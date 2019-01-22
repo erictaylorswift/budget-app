@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h2>Total expenses: ${{ expenses }}</h2>
         <form @submit.prevent>
             <select v-model.trim="expense.label">
                 <option disabled value="">Select an expense</option>

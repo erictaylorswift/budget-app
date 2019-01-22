@@ -9,8 +9,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         expenses: {},
-        income: {},
-        budgets: []
+        budgets: [],
+        incomes: {}
     },
     actions: {
         fetchExpenses({ commit }) {
@@ -37,6 +37,19 @@ export const store = new Vuex.Store({
 
                 commit('setBudget', budgetArray)
             })
+        },
+        fetchIncome({ commit }) {
+            fb.incomeCollection.onSnapshot(querySnapshot => {
+                let incomeArray = []
+
+                querySnapshot.forEach(doc => {
+                    let income = doc.data()
+                    incomeArray.push(Number(income.income))
+                })
+
+                let incomeTotal = incomeArray.reduce((a,b) => a + b )
+                commit('setIncome', incomeTotal)
+            })
         }
     },
     mutations: {
@@ -45,6 +58,9 @@ export const store = new Vuex.Store({
         },
         setBudget(state, val) {
             state.budgets = val
+        },
+        setIncome(state, val) {
+            state.incomes = val
         }
     }
 })

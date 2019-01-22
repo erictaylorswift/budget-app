@@ -1,13 +1,17 @@
 <template>
-    <div>
-        <form @submit.prevent v-if="createdBudget">
-            <label>Budgeted expenses</label>
-            <input v-model="budget.expenses">
-            <label>Budgeted income</label>
-            <input v-model="budget.income">
-            <button @click="saveBudget">Submit</button>
-        </form>
-        <div v-if="!createdBudget">
+    <div id="budget">
+        <modal name="budget-modal" height="auto">
+            <div id="modal">
+                <form @submit.prevent>
+                    <label>Budgeted expenses</label>
+                    <input v-model="budget.expenses">
+                    <label>Budgeted income</label>
+                    <input v-model="budget.income">
+                    <button @click="saveBudget">Submit</button>
+                </form>
+            </div>
+        </modal>
+        <div >
             <button @click="newBudget">New budget</button>
         </div>
     </div>
@@ -37,6 +41,7 @@ export default {
             this.createdBudget = false
         },
         newBudget() {
+            this.$modal.show('budget-modal')
             this.createdBudget = true
         }
     }

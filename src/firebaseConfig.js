@@ -15,10 +15,12 @@ const db = firebase.firestore()
 const auth = firebase.auth()
 const budgetCollection = db.collection('Budget')
 const expenseCollection = db.collection('Expenses')
+const incomeCollection = db.collection('Income')
 
 export {
     db,
     auth,
     budgetCollection,
-    expenseCollection
+    expenseCollection,
+    incomeCollection
 }
