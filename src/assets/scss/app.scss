@@ -1,0 +1,98 @@
+@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+@import url(https://unpkg.com/nes.css/css/nes.css);
+
+%margin-top {
+    margin-top: 60px;
+}
+
+%standard-spacing {
+    margin: 0 16px;
+}
+
+* {
+    font-family: 'Press Start 2P'
+}
+
+
+button {
+    @extend %standard-spacing;
+    width: auto;
+}
+
+.new-budget-button {
+    @extend %margin-top;
+    float: right;
+    margin-right: 60px;
+}
+
+select, input {
+    @extend %standard-spacing;
+    padding: 8px;
+}
+
+#app {
+    padding: 60px;
+}
+
+#main {
+    position: relative;
+}
+
+.footer {
+    background-position: bottom;
+    height: 250px;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    height: 250px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        position: relative;
+        bottom: 880px;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: 22px 0;
+}
+
+.nes-container {
+    margin: 22px 0;
+}
+
+.half {
+    width: 50%;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.center-middle {
+    align-items: center;
+    align-self: middle;
+    h4 {
+        @extend %standard-spacing;
+    }
+}
+
+.nes-table {
+    width: 80%;
+}
+
+.lists {
+    margin: 0 32px;
+}
+
+.margin-top {
+    @extend %margin-top
+}

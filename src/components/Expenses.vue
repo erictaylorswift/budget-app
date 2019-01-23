@@ -6,6 +6,7 @@
                 <option>Groceries</option>
                 <option>Bills</option>
                 <option>Allowances</option>
+                <option>Savings</option>
             </select>
             <select v-if="expense.label == 'Bills'" v-model.trim="expense.category">
                 <option disabled value="">Select a category</option>
@@ -16,8 +17,11 @@
                 <option>Cell phone</option>
                 <option>Internet</option>
                 <option>Insurance</option>
+                <option>Subscriptions</option>
+                <option>Gym</option>
             </select>
-            <input type="number" v-model.trim="expense.value">
+            <input v-model="expense.note" placeholder="enter expensee">
+            <input type="number" v-model.trim="expense.value" placeholder="enter amount">
             <button @click="saveExpense">Submit</button>
         </form>
     </div>
@@ -37,7 +41,8 @@ export default {
             expense: {
                 label: '',
                 category: '',
-                value: null
+                value: null,
+                note: ''
             }
         }
     },
@@ -50,11 +55,13 @@ export default {
             let expenseLabel = this.expense.label
             let expenseValue = this.expense.value
             let billCategory = this.expense.category
+            let expenseNote = this.expense.note
         
             fb.db.collection(expenseLabel).add({
                 'date': timestamp,
                 'category': billCategory,
-                'value': expenseValue
+                'value': expenseValue,
+                'note': expenseNote
             }).catch(err => console.log(err))
 
             fb.db.collection('Expenses').add({
@@ -64,7 +71,8 @@ export default {
             }).then(() => {
                 this.expense.label = '',
                 this.expense.category = '',
-                this.expense.value = null
+                this.expense.value = null,
+                this.expense.note = ''
             })
         },
     },

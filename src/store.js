@@ -10,7 +10,8 @@ export const store = new Vuex.Store({
     state: {
         expenses: {},
         budgets: [],
-        incomes: {}
+        incomes: {},
+        bills: []
     },
     actions: {
         fetchExpenses({ commit }) {
@@ -50,6 +51,26 @@ export const store = new Vuex.Store({
                 let incomeTotal = incomeArray.reduce((a,b) => a + b )
                 commit('setIncome', incomeTotal)
             })
+        },
+        fetchBills({ commit }) {
+            fb.billsCollection.onSnapshot(querySnapshot => {
+                let billsArray = []
+
+                querySnapshot.forEach(doc => {
+                    let bill = doc.data()
+                    let billName = bill.category
+                    let billNote = bill.billNote
+                    let billValue = Number(bill.value)
+
+                    billsArray.push({
+                        'bill': billName,
+                        'expensee': billNote,
+                        'amount': billValue
+                    })
+                })
+
+                commit('setBills', billsArray)
+            })
         }
     },
     mutations: {
@@ -61,6 +82,9 @@ export const store = new Vuex.Store({
         },
         setIncome(state, val) {
             state.incomes = val
+        },
+        setBills(state, val) {
+            state.bills = val
         }
     }
 })

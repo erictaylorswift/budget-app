@@ -1,25 +1,10 @@
 <template>
-  <div id="app">
-    <Budget></Budget>
-    <Income></Income>
-    <Expenses></Expenses>
-    <Home></Home>
+  <div id="main">
+    <div id="app">
+      <router-view/>
+    </div>
+    <div class="footer">
+      <img src="./assets/images/super-mario-background.jpg">
+    </div>
   </div>
 </template>
-
-<script>
-import Expenses from './components/Expenses';
-import Budget from './components/Budget';
-import Home from './components/Home';
-import Income from './components/Income'
-
-export default {
-  components: { 
-    Expenses,
-    Budget,
-    Home,
-    Income
-  }
-
-}
-</script>

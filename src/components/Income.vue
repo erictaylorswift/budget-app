@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="nes-container with-title">
+        <h2 class="title">Enter income</h2>
         <form @submit.prevent>
             <input type="number" v-model="income.value">
             <button @click="saveIncome">Submit</button>

@@ -11,8 +11,8 @@
                 </form>
             </div>
         </modal>
-        <div >
-            <button @click="newBudget">New budget</button>
+        <div>
+            <button @click="newBudget" class="nes-btn is-primary new-budget-button">New budget</button>
         </div>
     </div>
 </template>

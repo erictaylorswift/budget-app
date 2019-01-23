@@ -1,0 +1,33 @@
+<template>
+    <div>
+        <router-link to="expenses">View expenses</router-link>
+        <Budget></Budget>
+        <div class="container">
+            <Income></Income>
+        </div>
+        <div class="nes-container with-title">
+            <h2 class="title">Enter Expenses</h2>
+            <Expenses></Expenses>
+        </div>
+        <div>
+            <Home></Home>
+        </div>
+    </div>
+</template>
+
+<script>
+import Expenses from './Expenses';
+import Budget from './Budget';
+import Home from './Home';
+import Income from './Income';
+ 
+export default {
+    components: {
+        Budget,
+        Expenses,
+        Income,
+        Home
+    }
+}
+</script>
+
