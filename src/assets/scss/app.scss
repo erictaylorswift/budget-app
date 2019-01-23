@@ -20,14 +20,25 @@ button {
 }
 
 .new-budget-button {
-    @extend %margin-top;
     float: right;
     margin-right: 60px;
+    position: fixed;
+    top: 30px;
+    right: 0;
+}
+
+.budget-btn {
+    margin-top: 44px;
 }
 
 select, input {
     @extend %standard-spacing;
     padding: 8px;
+}
+
+label {
+    margin-top: 16px;
+    margin-left: 16px;
 }
 
 #app {
@@ -60,6 +71,26 @@ select, input {
     padding: 22px 0;
 }
 
+.v--modal {
+    padding: 22px 44px;
+    min-height: 450px;
+    top: 130px !important;
+}
+
+.date-input {
+    max-width: 80%;
+    margin: 16px;
+    font-size: 10px;
+}
+
+.date-input::placeholder {
+    font-size: 8px;
+}
+
+.date-wrapper {
+    max-width: 40%;
+}
+
 .nes-container {
     margin: 22px 0;
 }
@@ -68,8 +99,17 @@ select, input {
     width: 50%;
 }
 
+.three-quarters {
+    width: 60%;
+}
+
 .flex {
     display: flex;
+}
+
+.no-wrap {
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
 
 .flex-column {
@@ -86,7 +126,7 @@ select, input {
 }
 
 .nes-table {
-    width: 80%;
+    width: 50%;
 }
 
 .lists {

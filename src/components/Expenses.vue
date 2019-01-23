@@ -1,29 +1,32 @@
 <template>
-    <div>
-        <form @submit.prevent>
-            <select v-model.trim="expense.label">
-                <option disabled value="">Select an expense</option>
-                <option>Groceries</option>
-                <option>Bills</option>
-                <option>Allowances</option>
-                <option>Savings</option>
-            </select>
-            <select v-if="expense.label == 'Bills'" v-model.trim="expense.category">
-                <option disabled value="">Select a category</option>
-                <option>Credit</option>
-                <option>Loan</option>
-                <option>Hydro</option>
-                <option>Car</option>
-                <option>Cell phone</option>
-                <option>Internet</option>
-                <option>Insurance</option>
-                <option>Subscriptions</option>
-                <option>Gym</option>
-            </select>
-            <input v-model="expense.note" placeholder="enter expensee">
-            <input type="number" v-model.trim="expense.value" placeholder="enter amount">
-            <button @click="saveExpense">Submit</button>
-        </form>
+    <div class="flex no-wrap">
+        <select v-model.trim="expense.label">
+            <option disabled value="">Select an expense</option>
+            <option>Groceries</option>
+            <option>Bills</option>
+            <option>Allowances</option>
+            <option>Savings</option>
+        </select>
+        <select v-if="expense.label == 'Bills'" v-model.trim="expense.category">
+            <option disabled value="">Select a category</option>
+            <option>Credit</option>
+            <option>Loan</option>
+            <option>Hydro</option>
+            <option>Car</option>
+            <option>Cell phone</option>
+            <option>Internet</option>
+            <option>Insurance</option>
+            <option>Subscriptions</option>
+            <option>Gym</option>
+        </select>
+        <input v-model="expense.note" placeholder="enter expensee">
+        <input type="number" v-model.trim="expense.value" placeholder="enter amount">
+        <datepicker
+            wrapper-class="date-wrapper"
+            placeholder="select expense date"
+            v-model="expense.date">
+        </datepicker>
+        <button @click="saveExpense">Submit</button>
     </div>
     
 </template>
@@ -31,6 +34,7 @@
 <script>
 import { mapState } from 'vuex';
 import moment from 'moment';
+import Datepicker from 'vuejs-datepicker'
 import { firestore } from 'firebase';
 const fb = require('../firebaseConfig')
 
@@ -42,16 +46,18 @@ export default {
                 label: '',
                 category: '',
                 value: null,
-                note: ''
+                note: '',
+                date: null
             }
         }
     },
+    components: { Datepicker },
     computed: {
         ...mapState(['expenses'])
     },
     methods: {
         saveExpense() {
-            let timestamp = moment().toISOString()
+            let timestamp = moment(this.expense.date).toISOString()
             let expenseLabel = this.expense.label
             let expenseValue = this.expense.value
             let billCategory = this.expense.category

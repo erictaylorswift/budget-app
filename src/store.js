@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import Vue from 'vue'
 import Vuex from 'vuex'
+import moment from 'moment'
 
 const fb = require('./firebaseConfig')
 
@@ -14,19 +15,6 @@ export const store = new Vuex.Store({
         bills: []
     },
     actions: {
-        fetchExpenses({ commit }) {
-            fb.expenseCollection.onSnapshot(querySnapshot => {
-                let expenseArray = []
-
-                querySnapshot.forEach(doc => {
-                    let expense = doc.data()
-                    expenseArray.push(Number(expense.value))
-                })
-
-                let total = expenseArray.reduce((a,b) => a + b)
-                commit('setExpenses', total)
-            })
-        },
         fetchBudget({ commit }) {
             fb.budgetCollection.onSnapshot(querySnapshot => {
                 let budgetArray = []
@@ -37,6 +25,20 @@ export const store = new Vuex.Store({
                 })
 
                 commit('setBudget', budgetArray)
+            })
+        },
+        fetchExpenses({ commit }) {
+            fb.expenseCollection.onSnapshot(querySnapshot => {
+                let expenseArray = []
+
+                querySnapshot.forEach(doc => {
+                    let expense = doc.data()
+                    
+                    expenseArray.push(Number(expense.value))
+                })
+
+                let total = expenseArray.reduce((a,b) => a + b)
+                commit('setExpenses', total)
             })
         },
         fetchIncome({ commit }) {
@@ -61,15 +63,17 @@ export const store = new Vuex.Store({
                     let billName = bill.category
                     let billNote = bill.billNote
                     let billValue = Number(bill.value)
+                    let billDate = moment(bill.date).toISOString()
 
                     billsArray.push({
                         'bill': billName,
                         'expensee': billNote,
-                        'amount': billValue
-                    })
-                })
+                        'amount': billValue,
+                        'date': billDate
+                   })
 
                 commit('setBills', billsArray)
+                })
             })
         }
     },

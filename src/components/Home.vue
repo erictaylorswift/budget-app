@@ -24,7 +24,7 @@
                         Earned: {{ incomes | formatCurrency }}
                     </li>
                     <li>
-                        Outstanding: <b>{{ budgets[0].income - incomes | formatCurrency }}</b>
+                        Balance: <b>{{ incomes - budgets[0].income | formatCurrency }}</b>
                     </li>
                 </ul>
             </div>
