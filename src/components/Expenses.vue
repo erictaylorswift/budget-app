@@ -1,6 +1,6 @@
 <template>
-    <div class="flex no-wrap">
-        <select v-model.trim="expense.label">
+    <div class="flex">
+        <select v-model.trim="expense.label" class="expense-selection">
             <option disabled value="">Select an expense</option>
             <option>Groceries</option>
             <option>Bills</option>
@@ -9,7 +9,7 @@
             <option>Child Care</option>
         </select>
         <select v-if="expense.label == 'Bills'" v-model.trim="expense.category">
-            <option disabled value="">Select a category</option>
+            <option disabled value="">category</option>
             <option>Credit</option>
             <option>Loan</option>
             <option>Hydro</option>
@@ -20,11 +20,11 @@
             <option>Subscriptions</option>
             <option>Gym</option>
         </select>
-        <input v-model="expense.note" placeholder="enter expensee">
-        <input type="number" v-model.trim="expense.value" placeholder="enter amount">
+        <input v-model="expense.note" placeholder="expensee" class="expense-input">
+        <input type="number" v-model.trim="expense.value" placeholder="amount" class="expense-input">
         <datepicker
             wrapper-class="date-wrapper"
-            placeholder="select expense date"
+            placeholder="expense date"
             v-model="expense.date">
         </datepicker>
         <button @click="saveExpense">Submit</button>

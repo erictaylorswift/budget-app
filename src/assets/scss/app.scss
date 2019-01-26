@@ -139,10 +139,13 @@ label {
 
 .details-title {
     margin-bottom: 40px;
+    margin-left: 20px;
 }
 
-.details-home-link {
-    position: absolute;
-    left: 70px;
-    bottom: 0px;
+.expense-selection {
+    max-width: 15%;
+}
+
+.expense-input {
+    max-width: 15%;
 }
