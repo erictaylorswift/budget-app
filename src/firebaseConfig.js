@@ -17,6 +17,7 @@ const budgetCollection = db.collection('Budget')
 const expenseCollection = db.collection('Expenses')
 const incomeCollection = db.collection('Income')
 const billsCollection = db.collection('Bills')
+const allowanceCollection = db.collection('Allowances')
 
 export {
     db,
@@ -24,5 +25,6 @@ export {
     budgetCollection,
     expenseCollection,
     incomeCollection,
-    billsCollection
+    billsCollection,
+    allowanceCollection
 }

@@ -49,22 +49,6 @@ label {
     position: relative;
 }
 
-.footer {
-    background-position: bottom;
-    height: 250px;
-    position: fixed;
-    bottom: 0;
-    width: 100vw;
-    height: 250px;
-    overflow: hidden;
-
-    img {
-        width: 100%;
-        position: relative;
-        bottom: 880px;
-    }
-}
-
 .container {
     display: flex;
     flex-direction: row;
@@ -100,11 +84,27 @@ label {
 }
 
 .three-quarters {
+    width: 75%;
+}
+
+.two-thirds {
     width: 60%;
+}
+
+.one-third {
+    width: 30%;
 }
 
 .flex {
     display: flex;
+}
+
+.align-baseline {
+    align-items: flex-end;
+
+    i {
+        margin-right: 16px;
+    }
 }
 
 .no-wrap {
@@ -126,7 +126,7 @@ label {
 }
 
 .nes-table {
-    width: 50%;
+    margin: 16px 10px !important;
 }
 
 .lists {
@@ -135,4 +135,14 @@ label {
 
 .margin-top {
     @extend %margin-top
+}
+
+.details-title {
+    margin-bottom: 40px;
+}
+
+.details-home-link {
+    position: absolute;
+    left: 70px;
+    bottom: 0px;
 }

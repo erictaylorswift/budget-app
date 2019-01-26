@@ -6,6 +6,7 @@
             <option>Bills</option>
             <option>Allowances</option>
             <option>Savings</option>
+            <option>Child Care</option>
         </select>
         <select v-if="expense.label == 'Bills'" v-model.trim="expense.category">
             <option disabled value="">Select a category</option>
@@ -35,7 +36,6 @@
 import { mapState } from 'vuex';
 import moment from 'moment';
 import Datepicker from 'vuejs-datepicker'
-import { firestore } from 'firebase';
 const fb = require('../firebaseConfig')
 
 
@@ -68,7 +68,7 @@ export default {
                 'category': billCategory,
                 'value': expenseValue,
                 'note': expenseNote
-            }).catch(err => console.log(err))
+            }).catch(err => alert(err))
 
             fb.db.collection('Expenses').add({
                 'date': timestamp,
@@ -78,7 +78,8 @@ export default {
                 this.expense.label = '',
                 this.expense.category = '',
                 this.expense.value = null,
-                this.expense.note = ''
+                this.expense.note = '',
+                this.expense.date = ''
             })
         },
     },

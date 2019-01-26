@@ -1,35 +1,30 @@
 <template>
     <div class="nes-table-responsive">
-        <h3>Bills</h3>
+        <h3>Misc. Expenses</h3>
         <table class="nes-table is-bordered">
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Bill</th>
                     <th>Expensee</th>
                     <th>Amount</th>
                 </tr>
             </thead>
             <tbody>
                 <tr 
-                    v-for="bill in bills" 
-                    :key="bill.id">
-                    <td v-if="bill.date >= budgets[0].start && bill.date <= budgets[0].end">
-                        {{ bill.date | formatDate }}
+                    v-for="allowance in allowances" 
+                    :key="allowance.id">
+                    <td v-if="allowance.date >= budgets[0].start && allowance.date <= budgets[0].end">
+                        {{ allowance.date | formatDate }}
                     </td>
-                    <td v-if="bill.date >= budgets[0].start && bill.date <= budgets[0].end">
-                        {{ bill.bill }} 
+                    <td v-if="allowance.date >= budgets[0].start && allowance.date <= budgets[0].end">
+                        {{ allowance.allowance }}
                     </td>
-                    <td v-if="bill.date >= budgets[0].start && bill.date <= budgets[0].end">
-                        {{ bill.expensee }}
-                    </td>
-                    <td v-if="bill.date >= budgets[0].start && bill.date <= budgets[0].end">
-                        {{ bill.amount | formatCurrency }}
+                    <td v-if="allowance.date >= budgets[0].start && allowance.date <= budgets[0].end">
+                        {{ allowance.amount | formatCurrency }}
                     </td>
                 </tr>
                 <tr>
                     <td style="border-right: none;"></td>
-                    <td></td>
                     <td></td>
                     <td style="background-color: black; color: white;">
                         {{ this.total | formatCurrency }}
@@ -47,25 +42,24 @@ import numeral from 'numeral'
 
 export default {
     created() {
-        this.$store.dispatch('fetchBills')
-        this.$store.dispatch('fetchBudgets')
+        this.$store.dispatch('fetchAllowances')
     },
     updated() {
-        let bills = this.$store.state.bills;
+        let allowances = this.$store.state.allowances;
         let budgetStart = this.$store.state.budgets[0].start;
         let budgetEnd = this.$store.state.budgets[0].end;
         let total = 0;
 
-        for (var i = 0; i < bills.length; i++) {
-           if (bills[i].date >= budgetStart && bills[i].date <= budgetEnd ) {
-               total = total + bills[i].amount
+        for (var i = 0; i < allowances.length; i++) {
+           if (allowances[i].date >= budgetStart && allowances[i].date <= budgetEnd ) {
+               total = total + allowances[i].amount
            }
         }
 
         this.total = total;
     },
     computed: {
-        ...mapState(['bills', 'budgets'])
+        ...mapState(['allowances', 'budgets'])
     },
     data() {
         return {

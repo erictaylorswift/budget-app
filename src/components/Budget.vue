@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import { firestore } from 'firebase';
 import Datepicker from 'vuejs-datepicker';
 import moment from 'moment'
 const fb = require('../firebaseConfig')
@@ -60,9 +59,9 @@ export default {
             fb.db.collection('Budget').doc('Budgets').set({
                 'expenses': this.budget.expenses,
                 'income': this.budget.income,
-                'start': moment(this.budget.dates.start).format('MMM Do, YYYY'),
-                'end': moment(this.budget.dates.end).format('MMM Do, YYYY')
-            }).catch(err => console.log(err))
+                'start': moment(this.budget.dates.start).toISOString(),
+                'end': moment(this.budget.dates.end).toISOString()
+            }).catch(err => alert(err))
 
             this.createdBudget = false
             this.$modal.hide('budget-modal')

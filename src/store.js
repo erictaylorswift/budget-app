@@ -9,22 +9,34 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
-        expenses: {},
+        expenses: null,
         budgets: [],
-        incomes: {},
-        bills: []
+        incomes: null,
+        bills: [],
+        expectedExpenses: null,
+        allowances: []
     },
     actions: {
         fetchBudget({ commit }) {
             fb.budgetCollection.onSnapshot(querySnapshot => {
-                let budgetArray = []
+                let budgetArray = [];
+                let expectedExp = null;
 
                 querySnapshot.forEach(doc => {
-                    let budget = doc.data()
+                    let budget = doc.data();
+                    let budgetedExpense = budget.expenses;
+                    let start = moment(budget.start);
+                    let timeFromStart = moment().diff(start, 'days');
+                    let end = moment(budget.end);
+                    let days = end.diff(start, 'days');
+                    expectedExp = (budgetedExpense / days)*timeFromStart;
+
+
                     budgetArray.push(budget)
                 })
 
                 commit('setBudget', budgetArray)
+                commit('setBudgetExp', expectedExp)
             })
         },
         fetchExpenses({ commit }) {
@@ -33,12 +45,14 @@ export const store = new Vuex.Store({
 
                 querySnapshot.forEach(doc => {
                     let expense = doc.data()
-                    
-                    expenseArray.push(Number(expense.value))
+
+                    expenseArray.push({
+                        'amount': Number(expense.value),
+                        'date': expense.date
+                    })
                 })
 
-                let total = expenseArray.reduce((a,b) => a + b)
-                commit('setExpenses', total)
+                commit('setExpenses', expenseArray)
             })
         },
         fetchIncome({ commit }) {
@@ -55,13 +69,13 @@ export const store = new Vuex.Store({
             })
         },
         fetchBills({ commit }) {
-            fb.billsCollection.onSnapshot(querySnapshot => {
+            fb.billsCollection.orderBy("date", "asc").onSnapshot(querySnapshot => {
                 let billsArray = []
 
                 querySnapshot.forEach(doc => {
                     let bill = doc.data()
                     let billName = bill.category
-                    let billNote = bill.billNote
+                    let billNote = bill.note
                     let billValue = Number(bill.value)
                     let billDate = moment(bill.date).toISOString()
 
@@ -74,6 +88,23 @@ export const store = new Vuex.Store({
 
                 commit('setBills', billsArray)
                 })
+            })
+        },
+        fetchAllowances({ commit }) {
+            fb.allowanceCollection.orderBy("date", "asc").onSnapshot(querySnapshot => {
+                let allowanceArray = [];
+
+                querySnapshot.forEach(doc => {
+                    let allowance = doc.data()
+
+                    allowanceArray.push({
+                        'allowance': allowance.note,
+                        'amount': Number(allowance.value),
+                        'date': allowance.date
+                    })
+                })
+
+                commit('setAllowance', allowanceArray)
             })
         }
     },
@@ -89,6 +120,15 @@ export const store = new Vuex.Store({
         },
         setBills(state, val) {
             state.bills = val
+        },
+        setBudgetExp(state, val) {
+            state.expectedExpenses = val
+        },
+        setOverUnder(state, val) {
+            state.overUnder = val
+        },
+        setAllowance(state, val) {
+            state.allowances = val
         }
     }
 })

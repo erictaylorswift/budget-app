@@ -1,9 +1,8 @@
 <template>
     <div>
         <router-link to="expenses">View expenses</router-link>
-        <h4>{{ budgets[0].start }}</h4>
         <Budget></Budget>
-        <div class="nes-container with-title three-quarters">
+        <div class="nes-container with-title two-thirds">
             <h2 class="title">Enter income</h2>
             <Income></Income>
         </div>
@@ -23,7 +22,6 @@ import Budget from './Budget';
 import Home from './Home';
 import Income from './Income';
 import { mapState } from 'vuex'
-import moment from 'moment'
  
 export default {
     components: {
