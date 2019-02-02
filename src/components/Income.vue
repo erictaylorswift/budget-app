@@ -1,20 +1,20 @@
 <template>
-    <div class="flex no-wrap">
-        <input type="number" v-model="income.value" placeholder="enter amount">
-        <datepicker
-            wrapper-class="date-wrapper"
-            placeholder="select income date"
-            v-model="income.date">
-        </datepicker>
-        <button @click="saveIncome">Submit</button>
+    <div class="flex">
+        <modal name="income-modal">
+            <input type="number" v-model="income.value" placeholder="enter amount">
+            <datepicker
+                wrapper-class="date-wrapper"
+                placeholder="select income date"
+                v-model="income.date">
+            </datepicker>
+            <button @click="saveIncome">Submit</button>
+        </modal>
     </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import moment from 'moment';
 import Datepicker from 'vuejs-datepicker'
-import { firestore } from 'firebase';
 const fb = require('../firebaseConfig')
 
 export default {
@@ -39,7 +39,7 @@ export default {
             }).then(() => {
                 this.income.value = null
             }).catch(err => {
-                console.log(err)
+                alert(err)
             })
         }
     },

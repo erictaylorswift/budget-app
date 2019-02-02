@@ -2,17 +2,40 @@
 @import url(https://unpkg.com/nes.css/css/nes.css);
 
 %margin-top {
-    margin-top: 60px;
+    margin-top: 20px;
+}
+
+%margin-bottom {
+    margin-bottom: 20px;
 }
 
 %standard-spacing {
     margin: 0 16px;
 }
 
+%budget-inputs {
+    max-width: 80%;
+    font-size: 14px;
+}
+
+%budget-labels {
+    font-size: 12px;
+}
+
 * {
     font-family: 'Press Start 2P'
 }
 
+.header {
+    @extend %margin-top;
+    @extend %margin-bottom;
+    color: #C94C0C;
+}
+
+body {
+    background-image: url('../images/Mario-Background.png');
+    background-size: cover;
+}
 
 button {
     @extend %standard-spacing;
@@ -42,12 +65,43 @@ label {
 }
 
 #app {
-    padding: 60px;
+    padding: 60px 120px;
 }
 
 #main {
     position: relative;
 }
+
+#bills {
+    input {
+        @extend %budget-inputs
+    };
+
+    label {
+        @extend %budget-labels
+    }
+}
+
+#otherExpenses {
+    input {
+        @extend %budget-inputs;
+    };
+
+    label {
+        @extend %budget-labels
+    }
+}
+
+#income {
+    input {
+        @extend %budget-inputs
+    };
+
+    label {
+        @extend %budget-labels
+    }
+}
+
 
 .container {
     display: flex;
@@ -57,8 +111,8 @@ label {
 
 .v--modal {
     padding: 22px 44px;
-    min-height: 450px;
     top: 130px !important;
+    min-height: 600px;
 }
 
 .date-input {
@@ -80,7 +134,7 @@ label {
 }
 
 .half {
-    width: 50%;
+    width: 55%;
 }
 
 .three-quarters {
@@ -97,6 +151,10 @@ label {
 
 .flex {
     display: flex;
+
+    button {
+        margin-right: 20px;
+    }
 }
 
 .align-baseline {
@@ -117,35 +175,41 @@ label {
     flex-direction: column;
 }
 
-.center-middle {
-    align-items: center;
-    align-self: middle;
-    h4 {
-        @extend %standard-spacing;
-    }
-}
 
 .nes-table {
     margin: 16px 10px !important;
+    background-color: rgba(0,0,0,0);
 }
 
 .lists {
     margin: 0 32px;
 }
 
-.margin-top {
-    @extend %margin-top
+.margin-bottom {
+    @extend %margin-bottom
 }
 
-.details-title {
-    margin-bottom: 40px;
-    margin-left: 20px;
+.top-right {
+    position: absolute;
+    right: 120px;
+    top: 60px;
+
+    i {
+        margin-right: 16px;
+    }
 }
 
-.expense-selection {
-    max-width: 15%;
+.middle {
+    align-items: center;
 }
 
-.expense-input {
-    max-width: 15%;
+.title {
+    font-size: 18px;
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+.vdp-datepicker__calendar {
+    position: relative !important;
+    left: 16px;
 }

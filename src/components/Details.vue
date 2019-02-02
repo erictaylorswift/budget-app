@@ -1,15 +1,16 @@
 <template>
     <div>
         <div class="flex">
-            <router-link to="/" class="details-home-link">
-                <i class="nes-logo"></i>
-            </router-link>
-            <h2 class="details-title">Expense Details</h2>
+            <h2 class="header">Expense Details</h2>
         </div>
         <div class="flex">
             <Bills></Bills>
             <Allowances></Allowances>
         </div>
+        <a @click="goHome" class="top-right flex middle">
+            <i class="nes-logo"></i>
+            Home
+        </a>
     </div>
 </template>
 
@@ -18,7 +19,12 @@ import Bills from './Bills'
 import Allowances from './Allowances'
 
 export default {
-    components: { Bills, Allowances }    
+    components: { Bills, Allowances },
+    methods: {
+        goHome() {
+            this.$router.push('/')
+        }
+    }    
 }
 </script>
 

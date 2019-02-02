@@ -1,31 +1,35 @@
 <template>
     <div>
-        <router-link to="expenses">View expenses</router-link>
-        <Budget></Budget>
-        <div class="nes-container with-title two-thirds">
-            <h2 class="title">Enter income</h2>
-            <Income></Income>
+        <div class="flex space-between half margin-bottom">
+            <button @click="newBudget" class="nes-btn is-warning">New budget</button>
+            <button @click="newIncome" class="nes-btn is-primary">Add income</button>
+            <button @click="newExpense" class="nes-btn is-primary">Add expense</button>
         </div>
-        <div class="nes-container with-title">
-            <h2 class="title">Enter Expenses</h2>
-            <Expenses></Expenses>
+        <div class="top-right flex middle">
+            <i class="nes-logo"></i>
+            <a @click="viewExpenses">
+                View expenses
+            </a>
+            <a @click="currentBudget">Current Budget</a>
         </div>
-        <div>
-            <Home></Home>
-        </div>
+        <Expenses></Expenses>
+        <Income></Income>
+        <Home></Home>
     </div>
 </template>
 
 <script>
 import Expenses from './Expenses';
-import Budget from './Budget';
 import Home from './Home';
 import Income from './Income';
 import { mapState } from 'vuex'
  
 export default {
+    created() {
+        this.$store.dispatch('fetchBudget')
+        this.$store.dispatch('fetchAllowances')
+    },
     components: {
-        Budget,
         Expenses,
         Income,
         Home
@@ -38,8 +42,22 @@ export default {
             budgetStart: null,
         }
     },
-    created() {
-        this.$store.dispatch('fetchBudget')
+    methods: {
+        newExpense() {
+            this.$modal.show('expense-modal')
+        },
+        newBudget() {
+            this.$router.push('budget')
+        },
+        viewExpenses() {
+            this.$router.push('expenses')
+        },
+        currentBudget() {
+            this.$router.push('current-budget')
+        },
+        newIncome() {
+            this.$modal.show('income-modal')
+        }
     }
 }
 </script>

@@ -10,11 +10,33 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         expenses: null,
-        budgets: [],
+        budgets: {},
         incomes: null,
         bills: [],
         expectedExpenses: null,
-        allowances: []
+        allowances: [],
+        currentBudget: {
+            start: 0,
+            end: 0,
+            expenses: {
+                rent: 0,
+                credit: 0,
+                loans: 0,
+                utilities: 0,
+                phones: 0,
+                car: 0,
+                internet: 0,
+                insurance: 0,
+                subscriptions: 0,
+                gym: 0,
+                groceries: 0,
+                allowances: 0,
+                savings: 0,
+                childCare: 0,
+            },
+            income: 0
+
+        }
     },
     actions: {
         fetchBudget({ commit }) {
@@ -24,6 +46,7 @@ export const store = new Vuex.Store({
 
                 querySnapshot.forEach(doc => {
                     let budget = doc.data();
+
                     let budgetedExpense = budget.expenses;
                     let start = moment(budget.start);
                     let timeFromStart = moment().diff(start, 'days');

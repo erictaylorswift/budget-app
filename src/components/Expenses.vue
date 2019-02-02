@@ -1,35 +1,52 @@
 <template>
     <div class="flex">
-        <select v-model.trim="expense.label" class="expense-selection">
-            <option disabled value="">Select an expense</option>
-            <option>Groceries</option>
-            <option>Bills</option>
-            <option>Allowances</option>
-            <option>Savings</option>
-            <option>Child Care</option>
-        </select>
-        <select v-if="expense.label == 'Bills'" v-model.trim="expense.category">
-            <option disabled value="">category</option>
-            <option>Credit</option>
-            <option>Loan</option>
-            <option>Hydro</option>
-            <option>Car</option>
-            <option>Cell phone</option>
-            <option>Internet</option>
-            <option>Insurance</option>
-            <option>Subscriptions</option>
-            <option>Gym</option>
-        </select>
-        <input v-model="expense.note" placeholder="expensee" class="expense-input">
-        <input type="number" v-model.trim="expense.value" placeholder="amount" class="expense-input">
-        <datepicker
-            wrapper-class="date-wrapper"
-            placeholder="expense date"
-            v-model="expense.date">
-        </datepicker>
-        <button @click="saveExpense">Submit</button>
+        <modal 
+            name="expense-modal"
+            height='auto'>
+            <div id="modal">
+                <form @submit.prevent>
+                    <div class="flex-column">
+                        <label>Select Expense</label>
+                        <select v-model.trim="expense.label">
+                            <option disabled value="">Expense</option>
+                            <option>Groceries</option>
+                            <option>Bills</option>
+                            <option>Allowances</option>
+                            <option>Savings</option>
+                            <option>Child Care</option>
+                            <option>Prescriptions</option>
+                        </select>
+                    </div>
+                    <div class="flex-column" v-if="expense.label == 'Bills'">
+                        <label>Select Expense</label>
+                        <select v-model.trim="expense.category">
+                            <option disabled value="">category</option>
+                            <option>Credit</option>
+                            <option>Loan</option>
+                            <option>Hydro</option>
+                            <option>Car</option>
+                            <option>Cell phone</option>
+                            <option>Internet</option>
+                            <option>Insurance</option>
+                            <option>Subscriptions</option>
+                            <option>Gym</option>
+                        </select>
+                    </div>
+                    <label>Add an expensee</label>
+                    <input v-model="expense.note" placeholder="expensee">
+                    <label>Add amount</label>
+                    <input type="number" v-model.trim="expense.value" placeholder="amount">
+                    <label> Select expense date</label>
+                    <datepicker
+                        wrapper-class="date-wrapper"
+                        placeholder="expense date"
+                        v-model="expense.date">
+                    </datepicker>
+                    <button @click="saveExpense" class="budget-btn">Submit</button>
+                </form>
+            </div>
+        </modal>
     </div>
-    
 </template>
 
 <script>
@@ -57,14 +74,14 @@ export default {
     },
     methods: {
         saveExpense() {
-            let timestamp = moment(this.expense.date).toISOString()
+            let timestamp = moment(this.expense.date).format('MM-DD-YY')
             let expenseLabel = this.expense.label
             let expenseValue = this.expense.value
             let billCategory = this.expense.category
             let expenseNote = this.expense.note
         
-            fb.db.collection(expenseLabel).add({
-                'date': timestamp,
+            fb.db.collection(timestamp).add({
+                'expense': expenseLabel,
                 'category': billCategory,
                 'value': expenseValue,
                 'note': expenseNote
@@ -80,7 +97,11 @@ export default {
                 this.expense.value = null,
                 this.expense.note = '',
                 this.expense.date = ''
+            }).then(() => {
+                this.$store.dispatch('fetchExpenses')
             })
+
+            this.$modal.hide('expense-modal')
         },
     },
     created() {
