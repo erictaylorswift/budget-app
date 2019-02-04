@@ -22,20 +22,23 @@
 import Expenses from './Expenses';
 import Home from './Home';
 import Income from './Income';
-import { mapState } from 'vuex'
  
 export default {
     created() {
-        this.$store.dispatch('fetchBudget')
-        this.$store.dispatch('fetchAllowances')
+        this.$store.dispatch('fetchBudget').then(() => {
+            this.$store.dispatch('fetchDailyExpense')
+        }).then(() => {
+            this.$store.dispatch('fetchExpenseCategory')
+        }).then(() => {
+            this.$store.dispatch('fetchExpenseTotals')
+        }).then(() => {
+            this.$store.dispatch('fetchIncome')
+        })
     },
     components: {
         Expenses,
         Income,
         Home
-    },
-    computed: {
-        ...mapState(['budgets', 'expenses'])
     },
     data() {
         return {

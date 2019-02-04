@@ -15,6 +15,7 @@
                             <option>Savings</option>
                             <option>Child Care</option>
                             <option>Prescriptions</option>
+                            <option>Rent</option>
                         </select>
                     </div>
                     <div class="flex-column" v-if="expense.label == 'Bills'">
@@ -80,14 +81,16 @@ export default {
             let billCategory = this.expense.category
             let expenseNote = this.expense.note
         
-            fb.db.collection(timestamp).add({
+            fb.db.collection("Expenses").add({
                 'expense': expenseLabel,
                 'category': billCategory,
                 'value': expenseValue,
-                'note': expenseNote
+                'note': expenseNote,
+                'date': timestamp
             }).catch(err => alert(err))
 
-            fb.db.collection('Expenses').add({
+
+            fb.db.collection('ExpenseTotals').add({
                 'date': timestamp,
                 'category': expenseLabel,
                 'value': expenseValue
@@ -98,14 +101,14 @@ export default {
                 this.expense.note = '',
                 this.expense.date = ''
             }).then(() => {
-                this.$store.dispatch('fetchExpenses')
+                this.$store.dispatch('fetchExpenseTotals')
             })
 
             this.$modal.hide('expense-modal')
         },
     },
     created() {
-        this.$store.dispatch('fetchExpenses')
+        this.$store.dispatch('fetchExpenseTotals')
     }    
 }
 </script>

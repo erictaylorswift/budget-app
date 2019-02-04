@@ -4,8 +4,7 @@
             <h2 class="header">Expense Details</h2>
         </div>
         <div class="flex">
-            <Bills></Bills>
-            <Allowances></Allowances>
+            <BillsTable></BillsTable>
         </div>
         <a @click="goHome" class="top-right flex middle">
             <i class="nes-logo"></i>
@@ -15,11 +14,10 @@
 </template>
 
 <script>
-import Bills from './Bills'
-import Allowances from './Allowances'
+import BillsTable from './BillsTable'
 
 export default {
-    components: { Bills, Allowances },
+    components: { BillsTable },
     methods: {
         goHome() {
             this.$router.push('/')

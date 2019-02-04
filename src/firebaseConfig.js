@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import { FireSQL } from 'firesql'
 
 const config = {
     apiKey: "AIzaSyCJaSjyTZITHVhdUSHn9JPeGIYHUBNYS84",
@@ -18,9 +19,11 @@ const expenseCollection = db.collection('Expenses')
 const incomeCollection = db.collection('Income')
 const billsCollection = db.collection('Bills')
 const allowanceCollection = db.collection('Allowances')
+const fireSQL = new FireSQL(db)
 
 export {
     db,
+    fireSQL,
     auth,
     budgetCollection,
     expenseCollection,

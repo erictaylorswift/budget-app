@@ -4,6 +4,7 @@ import VModal from 'vue-js-modal'
 import Datepicker from 'vuejs-datepicker'
 import Toasted from 'vue-toasted'
 import VueMaterial from 'vue-material'
+import SmartTable from 'vuejs-smart-table';
 import 'vue-material/dist/vue-material.min.css'
 import './assets/scss/app.scss'
 import router from './router'
@@ -15,6 +16,8 @@ Vue.use(VModal)
 Vue.use(Datepicker)
 Vue.use(Toasted)
 Vue.use(VueMaterial)
+Vue.use(SmartTable)
+
 
 new Vue({
   el: '#app',

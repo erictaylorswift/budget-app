@@ -5,30 +5,35 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Bill</th>
+                    <th>Expense</th>
+                    <th>Category</th>
                     <th>Expensee</th>
                     <th>Amount</th>
                 </tr>
             </thead>
             <tbody>
                 <tr 
-                    v-for="bill in bills" 
-                    :key="bill.id">
-                    <td v-if="bill.date >= budgets[0].start && bill.date <= budgets[0].end">
-                        {{ bill.date | formatDate }}
+                    v-for="expense in expenses" 
+                    :key="expense.id">
+                    <td v-if="getDateDiff(expense.date)">
+                        {{ expense.date | formatDate }}
                     </td>
-                    <td v-if="bill.date >= budgets[0].start && bill.date <= budgets[0].end">
-                        {{ bill.bill }} 
+                    <td v-if="getDateDiff(expense.date)">
+                        {{ expense.type }} 
                     </td>
-                    <td v-if="bill.date >= budgets[0].start && bill.date <= budgets[0].end">
-                        {{ bill.expensee }}
+                    <td v-if="getDateDiff(expense.date)">
+                        {{ expense.category }}
                     </td>
-                    <td v-if="bill.date >= budgets[0].start && bill.date <= budgets[0].end">
-                        {{ bill.amount | formatCurrency }}
+                    <td v-if="getDateDiff(expense.date)">
+                        {{ expense.note }}
+                    </td>
+                    <td v-if="getDateDiff(expense.date)">
+                        {{ expense.amount | formatCurrency }}
                     </td>
                 </tr>
                 <tr>
                     <td style="border-right: none;"></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td style="background-color: black; color: white;">
@@ -47,29 +52,30 @@ import numeral from 'numeral'
 
 export default {
     created() {
-        this.$store.dispatch('fetchBills')
-        this.$store.dispatch('fetchBudgets')
-    },
-    updated() {
-        let bills = this.$store.state.bills;
-        let budgetStart = this.$store.state.budgets[0].start;
-        let budgetEnd = this.$store.state.budgets[0].end;
-        let total = 0;
-
-        for (var i = 0; i < bills.length; i++) {
-           if (bills[i].date >= budgetStart && bills[i].date <= budgetEnd ) {
-               total = total + bills[i].amount
-           }
-        }
-
-        this.total = total;
+        this.$store.dispatch('fetchBudget')
+        this.$store.dispatch('fetchExpenses')
+        this.$store.dispatch('fetchExpenseTotals')
     },
     computed: {
-        ...mapState(['bills', 'budgets'])
+        ...mapState(['budgets', 'expenses', 'expTotal'])
+    },
+    methods: {
+        getDateDiff(date) {
+            let start = moment(this.$store.state.budgets[0].start)
+            let end = moment(this.$store.state.budgets[0].end)
+            let expDate = moment(date)
+
+            let startDiff = expDate.diff(start, 'days')
+            let endDiff = expDate.diff(end, 'days')
+
+
+            if (startDiff > -1 && endDiff < 1) {
+                return true
+            }
+        }
     },
     data() {
         return {
-            total: null
         }
     },
     filters: {

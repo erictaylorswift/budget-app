@@ -17,11 +17,8 @@
 </template>
 
 <script>
-import Datepicker from 'vuejs-datepicker';
-import moment from 'moment';
 import numeral from 'numeral';
 import { mapState } from 'vuex';
-const fb = require('../firebaseConfig')
 
 export default {
     created() {
@@ -29,9 +26,6 @@ export default {
     },
     computed: {
         ...mapState(['budgets'])
-    },
-    components: {
-        Datepicker
     },
     data() {
         return {}
