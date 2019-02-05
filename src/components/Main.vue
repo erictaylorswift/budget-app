@@ -11,6 +11,7 @@
                 View expenses
             </a>
             <a @click="currentBudget">Current Budget</a>
+            <a @click="expenseChart">View Charts</a>
         </div>
         <Expenses></Expenses>
         <Income></Income>
@@ -33,6 +34,8 @@ export default {
             this.$store.dispatch('fetchExpenseTotals')
         }).then(() => {
             this.$store.dispatch('fetchIncome')
+        }).then(() => {
+            this.$store.dispatch('fetchDailyExpenses')
         })
     },
     components: {
@@ -60,6 +63,9 @@ export default {
         },
         newIncome() {
             this.$modal.show('income-modal')
+        },
+        expenseChart() {
+            this.$router.push('/charts/daily-expenses')
         }
     }
 }

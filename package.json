@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@firebase/app": "^0.3.8",
+    "chart.js": "^2.7.3",
     "firebase": "^5.8.2",
     "firesql": "^1.0.2",
     "firestore": "^1.1.6",
