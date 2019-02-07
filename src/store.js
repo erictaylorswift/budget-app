@@ -35,7 +35,8 @@ export const store = new Vuex.Store({
         income: 0,
         dailyExpenses: [],
         expenseCategory: [],
-        expTotal: 0
+        expTotal: 0,
+        current: []
     },
     actions: {
         fetchExpenseTotals({ commit }) {
@@ -151,6 +152,52 @@ export const store = new Vuex.Store({
                 commit('setBudget', budgetArray)
             })
         },
+        fetchCurrentBudget({ commit }) {
+            fb.budgetCollection.onSnapshot(querySnapshot => {
+                let budgetArray = [];
+
+                querySnapshot.forEach(doc => {
+                    let budget = doc.data();                  
+
+                    budgetArray.push(budget)
+                })
+
+                
+                let expenseCategory = this.state.expenseCategory;
+                let current = budgetArray[0];
+                let typesArray = Object.keys(current);
+                let amountsArray = Object.values(current);
+                let currentArray = [];
+                let expenseArray = [];
+                for (var e = 0; e<expenseCategory; e++) {
+                    let expenseType = Object.keys(expenseCategory[e]);
+                    let expenseAmount = Object.values(expenseCategory[e]);
+
+                    expenseArray.push({
+                        'type': expenseType,
+                        'amount': expenseAmount
+                    })
+                }
+
+                for (var i = 0; i<typesArray.length; i++) {
+                    let types = typesArray[i];
+                    let amounts = amountsArray[i]
+
+                    if (
+                        types != 'start' && 
+                        types != 'end' && 
+                        types != 'bills'
+                    ) {
+                        currentArray.push({
+                            'type': types,
+                            'amount': amounts,
+                        })
+                    }
+                }
+
+                commit('setCurrentBudget', currentArray)
+            })
+        },
         fetchExpenseCategory({ commit }) {
             let categorySet = [];
 
@@ -178,6 +225,9 @@ export const store = new Vuex.Store({
     mutations: {
         setBudget(state, val) {
             state.budgets = val
+        },
+        setCurrentBudget(state, val) {
+            state.current = val
         },
         setDailyExpenses(state, val) {
             state.dailyExpenses = val

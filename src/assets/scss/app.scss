@@ -26,15 +26,51 @@
     font-family: 'Press Start 2P'
 }
 
+
+.nav {
+    position: fixed;
+    padding: 20px 120px;
+    width: 100%;
+    background: #f7d51d;
+    border-bottom: 4px solid #F7F91D;
+    display: flex;
+    align-items: center;
+
+    .links {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+
+        a {
+            margin: 0 12px;
+            font-size: 14px;
+            color: grey;
+            transition: 0.3s
+        };
+
+        a:hover {
+            color: #108DE0
+        }
+    }
+
+    .home {
+        display: flex;
+        width: 100%;
+
+        i {
+            margin-right: 12px;
+        }
+    }
+}
+
 .header {
     @extend %margin-top;
     @extend %margin-bottom;
     color: #C94C0C;
 }
 
-body {
-    // background-image: url('../images/Mario-Background.png');
-    // background-size: cover;
+.main-container {
+    padding: 120px;
 }
 
 button {
@@ -151,6 +187,7 @@ label {
 
 .flex {
     display: flex;
+    flex-wrap: wrap;
 
     button {
         margin-right: 20px;
@@ -191,12 +228,26 @@ label {
 
 .top-right {
     position: absolute;
-    right: 120px;
-    top: 60px;
+    right: 200px;
+    top: 100px;
 
     i {
         margin-right: 16px;
     }
+}
+
+.absolute {
+    position: relative;
+    width: 100%;
+    
+}
+
+.space {
+    @extend %standard-spacing
+}
+
+.start {
+    align-items: flex-start;
 }
 
 .middle {

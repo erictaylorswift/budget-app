@@ -1,9 +1,5 @@
 <template>
     <div>
-        <a @click="goHome" class="top-right flex middle">
-            <i class="nes-logo"></i>
-            Home
-        </a>
         <form @submit.prevent>
             <label>Budget dates</label>
             <div class="flex">

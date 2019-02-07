@@ -1,32 +1,48 @@
 <template>
-    <div>
-        <label>Filter by Expense Type:</label>
-        <select v-model="filters.type.value" >
-            <option disabled value="">Select Type</option>
-            <option>Groceries</option>
-            <option>Bills</option>
-            <option>Allowances</option>
-            <option>Savings</option>
-            <option>Child Care</option>
-            <option>Prescriptions</option>
-            <option>Rent</option>
-            <option></option>
-        </select>
-        <v-table :data="expenses" :filters='filters' class="nes-table is-bordered">
+    <div class="flex">
+        <div class="flex absolute">
+            <label>Filter by Expense Type:</label>
+            <select v-model="filters.type.value" >
+                <option disabled value="">Select Type</option>
+                <option>Groceries</option>
+                <option>Bills</option>
+                <option>Allowances</option>
+                <option>Savings</option>
+                <option>Child Care</option>
+                <option>Prescriptions</option>
+                <option>Rent</option>
+                <option></option>
+            </select>
+        </div>
+        <div class="flex-column">
+            <v-table :data="expenses" :filters='filters' class="nes-table is-bordered">
+                <thead slot="head">
+                    <v-th sortKey="date">Date</v-th>
+                    <v-th sortKey="type">Expense</v-th>
+                    <th>Category</th>
+                    <th>Expensee</th>
+                    <v-th sortKey="amount">Amount</v-th>
+                </thead>
+                <tbody slot="body" slot-scope="{displayData}">
+                    <tr v-for="row in displayData" :key="row.id">
+                        <td v-if="getDateDiff(row.date)">{{ row.date }}</td>
+                        <td v-if="getDateDiff(row.date)">{{ row.type }}</td>
+                        <td v-if="getDateDiff(row.date)">{{ row.category }}</td>
+                        <td v-if="getDateDiff(row.date)">{{ row.note }}</td>
+                        <td v-if="getDateDiff(row.date)">{{ row.amount | formatCurrency }}</td>
+                    </tr>
+                </tbody>
+            </v-table>
+        </div>
+        <v-table :data="expenseCategory" class="nes-table is-bordered">
             <thead slot="head">
-                <v-th sortKey="date">Date</v-th>
-                <v-th sortKey="type">Expense</v-th>
                 <th>Category</th>
-                <th>Expensee</th>
-                <v-th sortKey="amount">Amount</v-th>
+                <th>Total</th>
             </thead>
             <tbody slot="body" slot-scope="{displayData}">
                 <tr v-for="row in displayData" :key="row.id">
-                    <td v-if="getDateDiff(row.date)">{{ row.date }}</td>
-                    <td v-if="getDateDiff(row.date)">{{ row.type }}</td>
-                    <td v-if="getDateDiff(row.date)">{{ row.category }}</td>
-                    <td v-if="getDateDiff(row.date)">{{ row.note }}</td>
-                    <td v-if="getDateDiff(row.date)">{{ row.amount | formatCurrency }}</td>
+                    <td>{{ row.category }}</td>
+                    <td>{{ row.amount | formatCurrency }}</td>
                 </tr>
             </tbody>
         </v-table>
@@ -43,9 +59,10 @@ export default {
         this.$store.dispatch('fetchBudget')
         this.$store.dispatch('fetchExpenses')
         this.$store.dispatch('fetchExpenseTotals')
+        this.$store.dispatch('fetchExpenseCategory')
     },
     computed: {
-        ...mapState(['budgets', 'expenses', 'expTotal'])
+        ...mapState(['budgets', 'expenses', 'expTotal', 'expenseCategory'])
     },
     data() {
        return {
