@@ -42,7 +42,7 @@
             <tbody slot="body" slot-scope="{displayData}">
                 <tr v-for="row in displayData" :key="row.id">
                     <td>{{ row.category }}</td>
-                    <td>{{ row.amount | formatCurrency }}</td>
+                    <td>{{ row.spent | formatCurrency }}</td>
                 </tr>
             </tbody>
         </v-table>

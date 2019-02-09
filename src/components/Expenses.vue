@@ -104,6 +104,14 @@ export default {
                 this.$store.dispatch('fetchExpenseTotals')
             })
 
+            fb.db.collection('ExpenseCategories').doc(expenseLabel.toLowerCase()).get().then(res => {
+                let data = res.data();
+
+                fb.db.collection('ExpenseCategories').doc(expenseLabel.toLowerCase()).update({
+                    'spent': Number(data.spent) + Number(expenseValue)
+                })
+            })
+
             this.$modal.hide('expense-modal')
         },
     },

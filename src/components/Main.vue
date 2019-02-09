@@ -14,12 +14,11 @@
 import Expenses from './Expenses';
 import Home from './Home';
 import Income from './Income';
-import Nav from './Nav'
  
 export default {
     created() {
         this.$store.dispatch('fetchBudget').then(() => {
-            this.$store.dispatch('fetchDailyExpense')
+            this.$store.dispatch('fetchDailyExpenses')
         }).then(() => {
             this.$store.dispatch('fetchExpenseCategory')
         }).then(() => {
@@ -27,14 +26,13 @@ export default {
         }).then(() => {
             this.$store.dispatch('fetchIncome')
         }).then(() => {
-            this.$store.dispatch('fetchDailyExpenses')
+            this.$store.dispatch('fetchCurrentBudget')
         })
     },
     components: {
         Expenses,
         Income,
-        Home,
-        Nav
+        Home
     },
     data() {
         return {

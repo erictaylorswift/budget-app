@@ -84,6 +84,7 @@ export default {
             let billsObj = Object.values(bills)
 
             let billsArray = [];
+            let currentArray = [];
 
             for (var i = 0; i<billsObj.length; i++) {
                 billsArray.push(Number(billsObj[i]))
@@ -95,21 +96,37 @@ export default {
                 'start': moment(budget.start).toISOString(),
                 'end': moment(budget.end).toISOString(),
                 'income': budget.income,
-                'groceries': budget.expenses.groceries,
-                'allowances': budget.expenses.allowances,
-                'savings': budget.expenses.savings,
-                'chidCare': budget.expenses.childCare,
-                'credit': budget.expenses.credit,
-                'loans': budget.expenses.loans,
-                'utilities': budget.expenses.utilities,
-                'cellphone': budget.expenses.phones,
-                'car': budget.expenses.car,
-                'internet': budget.expenses.internet,
-                'insurance': budget.expenses.insurance,
-                'subscriptions': budget.expenses.subscriptions,
-                'gym': budget.expenses.gym,
-                'rent': budget.expenses.rent,
+                'expenses': {
+                    'groceries': budget.expenses.groceries,
+                    'allowances': budget.expenses.allowances,
+                    'savings': budget.expenses.savings,
+                    'child Care': budget.expenses.childCare,
+                    'credit': budget.expenses.credit,
+                    'loans': budget.expenses.loans,
+                    'utilities': budget.expenses.utilities,
+                    'cellphone': budget.expenses.phones,
+                    'car': budget.expenses.car
+                },
                 'bills': billsTotal
+            }).then(() => {
+                let budgetObj = this.$store.state.budgets[0];
+                let budgetTypes = Object.keys(budgetObj);
+                let budgetAmounts = Object.values(budgetObj);
+
+                for (var i = 0; i < budgetTypes.length; i++){
+                    currentArray.push({
+                        'type': budgetTypes[i],
+                        'amount': budgetAmounts[i]
+                    })
+                }
+            }).then(() => {
+                for (var c = 0; c < currentArray.length; c++) {
+                    fb.db.collection('ExpenseCategories').doc(currentArray[c].type).set({
+                        'category': currentArray[c].type,
+                        'budgeted': currentArray[c].amount,
+                        'spent': 0
+                    })
+                }
             })
         },
         goHome() {

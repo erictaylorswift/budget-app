@@ -5,15 +5,19 @@
             <h2 class="header space">Current Budget</h2>
         </div>
         <div class="flex">
-            <v-table :data="current" class="nes-table is-bordered">
+            <v-table :data="expenseCategory" class="nes-table is-bordered">
                 <thead slot="head">
-                    <v-th sortKey='type'>Type</v-th>
-                    <v-th sortKey='amount' defaultSort='desc'>Amount</v-th>
+                    <v-th sortKey='category'>Category</v-th>
+                    <v-th sortKey='budgeted'>Budgeted</v-th>
+                    <v-th sortKey='spent' defaultSort='desc'>Spent</v-th>
+                    <v-th sortKey='remaining' >Remaining</v-th>
                 </thead>
                 <tbody slot="body" slot-scope="{displayData}">
                     <tr v-for="row in displayData" :key="row.id">
-                        <td v-if="row.type != 'income'">{{ row.type }}</td>
-                        <td v-if="row.type != 'income'">{{ row.amount | formatCurrency}}</td>
+                        <td v-if="row.category != 'income'">{{ row.category }}</td>
+                        <td v-if="row.category != 'income'">{{ row.budgeted | formatCurrency}}</td>
+                        <td v-if="row.category != 'income'">{{ row.spent | formatCurrency}}</td>
+                        <td v-if="row.category != 'income'">{{ row.remaining | formatCurrency}}</td>
                     </tr>
                 </tbody>
             </v-table>
@@ -27,7 +31,18 @@
                     </tr>
                 </tbody>
             </v-table>
+            <v-table></v-table>
         </div>
+        <h4>Budget over/under: 
+            <span v-if="remaining > 0" class="positive lg-font">
+                <i class="nes-kirby"></i>
+                {{ remaining | formatCurrency}}
+            </span>
+            <span v-else class="negative lg-font">
+                <i class="nes-bulbasaur"></i>
+                {{ remaining | formatCurrency}}
+            </span>
+        </h4>
     </div>
 </template>
 
@@ -35,14 +50,17 @@
 import numeral from 'numeral';
 import { mapState } from 'vuex';
 
+
 export default {
     created() {
         this.$store.dispatch('fetchBudget')
         this.$store.dispatch('fetchCurrentBudget')
+        this.$store.dispatch('fetchExpenseCategory')
+        this.$store.dispatch('fetchRemaining')
         
     },
     computed: {
-        ...mapState(['current', 'budgets'])
+        ...mapState(['current', 'budgets', 'expenseCategory', 'remaining'])
     },
     data() {
         return {

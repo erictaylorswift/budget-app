@@ -36,7 +36,8 @@ export const store = new Vuex.Store({
         dailyExpenses: [],
         expenseCategory: [],
         expTotal: 0,
-        current: []
+        current: [],
+        remaining: []
     },
     actions: {
         fetchExpenseTotals({ commit }) {
@@ -162,35 +163,22 @@ export const store = new Vuex.Store({
                     budgetArray.push(budget)
                 })
 
-                
-                let expenseCategory = this.state.expenseCategory;
                 let current = budgetArray[0];
                 let typesArray = Object.keys(current);
                 let amountsArray = Object.values(current);
                 let currentArray = [];
-                let expenseArray = [];
-                for (var e = 0; e<expenseCategory; e++) {
-                    let expenseType = Object.keys(expenseCategory[e]);
-                    let expenseAmount = Object.values(expenseCategory[e]);
-
-                    expenseArray.push({
-                        'type': expenseType,
-                        'amount': expenseAmount
-                    })
-                }
-
+    
                 for (var i = 0; i<typesArray.length; i++) {
                     let types = typesArray[i];
                     let amounts = amountsArray[i]
 
                     if (
                         types != 'start' && 
-                        types != 'end' && 
-                        types != 'bills'
+                        types != 'end'
                     ) {
                         currentArray.push({
-                            'type': types,
-                            'amount': amounts,
+                            'type': types.toLocaleLowerCase(),
+                            'amount': amounts
                         })
                     }
                 }
@@ -204,23 +192,53 @@ export const store = new Vuex.Store({
             const categoryPromise = fireSQL.query(`
                 SELECT
                     category,
-                    SUM(value) as totalValue
-                FROM ExpenseTotals
-
-                GROUP BY category
+                    spent,
+                    budgeted
+                FROM ExpenseCategories
             `)
 
             categoryPromise.then(query => {
                 query.forEach(doc => {
+                    let budgeted = Number(doc.budgeted);
+                    let spent = Number(doc.spent);
+                    let remaining = budgeted - spent;
                     categorySet.push({
-                        'category': doc.category,
-                        'amount': doc.totalValue
+                        'category': doc.category.toLocaleLowerCase(),
+                        'budgeted': budgeted,
+                        'spent': spent,
+                        'remaining': remaining
                     })
                 })
 
                 commit('setExpenseCategory', categorySet)
             })
         },
+        fetchRemaining({ commit }) {
+
+            const promise = fireSQL.query(`
+                SELECT 
+                    category,
+                    SUM(budgeted) as value,
+                    SUM(spent) as spent
+                FROM ExpenseCategories
+                GROUP BY category
+            `)
+
+            promise.then(query => {
+                let calc = 0;
+
+                query.forEach(doc => {
+                    if (doc.category != 'bills' && doc.category != 'income') {
+                        calc = calc + (doc.value - doc.spent)
+                    }
+                })
+                return calc
+            }).then((data) => {
+                commit('setRemaining', data)
+            })
+
+            
+        }
     },
     mutations: {
         setBudget(state, val) {
@@ -243,6 +261,9 @@ export const store = new Vuex.Store({
         },
         setExpenses(state, val) {
             state.expenses = val
+        },
+        setRemaining(state, val) {
+            state.remaining = val
         }
     }
 })
