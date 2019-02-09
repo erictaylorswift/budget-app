@@ -1,5 +1,6 @@
 <template>
-    <div class="nes-container half"> 
+    <div class="half"> 
+        <h2>Daily Expenses</h2>
         <bar-chart :chart-data="datacollection" :options="chartOptions" width="50" height="25"></bar-chart>
     </div>
 </template>

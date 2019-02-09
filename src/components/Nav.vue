@@ -24,7 +24,7 @@ export default {
             this.$router.push('current-budget')
         },
         expenseChart() {
-            this.$router.push('/charts/daily-expenses')
+            this.$router.push('/charts')
         },
         goHome() {
             this.$router.push('/')

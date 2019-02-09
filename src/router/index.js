@@ -5,7 +5,7 @@ import Details from '@/components/Details'
 import Main from '@/components/Main'
 import BudgetForm from '@/components/BudgetForm'
 import CurrentBudget from '@/components/CurrentBudget'
-import ExpenseChart from '@/components/charts/ExpenseChart'
+import Charts from '@/components/Charts'
 
 Vue.use(Router)
 
@@ -33,9 +33,9 @@ const router = new Router({
 			component: CurrentBudget
 		},
 		{
-			path: '/charts/daily-expenses',
-			name: 'ExpenseChart',
-			component: ExpenseChart
+			path: '/charts',
+			name: 'Charts',
+			component: Charts
 		}
 	]
 })
