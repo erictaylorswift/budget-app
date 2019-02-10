@@ -1,5 +1,5 @@
 <template>
-    <div class="one-third">
+    <div class="">
         <h2>Amount spent by Category</h2>
         <pie-chart :chart-data="datacollection" :options="chartOptions"></pie-chart>
     </div>
@@ -9,7 +9,6 @@
 import PieChart from './Pie.js'
 import { mapState } from 'vuex'
 import 'chartjs-plugin-colorschemes'
-import numeral from 'numeral'
 
 export default {
     created() {
@@ -24,13 +23,30 @@ export default {
         return {
             datacollection: null,
             chartOptions: {
+                zoomOutPercentage: 10,
+                layout: {
+                    padding: {
+                        left: 50,
+                        right: 50,
+                        top: 100,
+                        bottom: 100
+                    }
+                },
                 plugins: 
                 {
                     colorschemes: {
                         scheme: 'tableau.Tableau20'
                     },
-                    datalabels: {
-                        color: '#fff'
+                    legend: false,
+                    outlabels: {
+                        text: '%l: $%v',
+                        color: 'white',
+                        stretch: 45,
+                        font: {
+                            resizable: true,
+                            minSize: 14,
+                            maxSize: 18
+                        }
                     }
                 },
                 responsive: true,
@@ -40,6 +56,9 @@ export default {
                 },
                 title: {
                     display: false
+                },
+                tooltips: {
+                    enabled: false
                 }
             },
         }
@@ -49,19 +68,14 @@ export default {
             let state = this.$store.state.expenseCategory;
             let category = []
             let amounts = []
-            const formatter = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'CAD',
-                minimumFractionDigits: 2
-            })
 
             state.forEach(doc => {
                 if (
-                    doc.category != 'income' 
-                    && doc.category != 'bills' 
+                    doc.type != 'income' 
+                    && doc.type != 'bills' 
                     && doc.spent != 0
                 ) {
-                    category.push(doc.category)
+                    category.push(doc.type)
                     amounts.push((doc.spent))
                 }
                 

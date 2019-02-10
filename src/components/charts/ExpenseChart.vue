@@ -24,6 +24,14 @@ export default {
             chart: false,
             datacollection: null,
             chartOptions: {
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 100,
+                        top: 60,
+                        bottom: 60
+                    }
+                },
                 responsive: true,
                 maintainAspectRation: false,
                 categoryPercentage: 1.0,
@@ -34,6 +42,23 @@ export default {
                 title: {
                     display: false,
                     text: 'Daily Expenses'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return '$' + value;
+                            }
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var dataLabel = data.datasets[tooltipItem.datasetIndex].label;
+                            return dataLabel + ': $' + tooltipItem.yLabel
+                        }
+                    }
                 }
             }
         }
@@ -47,7 +72,7 @@ export default {
 
             state.forEach(doc => {
                 dates.push(moment(doc.date).format("MMM Do"))
-                amounts.push(parseInt(doc.amount))
+                amounts.push(parseFloat(doc.amount).toFixed(2))
             })
 
             this.datacollection = {
@@ -56,7 +81,8 @@ export default {
                     {
                         label: 'Daily Expenses',
                         data: amounts,
-                        backgroundColor: '#f87979'
+                        backgroundColor: '#41A234',
+                        hoverBackgroundColor: '#2D6F24'
                     }
                 ]
             }

@@ -1,11 +1,11 @@
 import { Doughnut, mixins } from 'vue-chartjs';
 const { reactiveProp } = mixins;
-import ChartDataLabels from 'chartjs-plugin-datalabels'
+import Outlabels from 'chartjs-plugin-piechart-outlabels'
 
 export default {
     extends: Doughnut,
     mixins: [reactiveProp],
-    plugins: [ChartDataLabels],
+    plugins: [Outlabels],
     props: ['options'],
     mounted () {
         this.renderChart(this.chartData, this.options)

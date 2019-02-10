@@ -6,10 +6,9 @@
         </a>
         <div class="links">
             <a @click="viewExpenses">
-                View expenses
+               Expenses
             </a>
             <a @click="currentBudget">Budgets</a>
-            <a @click="expenseChart">View Charts</a>
         </div>
     </div>
 </template>

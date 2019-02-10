@@ -19,6 +19,7 @@ Vue.use(VueMaterial)
 Vue.use(SmartTable)
 
 
+
 new Vue({
   el: '#app',
   store,

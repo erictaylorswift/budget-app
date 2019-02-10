@@ -25,7 +25,7 @@
                 </thead>
                 <tbody slot="body" slot-scope="{displayData}">
                     <tr v-for="row in displayData" :key="row.id">
-                        <td v-if="getDateDiff(row.date)">{{ row.date }}</td>
+                        <td v-if="getDateDiff(row.date)">{{ row.date | formatDate }}</td>
                         <td v-if="getDateDiff(row.date)">{{ row.type }}</td>
                         <td v-if="getDateDiff(row.date)">{{ row.category }}</td>
                         <td v-if="getDateDiff(row.date)">{{ row.note }}</td>
@@ -34,15 +34,17 @@
                 </tbody>
             </v-table>
         </div>
-        <v-table :data="expenseCategory" class="nes-table is-bordered">
+        <v-table :data="expenseCategory" :filters='filters' class="nes-table is-bordered">
             <thead slot="head">
-                <th>Category</th>
-                <th>Total</th>
+                <th></th>
+                <th>Total Spent</th>
+                <th>Remaining</th>
             </thead>
             <tbody slot="body" slot-scope="{displayData}">
                 <tr v-for="row in displayData" :key="row.id">
-                    <td>{{ row.category }}</td>
+                    <td>{{ row.type }}</td>
                     <td>{{ row.spent | formatCurrency }}</td>
+                    <td>{{ row.remaining | formatCurrency }}</td>
                 </tr>
             </tbody>
         </v-table>
@@ -101,7 +103,7 @@ export default {
     },
     filters: {
         formatDate(val) {
-            let date = moment(val).format('MMM Do, YYYY')
+            let date = moment(val).format('MMM Do')
             return date
         },
         formatCurrency(val) {

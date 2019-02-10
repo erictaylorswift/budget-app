@@ -47,6 +47,7 @@
     border-bottom: 4px solid #F7F91D;
     display: flex;
     align-items: center;
+    z-index: 10000;
 
     .links {
         display: flex;
@@ -236,6 +237,10 @@ label {
 
 .margin-bottom {
     @extend %margin-bottom
+}
+
+.margin-top {
+    @extend %margin-top
 }
 
 .top-right {

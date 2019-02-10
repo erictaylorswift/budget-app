@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex">
+        <div class="flex middle">
             <div class="nes-container flex">
                 <i class="nes-mario"></i>
                 <div class="lists">
@@ -60,6 +60,18 @@
                     </ul>
                 </div>
             </div>
+            <div class="space">
+                <a @click="showCharts" v-if="!this.charts">
+                    <i class="nes-pokeball"></i>
+                </a>
+                <a v-else @click="hideCharts">
+                    <i class="nes-squirtle"></i>
+                </a>
+            </div>
+        </div>
+        <div class="flex margin-top" v-if="this.charts">
+            <daily-expense></daily-expense>
+            <category-pie></category-pie>
         </div>
     </div>
 </template>
@@ -67,9 +79,15 @@
 <script>
 import { mapState } from 'vuex';
 import moment from 'moment';
+import DailyExpense from './charts/ExpenseChart'
+import CategoryPie from './charts/CategoryPie'
 const numeral = require('numeral');
 
 export default {
+    components: {
+        DailyExpense,
+        CategoryPie
+    },
     computed: {
         ...mapState(['budgets', 'expTotal', 'income'])
     },
@@ -85,11 +103,16 @@ export default {
     },
     data() {
         return {
-            
+            charts: false
         }
     },
     methods: {
-       
+       showCharts() {
+           this.charts = true;
+       },
+       hideCharts() {
+           this.charts = false
+       }
     }
 }
 </script>

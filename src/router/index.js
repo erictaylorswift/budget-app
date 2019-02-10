@@ -5,7 +5,6 @@ import Details from '@/components/Details'
 import Main from '@/components/Main'
 import BudgetForm from '@/components/BudgetForm'
 import CurrentBudget from '@/components/CurrentBudget'
-import Charts from '@/components/Charts'
 
 Vue.use(Router)
 
@@ -31,11 +30,6 @@ const router = new Router({
 			path: '/current-budget',
 			name: 'CurrentBudget',
 			component: CurrentBudget
-		},
-		{
-			path: '/charts',
-			name: 'Charts',
-			component: Charts
 		}
 	]
 })

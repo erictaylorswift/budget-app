@@ -203,7 +203,7 @@ export const store = new Vuex.Store({
                     let spent = Number(doc.spent);
                     let remaining = budgeted - spent;
                     categorySet.push({
-                        'category': doc.category.toLocaleLowerCase(),
+                        'type': doc.category.toLocaleLowerCase(),
                         'budgeted': budgeted,
                         'spent': spent,
                         'remaining': remaining
