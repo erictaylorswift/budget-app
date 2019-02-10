@@ -46,7 +46,7 @@ export default {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            callback: function(value, index, values) {
+                            callback: function(value) {
                                 return '$' + value;
                             }
                         }
