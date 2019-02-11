@@ -7,17 +7,17 @@
         <div class="flex">
             <v-table :data="expenseCategory" class="nes-table is-bordered">
                 <thead slot="head">
-                    <v-th sortKey='category'>Category</v-th>
+                    <v-th sortKey='tpe'>Category</v-th>
                     <v-th sortKey='budgeted'>Budgeted</v-th>
                     <v-th sortKey='spent' defaultSort='desc'>Spent</v-th>
                     <v-th sortKey='remaining' >Remaining</v-th>
                 </thead>
                 <tbody slot="body" slot-scope="{displayData}">
                     <tr v-for="row in displayData" :key="row.id">
-                        <td v-if="row.category != 'income'">{{ row.category }}</td>
-                        <td v-if="row.category != 'income'">{{ row.budgeted | formatCurrency}}</td>
-                        <td v-if="row.category != 'income'">{{ row.spent | formatCurrency}}</td>
-                        <td v-if="row.category != 'income'">{{ row.remaining | formatCurrency}}</td>
+                        <td v-if="row.type != 'income'">{{ row.type }}</td>
+                        <td v-if="row.type != 'income'">{{ row.budgeted | formatCurrency}}</td>
+                        <td v-if="row.type != 'income'">{{ row.spent | formatCurrency}}</td>
+                        <td v-if="row.type != 'income'">{{ row.remaining | formatCurrency}}</td>
                     </tr>
                 </tbody>
             </v-table>

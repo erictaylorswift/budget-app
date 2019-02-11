@@ -8,26 +8,26 @@
                     <p>Budgeted income: {{ budgets[0].income | formatCurrency }}</p>
                     <p>Budgeted expenses: {{ budgets[0].bills | formatCurrency }}</p>      
                     <hr>
-                    <p>Budget net income: {{ budgets[0].income - budgets[0].bills | formatCurrency }}</p>
-                    <p>Current net income: {{ income - expTotal | formatCurrency}}</p>
+                    <p>Budget net income: {{ netBudget.budgetNet | formatCurrency }}</p>
+                    <p>Current net income: {{ netBudget.currentNet | formatCurrency}}</p>
                 </div>
             </div>
             <div class="nes-container">
                 <h3 class="title">Perfomance</h3>
                 <div class="messages">
-                    <div class="message -left flex align-baseline" v-if="((income - expTotal) - (budgets[0].income - budgets[0].bills)) > 0">
+                    <div class="message -left flex align-baseline" v-if=" netBudget.diff > 0">
                         <i class="nes-icon trophy is-medium"></i>
                         <div class="nes-balloon from-left">
                             <p style="color: green">
-                                {{ (income - expTotal) - (budgets[0].income - budgets[0].bills) | formatCurrency }} ahead of budget
+                                {{ netBudget.diff | formatCurrency }} ahead of budget
                             </p>
                         </div>
                     </div>
                     <div class="message -left flex align-baseline" v-else>
                         <i class="nes-bulbasaur is-medium"></i>
                         <div class="nes-balloon from-left">
-                            <p>
-                                {{ (income - expTotal) - (budgets[0].income - budgets[0].bills) | formatCurrency }} behind budget
+                            <p style="color: #F81C2F">
+                                {{ netBudget.diff | formatCurrency }} behind budget
                             </p>
                         </div>
                     </div>
@@ -89,7 +89,20 @@ export default {
         CategoryPie
     },
     computed: {
-        ...mapState(['budgets', 'expTotal', 'income'])
+        ...mapState(['budgets', 'expTotal', 'income', 'remaining']),
+        netBudget() {
+            let state = this.$store.state;
+            let budgetNet = state.budgets[0].income - state.budgets[0].bills;
+            let currentNet = state.income - state.expTotal;
+            let diff = currentNet - budgetNet;
+
+            return {
+                budgetNet: budgetNet,
+                currentNet: currentNet,
+                diff: diff
+
+            }
+        }
     },
     filters: {
         formatDate(val) {

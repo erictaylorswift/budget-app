@@ -41,49 +41,59 @@ export const store = new Vuex.Store({
     },
     actions: {
         fetchExpenseTotals({ commit }) {
-            let total = 0
-
             const promise = fireSQL.query(`
-                SELECT
-                    date,
-                    SUM(value) as value
-                FROM ExpenseTotals
-
-                GROUP BY date
+                SELECT 
+                    category,
+                    SUM(budgeted) as value,
+                    SUM(spent) as spent
+                FROM ExpenseCategories
+                GROUP BY category
             `)
 
             promise.then(query => {
+                let calc = 0;
 
                 query.forEach(doc => {
-                    let expDate = moment(doc.date)
-                    let start = moment(this.state.budgets[0].start)
-                    let end = moment(this.state.budgets[0].end)
-                    let startDiff = expDate.diff(start, "days")
-                    let endDiff = expDate.diff(end, "days")
-
-                    if (startDiff > -1 && endDiff < 1) {
-                        total = doc.value + total   
+                    if (doc.category != 'bills' && doc.category != 'income') {
+                        calc = calc + doc.spent
                     }
                 })
-                commit('setExpTotal', total)
-            }).catch(err => {
-                alert(err)
+                return calc
+            }).then((data) => {
+                commit('setExpTotal', data)
             })
         },
         fetchIncome({ commit }) {
             let income = 0
-
-            const promise = fireSQL.query(`
+            let budgetDates = []
+            
+            const budgetPromise = fireSQL.query(`
                 SELECT
+                    start,
+                    end
+                FROM Budget
+            `)
+            
+            budgetPromise.then(query => {
+                budgetDates.push({
+                    'start': (query[0].start),
+                    'end': (query[0].end)
+                }) 
+            })
+
+
+            const incomePromise = fireSQL.query(`
+                SELECT
+                    date,
                     SUM(income) as value
                 FROM Income
             `)
 
-            promise.then(query => {
+            incomePromise.then(query => {
                 query.forEach(doc => {
                     let incDate = moment(doc.date)
-                    let start = moment(this.state.budgets[0].start)
-                    let end = moment(this.state.budgets[0].end)
+                    let start = moment(budgetDates[0].start)
+                    let end = moment(budgetDates[0].end)
                     let startDiff = incDate.diff(start, "days")
                     let endDiff = incDate.diff(end, "days")
 

@@ -33,6 +33,18 @@
                             <option>Gym</option>
                         </select>
                     </div>
+                    <div class="flex-column" v-if="expense.label == 'Allowances'">
+                        <label>Select Expense</label>
+                        <select v-model.trim="expense.category">
+                            <option disabled value="">category</option>
+                            <option>Dining Out</option>
+                            <option>Gifts</option>
+                            <option>Personal Shopping</option>
+                            <option>Vapes</option>
+                            <option>Art</option>
+                            <option>Coffee</option>
+                        </select>
+                    </div>
                     <label>Add an expensee</label>
                     <input v-model="expense.note" placeholder="expensee">
                     <label>Add amount</label>
