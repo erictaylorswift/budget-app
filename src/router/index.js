@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import firebase from 'firebase'
 
 import Details from '@/components/Details'
 import Main from '@/components/Main'
