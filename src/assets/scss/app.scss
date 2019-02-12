@@ -103,6 +103,11 @@ button {
     margin-top: 44px;
 }
 
+.login {
+    margin: 20px;
+    align-self: flex-end;
+}
+
 select, input {
     @extend %standard-spacing;
     padding: 8px;
@@ -269,6 +274,10 @@ label {
 
 .middle {
     align-items: center;
+}
+
+.bottom {
+    align-items: baseline;
 }
 
 .title {

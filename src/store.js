@@ -6,10 +6,17 @@ import moment from 'moment'
 
 const fb = require('./firebaseConfig')
 
+fb.auth.onAuthStateChanged(user => {
+    if (user) {
+        store.commit('setCurrentUser', user)
+    }
+});
+
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
+        currentUser: null,
         budgets: {},
         expenses: {},
         currentBudget: {
@@ -147,6 +154,11 @@ export const store = new Vuex.Store({
                         'amount': Number(doc.value)
                     })
                 })
+                
+                expenseDataset.sort((a,b) => {
+                    return new Date(a.date) - new Date(b.date)
+                })
+
                 commit('setDailyExpenses', expenseDataset)
             })
         },
@@ -274,6 +286,9 @@ export const store = new Vuex.Store({
         },
         setRemaining(state, val) {
             state.remaining = val
-        }
+        },
+        setCurrentUser(state, val) {
+            state.currentUser = val
+        },
     }
 })

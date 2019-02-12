@@ -14,10 +14,10 @@
                 </thead>
                 <tbody slot="body" slot-scope="{displayData}">
                     <tr v-for="row in displayData" :key="row.id">
-                        <td v-if="row.type != 'income'">{{ row.type }}</td>
-                        <td v-if="row.type != 'income'">{{ row.budgeted | formatCurrency}}</td>
-                        <td v-if="row.type != 'income'">{{ row.spent | formatCurrency}}</td>
-                        <td v-if="row.type != 'income'">{{ row.remaining | formatCurrency}}</td>
+                        <td v-if="row.type != 'income' && row.type != 'bills'">{{ row.type }}</td>
+                        <td v-if="row.type != 'income' && row.type != 'bills'">{{ row.budgeted | formatCurrency}}</td>
+                        <td v-if="row.type != 'income' && row.type != 'bills'">{{ row.spent | formatCurrency}}</td>
+                        <td v-if="row.type != 'income' && row.type != 'bills'">{{ row.remaining | formatCurrency}}</td>
                     </tr>
                 </tbody>
             </v-table>
