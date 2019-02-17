@@ -33,7 +33,7 @@
             </v-table>
             <v-table></v-table>
         </div>
-        <h4>Budget over/under: 
+        <h4>Remaining budget: 
             <span v-if="remaining > 0" class="positive lg-font">
                 <i class="nes-kirby"></i>
                 {{ remaining | formatCurrency}}

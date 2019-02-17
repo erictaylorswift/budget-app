@@ -33,18 +33,6 @@
                             <option>Gym</option>
                         </select>
                     </div>
-                    <div class="flex-column" v-if="expense.label == 'Allowances'">
-                        <label>Select Expense</label>
-                        <select v-model.trim="expense.category">
-                            <option disabled value="">category</option>
-                            <option>Dining Out</option>
-                            <option>Gifts</option>
-                            <option>Personal Shopping</option>
-                            <option>Vapes</option>
-                            <option>Art</option>
-                            <option>Coffee</option>
-                        </select>
-                    </div>
                     <label>Add an expensee</label>
                     <input v-model="expense.note" placeholder="expensee">
                     <label>Add amount</label>
@@ -116,13 +104,26 @@ export default {
                 this.$store.dispatch('fetchExpenseTotals')
             })
 
-            fb.db.collection('ExpenseCategories').doc(expenseLabel.toLowerCase()).get().then(res => {
-                let data = res.data();
+            if (billCategory == "") {
+                fb.db.collection('ExpenseCategories').doc(expenseLabel.toLowerCase()).get().then(res => {
+                    let data = res.data();
 
-                fb.db.collection('ExpenseCategories').doc(expenseLabel.toLowerCase()).update({
-                    'spent': Number(data.spent) + Number(expenseValue)
+                    fb.db.collection('ExpenseCategories').doc(expenseLabel.toLowerCase()).update({
+                        'spent': Number(data.spent) + Number(expenseValue)
+                    })
                 })
-            })
+            } else {
+                fb.db.collection('ExpenseCategories').doc(billCategory.toLowerCase()).get().then(res => {
+                    let data = res.data();
+
+
+                    fb.db.collection('ExpenseCategories').doc(billCategory.toLowerCase()).update({
+                        'spent': Number(data.spent) + Number(expenseValue)
+                    })
+                })
+            }
+
+            
 
             this.$modal.hide('expense-modal')
         },

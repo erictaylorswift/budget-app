@@ -36,7 +36,7 @@ export const store = new Vuex.Store({
                 groceries: 0,
                 allowances: 0,
                 savings: 0,
-                childCare: 0,
+                'child Care': 0,
             }
         },
         income: 0,
@@ -59,12 +59,12 @@ export const store = new Vuex.Store({
 
             promise.then(query => {
                 let calc = 0;
-
                 query.forEach(doc => {
                     if (doc.category != 'bills' && doc.category != 'income') {
-                        calc = calc + doc.spent
+                        calc = calc + Number(doc.spent)
                     }
                 })
+
                 return calc
             }).then((data) => {
                 commit('setExpTotal', data)
@@ -94,6 +94,7 @@ export const store = new Vuex.Store({
                     date,
                     SUM(income) as value
                 FROM Income
+                GROUP BY date
             `)
 
             incomePromise.then(query => {

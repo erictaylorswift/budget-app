@@ -82,52 +82,40 @@ export default {
             let budget = this.$store.state.currentBudget
             let bills = budget.expenses
             let billsObj = Object.values(bills)
+            let expenseKeys = Object.keys(bills)
 
             let billsArray = [];
-            let currentArray = [];
 
             for (var i = 0; i<billsObj.length; i++) {
                 billsArray.push(Number(billsObj[i]))
             }
-
             let billsTotal = billsArray.reduce((a, b) => a + b, 0)
 
             fb.db.collection('Budget').doc('Budgets').set({
                 'start': moment(budget.start).toISOString(),
                 'end': moment(budget.end).toISOString(),
-                'income': budget.income,
+                'income': Number(budget.income),
                 'expenses': {
-                    'groceries': budget.expenses.groceries,
-                    'allowances': budget.expenses.allowances,
-                    'savings': budget.expenses.savings,
-                    'child Care': budget.expenses.childCare,
-                    'credit': budget.expenses.credit,
-                    'loans': budget.expenses.loans,
-                    'utilities': budget.expenses.utilities,
-                    'cellphone': budget.expenses.phones,
-                    'car': budget.expenses.car
+                    'groceries': Number(budget.expenses.groceries),
+                    'allowances': Number(budget.expenses.allowances),
+                    'savings': Number(budget.expenses.savings),
+                    'child Care': Number(budget.expenses.childCare),
+                    'credit': Number(budget.expenses.credit),
+                    'loans': Number(budget.expenses.loans),
+                    'utilities': Number(budget.expenses.utilities),
+                    'cellphone': Number(budget.expenses.phones),
+                    'car': Number(budget.expenses.car)
                 },
                 'bills': billsTotal
-            }).then(() => {
-                let budgetObj = this.$store.state.budgets[0];
-                let budgetTypes = Object.keys(budgetObj);
-                let budgetAmounts = Object.values(budgetObj);
-
-                for (var i = 0; i < budgetTypes.length; i++){
-                    currentArray.push({
-                        'type': budgetTypes[i],
-                        'amount': budgetAmounts[i]
-                    })
-                }
-            }).then(() => {
-                for (var c = 0; c < currentArray.length; c++) {
-                    fb.db.collection('ExpenseCategories').doc(currentArray[c].type).set({
-                        'category': currentArray[c].type,
-                        'budgeted': currentArray[c].amount,
-                        'spent': 0
-                    })
-                }
             })
+
+            for (var c = 0; c < billsObj.length; c++) {
+                fb.db.collection('ExpenseCategories').doc(expenseKeys[c]).set({
+                    'category': expenseKeys[c],
+                    'budgeted': Number(billsObj[c]),
+                    'spent': 0
+                })
+            }
         },
         goHome() {
             this.$router.push('/')
