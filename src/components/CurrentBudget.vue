@@ -33,16 +33,17 @@
             </v-table>
             <v-table></v-table>
         </div>
-        <h4>Remaining budget: 
-            <span v-if="remaining > 0" class="positive lg-font">
-                <i class="nes-kirby"></i>
-                {{ remaining | formatCurrency}}
-            </span>
-            <span v-else class="negative lg-font">
-                <i class="nes-bulbasaur"></i>
-                {{ remaining | formatCurrency}}
-            </span>
-        </h4>
+        <div class="flex baseline margin-top">
+            <h4>Remaining budget: 
+                <span v-if="remaining.percent > 50" class="positive lg-font">
+                    {{ remaining.remaining | formatCurrency}}
+                </span>
+                <span v-else class="negative lg-font">
+                    {{ remaining.remaining | formatCurrency}}
+                </span>
+            </h4>
+        <progress v-bind:class="{'is-success': remaining.percent > 49, 'is-warning': remaining.percent < 50 && remaining.percent > 24, 'is-error': remaining.percent < 25}" class="nes-progress" v-bind:value="remaining.percent" max="100"></progress>
+        </div>
     </div>
 </template>
 
@@ -50,7 +51,7 @@
 import numeral from 'numeral';
 import { mapState } from 'vuex';
 
-
+/* eslint-disable */
 export default {
     created() {
         this.$store.dispatch('fetchBudget')

@@ -17,7 +17,7 @@ const router = new Router({
 			redirect: '/'
 		},
 		{
-			path: '/',
+			path: '/home',
             name: 'Main',
 			component: Main,
 			meta: {
@@ -25,7 +25,7 @@ const router = new Router({
 			}
 		},
 		{
-			path: '/login',
+			path: '/',
 			name: 'Login',
 			component: Login
 		},

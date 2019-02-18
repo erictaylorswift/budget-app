@@ -156,6 +156,9 @@ label {
     }
 }
 
+.message-container {
+    margin: 22px 0 0 30px;
+}
 
 .container {
     display: flex;
@@ -212,6 +215,10 @@ label {
     }
 }
 
+.baseline {
+    align-items: baseline;
+}
+
 .align-baseline {
     align-items: flex-end;
 
@@ -234,6 +241,12 @@ label {
 .nes-table {
     margin: 16px 10px !important;
     background-color: rgba(0,0,0,0);
+}
+
+.table-row {
+    .font-sm {
+        font-size: 12px;
+    }
 }
 
 .lists {
@@ -289,4 +302,10 @@ label {
 .vdp-datepicker__calendar {
     position: relative !important;
     left: 16px;
+}
+
+.nes-progress {
+    width: 43%;
+    height: 40px;
+    margin: 0 40px;
 }

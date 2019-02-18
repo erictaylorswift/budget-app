@@ -249,13 +249,22 @@ export const store = new Vuex.Store({
 
             promise.then(query => {
                 let calc = 0;
+                let total = 0;
 
                 query.forEach(doc => {
                     if (doc.category != 'bills' && doc.category != 'income') {
                         calc = calc + (doc.value - doc.spent)
+                        total = total + doc.value
                     }
                 })
-                return calc
+
+                let remainingPercent = (calc / total)*100
+                let remainingObj = {
+                    remaining: calc,
+                    budgeted: total,
+                    percent: remainingPercent
+                }
+                return remainingObj
             }).then((data) => {
                 commit('setRemaining', data)
             })

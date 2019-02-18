@@ -12,22 +12,19 @@
                     <p>Current net income: {{ netBudget.currentNet | formatCurrency}}</p>
                 </div>
             </div>
-            <div class="nes-container">
-                <h3 class="title">Perfomance</h3>
+            <div class="message-container">
                 <div class="messages">
-                    <div class="message -left flex align-baseline" v-if=" netBudget.diff > 0">
-                        <i class="nes-icon trophy is-medium"></i>
+                    <div class="message -left flex align-baseline">
                         <div class="nes-balloon from-left">
-                            <p style="color: green">
-                                {{ netBudget.diff | formatCurrency }} ahead of budget
-                            </p>
-                        </div>
-                    </div>
-                    <div class="message -left flex align-baseline" v-else>
-                        <i class="nes-bulbasaur is-medium"></i>
-                        <div class="nes-balloon from-left">
-                            <p style="color: #F81C2F">
-                                {{ netBudget.diff | formatCurrency }} behind budget
+                            <p>
+                                You are 
+                                    <span v-bind:class="{ 
+                                            positive: positiveNet, 
+                                            negative: !positiveNet
+                                        }">
+                                        {{ netBudget.diff | formatCurrency }}
+                                    </span> 
+                                ahead of budget
                             </p>
                         </div>
                     </div>
@@ -36,7 +33,7 @@
         </div>
         <div class="flex middle">
             <div class="nes-container flex">
-                <i class="nes-mario"></i>
+                <i class="nes-icon coin is-large"></i>
                 <div class="lists">
                     <h3>Expenses</h3>
                     <ul class="nes-list is-disc">
@@ -96,6 +93,11 @@ export default {
             let currentNet = state.income - state.expTotal;
             let diff = currentNet - budgetNet;
 
+            if (diff > 0) {
+                // eslint-disable-next-line
+                this.positiveNet = true;
+            }
+
             return {
                 budgetNet: budgetNet,
                 currentNet: currentNet,
@@ -116,7 +118,8 @@ export default {
     },
     data() {
         return {
-            charts: false
+            charts: false,
+            positiveNet: false
         }
     },
     methods: {

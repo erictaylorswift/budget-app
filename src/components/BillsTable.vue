@@ -11,8 +11,11 @@
                 <option>Child Care</option>
                 <option>Prescriptions</option>
                 <option>Rent</option>
-                <option></option>
             </select>
+            <label>
+                <input type="checkbox" v-model="filters.type.value" true-value="" class="nes-checkbox"/>
+                <span>Show All</span>
+            </label>
         </div>
         <div class="flex-column">
             <v-table :data="expenses" :filters='filters' class="nes-table is-bordered">
@@ -24,11 +27,11 @@
                     <v-th sortKey="amount">Amount</v-th>
                 </thead>
                 <tbody slot="body" slot-scope="{displayData}">
-                    <tr v-for="row in displayData" :key="row.id">
+                    <tr v-for="row in displayData" :key="row.id" class="table-row">
                         <td v-if="getDateDiff(row.date)">{{ row.date | formatDate }}</td>
                         <td v-if="getDateDiff(row.date)">{{ row.type }}</td>
-                        <td v-if="getDateDiff(row.date)">{{ row.category }}</td>
-                        <td v-if="getDateDiff(row.date)">{{ row.note }}</td>
+                        <td class="font-sm" v-if="getDateDiff(row.date)">{{ row.category }}</td>
+                        <td class="font-sm" v-if="getDateDiff(row.date)">{{ row.note }}</td>
                         <td v-if="getDateDiff(row.date)">{{ row.amount | formatCurrency }}</td>
                     </tr>
                 </tbody>

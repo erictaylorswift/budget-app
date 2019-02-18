@@ -32,7 +32,7 @@ export default {
             this.$router.push('/charts')
         },
         goHome() {
-            this.$router.push('/')
+            this.$router.push('/home')
         },
         logout() {
             fb.auth.signOut().then(() => {

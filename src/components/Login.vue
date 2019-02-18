@@ -92,7 +92,7 @@
                     .then(user => {
                         this.$store.commit('setCurrentUser', user.user)
                         this.performingRequest = false
-                        this.$router.push('/')
+                        this.$router.push('/home')
                     }).catch(err => {
                         this.performingRequest = false
                         this.errorMsg = err.message
