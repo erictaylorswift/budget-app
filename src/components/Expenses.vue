@@ -23,7 +23,7 @@
                         <select v-model.trim="expense.category">
                             <option disabled value="">category</option>
                             <option>Credit</option>
-                            <option>Loan</option>
+                            <option>Loans</option>
                             <option>Hydro</option>
                             <option>Car</option>
                             <option>Cell phone</option>
