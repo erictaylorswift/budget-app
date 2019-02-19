@@ -6,6 +6,7 @@ import Toasted from 'vue-toasted'
 import VueMaterial from 'vue-material'
 import SmartTable from 'vuejs-smart-table';
 import 'vue-material/dist/vue-material.min.css'
+import './../node_modules/bulma/css/bulma.css';
 import './assets/scss/app.scss'
 import router from './router'
 import { store } from './store.js'

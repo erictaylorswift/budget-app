@@ -1,0 +1,43 @@
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+
+    button {
+        margin-right: 20px;
+    }
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.baseline {
+    align-items: baseline;
+}
+
+.align-baseline {
+    align-items: flex-end;
+
+    i {
+        margin-right: 16px;
+    }
+}
+
+.no-wrap {
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+
+.start {
+    align-items: flex-start;
+}
+
+.middle {
+    align-items: center;
+}
+
+.bottom {
+    align-items: baseline;
+}

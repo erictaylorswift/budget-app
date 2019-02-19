@@ -1,17 +1,48 @@
 <template>
-    <div class="nav" v-if="currentUser">
-        <a @click="goHome" class="home middle">
-            <i class="nes-logo"></i>
-            Home
-        </a>
-        <div class="links">
-            <a @click="viewExpenses">
-               Expenses
+    <nav class="navbar is-fixed-top is-black" role="navigation" v-if="currentUser">
+        <div class="navbar-brand">
+            <a @click="goHome" class="navbar-item">
+                <img src="..\assets\images\home.png">
             </a>
-            <a @click="currentBudget">Budgets</a>
-            <a @click="logout">Logout</a>
         </div>
-    </div>
+        
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a @click="viewExpenses" class="navbar-item has-text-weight-semibold">
+                    Expenses
+                </a>
+                <a @click="currentBudget" class="navbar-item has-text-weight-semibold">Budgets</a>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a @click="newIncome" class="button is-rounded is-link">
+                            <span class="icon has-text-white">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </span>
+                            <span class="has-text-white">Add Income</span>
+                        </a>
+                        <a @click="newExpense" class="button is-rounded is-success">
+                            <span class="icon has-text-white">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </span>
+                            <span class="has-text-white">
+                                Add Expense
+                            </span>
+                        </a>
+                        <a @click="logout" class="button is-rounded">
+                            <span class="icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </span>
+                            <span>
+                                Logout
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 </template>
 
 <script>
@@ -42,6 +73,12 @@ export default {
                 alert(err)
             })
             
+        },
+        newExpense() {
+            this.$modal.show('expense-modal')
+        },
+        newIncome() {
+            this.$modal.show('income-modal')
         }
     }
     

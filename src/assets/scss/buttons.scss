@@ -1,0 +1,16 @@
+button {
+    @extend %standard-spacing;
+    width: auto;
+}
+
+.new-budget-button {
+    float: right;
+    margin-right: 60px;
+    position: fixed;
+    top: 30px;
+    right: 0;
+}
+
+.budget-btn {
+    margin-top: 44px;
+}

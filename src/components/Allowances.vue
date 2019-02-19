@@ -1,7 +1,7 @@
 <template>
-    <div class="nes-table-responsive">
+    <div>
         <h3>Misc. Expenses</h3>
-        <table class="nes-table is-bordered">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Date</th>

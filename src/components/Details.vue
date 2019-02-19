@@ -1,11 +1,6 @@
 <template>
     <div>
-        <div class="flex">
-            <h2 class="header">Expense Details</h2>
-        </div>
-        <div class="flex">
-            <BillsTable></BillsTable>
-        </div>
+        <BillsTable></BillsTable>
     </div>
 </template>
 

@@ -1,5 +1,13 @@
-@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
-@import url(https://unpkg.com/nes.css/css/nes.css);
+// @import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+// @import url(https://unpkg.com/nes.css/css/nes.css);
+@import url('https://fonts.googleapis.com/css?family=Arimo');
+@import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
+
+@import './nav';
+@import './flex';
+@import './buttons.scss';
+@import './box.scss';
+@import './table.scss';
 
 %margin-top {
     margin-top: 20px;
@@ -23,7 +31,15 @@
 }
 
 * {
-    font-family: 'Press Start 2P'
+    font-family: 'Arimo'
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none !important;
 }
 
 .positive {
@@ -39,42 +55,7 @@
 }
 
 
-.nav {
-    position: fixed;
-    padding: 20px 120px;
-    width: 100%;
-    background: #f7d51d;
-    border-bottom: 4px solid #F7F91D;
-    display: flex;
-    align-items: center;
-    z-index: 10000;
 
-    .links {
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
-
-        a {
-            margin: 0 12px;
-            font-size: 14px;
-            color: grey;
-            transition: 0.3s
-        };
-
-        a:hover {
-            color: #108DE0
-        }
-    }
-
-    .home {
-        display: flex;
-        width: 100%;
-
-        i {
-            margin-right: 12px;
-        }
-    }
-}
 
 .header {
     @extend %margin-top;
@@ -86,36 +67,13 @@
     padding: 120px;
 }
 
-button {
-    @extend %standard-spacing;
-    width: auto;
-}
 
-.new-budget-button {
-    float: right;
-    margin-right: 60px;
-    position: fixed;
-    top: 30px;
-    right: 0;
-}
 
-.budget-btn {
-    margin-top: 44px;
-}
+
 
 .login {
     margin: 20px;
     align-self: flex-end;
-}
-
-select, input {
-    @extend %standard-spacing;
-    padding: 8px;
-}
-
-label {
-    margin-top: 16px;
-    margin-left: 16px;
 }
 
 #app {
@@ -206,49 +164,6 @@ label {
     width: 30%;
 }
 
-.flex {
-    display: flex;
-    flex-wrap: wrap;
-
-    button {
-        margin-right: 20px;
-    }
-}
-
-.baseline {
-    align-items: baseline;
-}
-
-.align-baseline {
-    align-items: flex-end;
-
-    i {
-        margin-right: 16px;
-    }
-}
-
-.no-wrap {
-    flex-direction: row;
-    flex-wrap: nowrap;
-}
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
-}
-
-
-.nes-table {
-    margin: 16px 10px !important;
-    background-color: rgba(0,0,0,0);
-}
-
-.table-row {
-    .font-sm {
-        font-size: 12px;
-    }
-}
-
 .lists {
     margin: 0 32px;
 }
@@ -279,24 +194,6 @@ label {
 
 .space {
     @extend %standard-spacing
-}
-
-.start {
-    align-items: flex-start;
-}
-
-.middle {
-    align-items: center;
-}
-
-.bottom {
-    align-items: baseline;
-}
-
-.title {
-    font-size: 18px;
-    text-decoration: underline;
-    margin-bottom: 20px;
 }
 
 .vdp-datepicker__calendar {

@@ -1,9 +1,5 @@
 <template>
     <div>
-        <div class="flex margin-bottom">
-            <button @click="newIncome" class="nes-btn is-primary">Add income</button>
-            <button @click="newExpense" class="nes-btn is-primary">Add expense</button>
-        </div>
         <Expenses></Expenses>
         <Income></Income>
         <Home></Home>
@@ -40,12 +36,7 @@ export default {
         }
     },
     methods: {
-        newExpense() {
-            this.$modal.show('expense-modal')
-        },
-        newIncome() {
-            this.$modal.show('income-modal')
-        }
+        
     }
 }
 </script>
