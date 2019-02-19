@@ -1,19 +1,15 @@
 <template>
-  <div id="main">
+  <div id="main" class="container">
     <Nav></Nav>
-    <div class="main-container">
       <router-view/>
-    </div>
   </div>
 </template>
 
 <script>
 import Nav from './components/Nav'
-import Main from './components/Main'
 export default {
   components: {
-    Nav,
-    Main
+    Nav
   }
 }
 </script>

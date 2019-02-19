@@ -1,5 +1,6 @@
 <template>
-    <div class="flex">
+    <div class="">
+        <p class="title is-4">Filter</p>
         <div class="level absolute">
             <div class="level-left">
                 <div class="level-item">
