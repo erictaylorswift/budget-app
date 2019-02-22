@@ -1,15 +1,21 @@
 <template>
   <div id="main" class="container">
     <Nav></Nav>
-      <router-view/>
+    <Expenses/>
+    <Income/>
+    <router-view/>
   </div>
 </template>
 
 <script>
 import Nav from './components/Nav'
+import Expenses from './components/Expenses'
+import Income from './components/Income'
 export default {
   components: {
-    Nav
+    Nav,
+    Expenses,
+    Income
   }
 }
 </script>

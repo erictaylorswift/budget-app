@@ -1,13 +1,12 @@
 <template>
     <div id="home">
+        <h1 class="title">Budget Performance Overview</h1>
+        <p class="subtitle">for {{ budgets[0].start | formatDate }} to {{ budgets[0].end | formatDate }}</p>
         <div class="tile is-ancestor">
             <div class="tile is-parent is-4">
                     <article class="tile is-child notification is-primary">
                         <p class="title is-4">
                             Breakdown
-                        </p>
-                        <p class="subtitle is-5">
-                            Budget for {{ budgets[0].start | formatDate }} to {{ budgets[0].end | formatDate }}
                         </p>
                         <div class="content">
                             <p>Budgeted income: {{ budgets[0].income | formatCurrency }}</p>
@@ -37,7 +36,18 @@
                 </article>
             </div>
         </div>
-        <div>
+        <div class="column is-8">
+            <h4 class="subtitle">Remaining budget: 
+                <span v-if="remaining.percent > 50" class="positive lg-font">
+                    {{ remaining.remaining | formatCurrency}}
+                </span>
+                <span v-else class="negative lg-font">
+                    {{ remaining.remaining | formatCurrency}}
+                </span>
+            </h4>
+            <progress v-bind:class="{'is-success': remaining.percent > 49, 'is-warning': remaining.percent < 50 && remaining.percent > 24, 'is-danger': remaining.percent < 25}" class="progress is-large" v-bind:value="remaining.percent" max="100"></progress>
+        </div>
+        <div class="buttons column">
             <a @click="showCharts" v-if="!this.charts" class="button has-background-info is-rounded">
                 <span class="icon is-large has-text-white">
                     <i class="fas fa-chart-line"></i>

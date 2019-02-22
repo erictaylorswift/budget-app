@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div>
         <p class="title is-4">Filter</p>
         <div class="level absolute">
             <div class="level-left">

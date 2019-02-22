@@ -8,6 +8,7 @@
 @import './buttons.scss';
 @import './box.scss';
 @import './table.scss';
+@import './pages/login.scss';
 
 %margin-top {
     margin-top: 20px;
@@ -69,8 +70,6 @@ a:hover {
     margin: 20px;
     align-self: flex-end;
 }
-
-
 
 #bills {
     input {

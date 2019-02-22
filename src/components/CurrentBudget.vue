@@ -1,11 +1,11 @@
 <template>
     <div>
-        <button @click="newBudget" class="nes-btn is-warning top-right">New budget</button>
-        <div class="flex middle">
-            <h2 class="header space">Current Budget</h2>
+        <div class="buttons is-right">
+            <button @click="newBudget" class="button is-rounded is-warning">New budget</button>
         </div>
-        <div class="flex">
-            <v-table :data="expenseCategory" class="nes-table is-bordered">
+        <h2 class="title">Current Budget</h2>
+        <div class="columns">
+            <v-table :data="expenseCategory" class="table is-bordered column is-hoverable budget-table">
                 <thead slot="head">
                     <v-th sortKey='tpe'>Category</v-th>
                     <v-th sortKey='budgeted'>Budgeted</v-th>
@@ -21,7 +21,7 @@
                     </tr>
                 </tbody>
             </v-table>
-            <v-table :data='current' class="nes-table is-bordered">
+            <v-table :data='current' class="table is-bordered column">
                 <thead slot="head">
                     <th>Income</th>
                 </thead>
@@ -31,18 +31,6 @@
                     </tr>
                 </tbody>
             </v-table>
-            <v-table></v-table>
-        </div>
-        <div class="flex baseline margin-top">
-            <h4>Remaining budget: 
-                <span v-if="remaining.percent > 50" class="positive lg-font">
-                    {{ remaining.remaining | formatCurrency}}
-                </span>
-                <span v-else class="negative lg-font">
-                    {{ remaining.remaining | formatCurrency}}
-                </span>
-            </h4>
-        <progress v-bind:class="{'is-success': remaining.percent > 49, 'is-warning': remaining.percent < 50 && remaining.percent > 24, 'is-error': remaining.percent < 25}" class="nes-progress" v-bind:value="remaining.percent" max="100"></progress>
         </div>
     </div>
 </template>

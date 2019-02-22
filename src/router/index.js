@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Details from '@/components/Details'
-import Main from '@/components/Main'
+import Home from '@/components/Home'
 import BudgetForm from '@/components/BudgetForm'
 import CurrentBudget from '@/components/CurrentBudget'
 import Login from '@/components/Login'
@@ -14,12 +14,12 @@ const router = new Router({
 	routes: [
 		{
 			path: '*',
-			redirect: '/'
+			redirect: '/home'
 		},
 		{
 			path: '/home',
-            name: 'Main',
-			component: Main,
+            name: 'Home',
+			component: Home,
 			meta: {
 				requiresAuth: true
 			}

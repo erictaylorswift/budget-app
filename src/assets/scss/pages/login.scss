@@ -1,0 +1,21 @@
+.login-title {
+    color: #2E3865;
+}
+
+.login-button {
+    background-color: #2E3865;
+    color: white;
+    transition: 0.3s;
+    border: none;
+}
+
+.login-button:hover {
+    background-color: #4CAD9D;
+    color: #2E3865;
+}
+
+.login-background {
+    background: #acb6e5;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to bottom, #86fde8, #acb6e5);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to bottom, #86fde8, #acb6e5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
