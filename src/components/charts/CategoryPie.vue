@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="pie-chart-wrapper column is-two-fifths">
         <h2>Amount spent by Category</h2>
         <pie-chart :chart-data="datacollection" :options="chartOptions"></pie-chart>
     </div>
@@ -12,7 +12,6 @@ import 'chartjs-plugin-colorschemes'
 
 export default {
     created() {
-        this.$store.dispatch('fetchExpenseCategory')
         this.fillData()
     },
     computed: {

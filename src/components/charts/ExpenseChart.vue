@@ -1,5 +1,5 @@
 <template>
-    <div class="half"> 
+    <div class="column is-three-fifths"> 
         <h2>Daily Expenses</h2>
         <bar-chart :chart-data="datacollection" :options="chartOptions" width="50" height="25"></bar-chart>
     </div>
@@ -11,7 +11,6 @@ import moment from 'moment'
 import BarChart from './Bar.js'
 export default {
     created() {
-        this.$store.dispatch('fetchDailyExpenses')
         this.fillData()
     },
     computed: {

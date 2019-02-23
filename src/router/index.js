@@ -13,7 +13,7 @@ const router = new Router({
 	mode: 'history',
 	routes: [
 		{
-			path: '*',
+			path: '/',
 			redirect: '/home'
 		},
 		{
@@ -25,7 +25,7 @@ const router = new Router({
 			}
 		},
 		{
-			path: '/',
+			path: '/login',
 			name: 'Login',
 			component: Login
 		},

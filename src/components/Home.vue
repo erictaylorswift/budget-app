@@ -61,7 +61,7 @@
                 <span class="has-text-white">Hide Charts</span>
             </a>
         </div>
-        <div class="flex margin-top" v-if="this.charts">
+        <div class="columns margin-top" v-if="this.charts">
             <daily-expense></daily-expense>
             <category-pie></category-pie>
         </div>
@@ -76,6 +76,14 @@ import CategoryPie from './charts/CategoryPie'
 const numeral = require('numeral');
 
 export default {
+    created() {
+        this.$store.dispatch('fetchIncome')
+        this.$store.dispatch('fetchBudget')
+        this.$store.dispatch('fetchRemaining')
+        this.$store.dispatch('fetchExpenseTotals')
+        this.$store.dispatch('fetchDailyExpenses')
+        this.$store.dispatch('fetchExpenseCategory')
+    },
     components: {
         DailyExpense,
         CategoryPie
