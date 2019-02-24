@@ -77,7 +77,7 @@ export default {
             
         },
         newExpense() {
-            this.$modal.show('expense-modal')
+            this.$store.state.showExpenseModal = true
         },
         newIncome() {
             this.$modal.show('income-modal')

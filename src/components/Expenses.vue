@@ -1,52 +1,83 @@
 <template>
-    <div class="flex">
-        <modal 
-            name="expense-modal"
-            height='auto'>
-            <div id="modal">
-                <form @submit.prevent>
-                    <div class="flex-column">
-                        <label>Select Expense</label>
-                        <select v-model.trim="expense.label">
-                            <option disabled value="">Expense</option>
-                            <option>Groceries</option>
-                            <option>Bills</option>
-                            <option>Allowances</option>
-                            <option>Savings</option>
-                            <option>Child Care</option>
-                            <option>Prescriptions</option>
-                            <option>Rent</option>
-                        </select>
+    <div class="modal is-active" v-if="showExpenseModal">
+        <div class="modal-background"></div>
+        <div id="modal" class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Add new expense</p>
+                <button class="delete" aria-label="close" @click="closeModal"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field columns">
+                    <div class="control column">
+                        <label class="label">Select Type</label>
+                        <div class="select">
+                            <select v-model.trim="expense.label">
+                                <option disabled value="">Expense</option>
+                                <option>Groceries</option>
+                                <option>Bills</option>
+                                <option>Allowances</option>
+                                <option>Savings</option>
+                                <option>Child Care</option>
+                                <option>Prescriptions</option>
+                                <option>Rent</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="flex-column" v-if="expense.label == 'Bills'">
-                        <label>Select Expense</label>
-                        <select v-model.trim="expense.category">
-                            <option disabled value="">category</option>
-                            <option>Credit</option>
-                            <option>Loans</option>
-                            <option>Hydro</option>
-                            <option>Car</option>
-                            <option>Cell phone</option>
-                            <option>Internet</option>
-                            <option>Insurance</option>
-                            <option>Subscriptions</option>
-                            <option>Gym</option>
-                        </select>
+                    <div class="control column" v-if="expense.label == 'Bills'">
+                        <label class="label">Select category</label>
+                        <div class="select">
+                            <select v-model.trim="expense.category">
+                                <option disabled value="">category</option>
+                                <option>Credit</option>
+                                <option>Loans</option>
+                                <option>Hydro</option>
+                                <option>Car</option>
+                                <option>Cell phone</option>
+                                <option>Internet</option>
+                                <option>Insurance</option>
+                                <option>Subscriptions</option>
+                                <option>Gym</option>
+                            </select>
+                        </div>
                     </div>
-                    <label>Add an expensee</label>
-                    <input v-model="expense.note" placeholder="expensee">
-                    <label>Add amount</label>
-                    <input type="number" v-model.trim="expense.value" placeholder="amount">
-                    <label> Select expense date</label>
-                    <datepicker
-                        wrapper-class="date-wrapper"
-                        placeholder="expense date"
-                        v-model="expense.date">
-                    </datepicker>
-                    <button @click="saveExpense" class="budget-btn">Submit</button>
-                </form>
-            </div>
-        </modal>
+                </div>
+                <div class="field">
+                    <div class="field-label">
+                        <label class="label has-text-left">Expensee</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" v-model="expense.note" placeholder="expensee">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="field-label">
+                        <label class="label has-text-left">Add amount</label>
+                    </div>
+                    <div class="field-body">
+                        <input class="input" type="number" v-model.trim="expense.value" placeholder="amount">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="field-label">
+                        <label class="label has-text-left">Select expense date</label>
+                    </div>
+                    <div class="field-body">
+                        <datepicker
+                            input-class="input"
+                            placeholder="expense date"
+                            v-model="expense.date">
+                        </datepicker>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button @click="saveExpense" class="button is-success is-rounded">Submit</button>
+            </footer>
+        </div>
     </div>
 </template>
 
@@ -71,7 +102,7 @@ export default {
     },
     components: { Datepicker },
     computed: {
-        ...mapState(['expenses'])
+        ...mapState(['expenses', 'showExpenseModal'])
     },
     methods: {
         saveExpense() {
@@ -127,6 +158,9 @@ export default {
 
             this.$modal.hide('expense-modal')
         },
+        closeModal() {
+            this.$store.state.showExpenseModal = false
+        }
     },
     created() {
         this.$store.dispatch('fetchExpenseTotals')

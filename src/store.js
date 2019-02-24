@@ -44,7 +44,8 @@ export const store = new Vuex.Store({
         expenseCategory: [],
         expTotal: 0,
         current: [],
-        remaining: []
+        remaining: [],
+        showExpenseModal: false
     },
     actions: {
         fetchExpenseTotals({ commit }) {
