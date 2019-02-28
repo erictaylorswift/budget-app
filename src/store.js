@@ -45,9 +45,64 @@ export const store = new Vuex.Store({
         expTotal: 0,
         current: [],
         remaining: [],
-        showExpenseModal: false
+        showExpenseModal: false,
+        budgetItem: [],
+        budgetByItems: [],
+        budgetDates: []
     },
     actions: {
+        addBudgetItem({commit}, json) {
+            commit('setBudgetItem', json)
+        },
+        fetchBudgetItems({commit}) {
+            let dates = [];
+            const datePromise = fireSQL.query(`
+                SELECT
+                    start,
+                    end
+                FROM BudgetOverview
+            `)
+
+            datePromise.then(query => {
+                dates.push({
+                    'start': query[0].start,
+                    'end': query[0].end
+
+                })
+            })
+            let budgetItems = [];
+            const promise = fireSQL.query(`
+                SELECT
+                    amount,
+                    expenseType,
+                    name,
+                    type,
+                    date
+                FROM BudgetItems
+                WHERE type = 'Expense'
+            `)
+
+            promise.then(query => {
+                query.forEach(doc => {
+                    let date = moment(doc.date);
+                    let start = moment(dates[0].start);
+                    let end = moment(dates[0].end);
+
+                    if (date >= start && date <= end) {
+                        budgetItems.push({
+                            amount: doc.amount,
+                            expenseType: doc.expenseType,
+                            name: doc.name,
+                            type: doc.type,
+                            date: date.toISOString()
+                        })
+                    }
+                })
+            })
+            // console.log(budgetItems)
+            commit('setBudgetDates', dates)
+            commit('setBudgetByItems', budgetItems)
+        },
         fetchExpenseTotals({ commit }) {
             const promise = fireSQL.query(`
                 SELECT 
@@ -301,5 +356,14 @@ export const store = new Vuex.Store({
         setCurrentUser(state, val) {
             state.currentUser = val
         },
+        setBudgetItem(state, val) {
+            state.budgetItem.push({...val})
+        },
+        setBudgetByItems(state, val) {
+            state.budgetByItems = val
+        },
+        setBudgetDates(state, val) {
+            state.budgetDates = val
+        }
     }
 })

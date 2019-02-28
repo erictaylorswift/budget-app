@@ -6,6 +6,8 @@ import Home from '@/components/Home'
 import BudgetForm from '@/components/BudgetForm'
 import CurrentBudget from '@/components/CurrentBudget'
 import Login from '@/components/Login'
+import NewBudget from '@/components/NewBudget'
+import DailyBudgets from '@/components/DailyBudgets'
 
 Vue.use(Router)
 
@@ -52,6 +54,16 @@ const router = new Router({
 			meta: {
 				requiresAuth: true
 			}
+		},
+		{
+			path: '/new-budget',
+			name: 'NewBudget',
+			component: NewBudget
+		},
+		{
+			path: '/daily-budget',
+			name: 'DailyBudget',
+			component: DailyBudgets
 		}
 	]
 })

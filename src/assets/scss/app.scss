@@ -10,6 +10,7 @@
 @import './table.scss';
 @import './pages/login.scss';
 @import './charts/pie.scss';
+@import './modals.scss';
 
 %margin-top {
     margin-top: 20px;
@@ -102,50 +103,6 @@ a:hover {
     }
 }
 
-.message-container {
-    margin: 22px 0 0 30px;
-}
-
-.v--modal {
-    padding: 22px 44px;
-    top: 130px !important;
-    min-height: 600px;
-}
-
-.date-input {
-    max-width: 80%;
-    margin: 16px;
-    font-size: 10px;
-}
-
-.date-input::placeholder {
-    font-size: 8px;
-}
-
-.date-wrapper {
-    max-width: 40%;
-}
-
-.nes-container {
-    margin: 22px 0;
-}
-
-.half {
-    width: 55%;
-}
-
-.three-quarters {
-    width: 75%;
-}
-
-.two-thirds {
-    width: 60%;
-}
-
-.one-third {
-    width: 30%;
-}
-
 .lists {
     margin: 0 32px;
 }
@@ -179,12 +136,12 @@ a:hover {
 }
 
 .vdp-datepicker__calendar {
-    position: relative !important;
-    left: 16px;
+
+    color: #283636;
 }
 
-.nes-progress {
-    width: 43%;
-    height: 40px;
-    margin: 0 40px;
+.vdp-datepicker {
+    .no-input {
+        display: none;
+    }
 }

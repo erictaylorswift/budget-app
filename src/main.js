@@ -10,6 +10,8 @@ import './../node_modules/bulma/css/bulma.css';
 import './assets/scss/app.scss'
 import router from './router'
 import { store } from './store.js'
+import VCalendar from 'v-calendar'
+import 'v-calendar/lib/v-calendar.min.css'
 
 Vue.config.productionTip = false
 
@@ -18,7 +20,10 @@ Vue.use(Datepicker)
 Vue.use(Toasted)
 Vue.use(VueMaterial)
 Vue.use(SmartTable)
-
+Vue.use(VCalendar, {
+  firstDayOfWeek: 2,
+  paneWidth: 600
+})
 
 
 new Vue({
