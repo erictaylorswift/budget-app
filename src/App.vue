@@ -16,6 +16,9 @@ export default {
     Nav,
     Expenses,
     Income
+  },
+  created() {
+    this.$store.dispatch('fetchExpensesByDay')
   }
 }
 </script>

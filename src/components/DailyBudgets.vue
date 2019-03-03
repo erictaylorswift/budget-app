@@ -1,54 +1,55 @@
 <template>
-    <v-calendar 
-        :attributes="attributes" 
-        :min-date='budgetDates[0].start'>
-    </v-calendar>
+  <div class="tile is-ancestor is-10">
+    <div class="tile is-vertical">
+      <h1 class="title">Expenses by day</h1>
+      <div class="tile is-child box">
+        <div class="tile is-parent is-vertical">
+          <div class="tile is-child">
+            <div class="columns">
+              <div class="column is-one-third">
+                <h2 class="subtitle">Expense types by day</h2>
+                <Calendar></Calendar>
+              </div>
+              <div class="column">
+                <ExpensesByDay/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-// import moment from 'moment';
+  import { mapState } from "vuex";
+  import moment from "moment";
+  import numeral from "numeral";
+  import ExpensesByDay from "./charts/ExpensesByDay";
+  import Calendar from "./Calendar";
 
-export default {
-    created() {
-        this.$store.dispatch('fetchBudgetItems')
+  export default {
+    components: {
+      ExpensesByDay,
+      Calendar
     },
-    data() {
-        return {
-            
-        }
-    },
-    methods: {
-        getDates() {
-            let data = this.$store.state.budgetByItems;
-            let dates = [];
-            let popover = [];
-
-            data.forEach(doc => {
-                dates.push(new Date(doc.date))
-                popover.push(doc.name)
-            })
-            this.attrs[0].dates = dates
-            this.attrs[0].popover.label = popover
-        }
+    mounted() {
+      this.$store.dispatch("fetchBudgetItems");
+      this.$store.dispatch("fetchExpensesByDay");
+      this.$store.dispatch("fetchBudgetDates");
     },
     computed: {
-        ...mapState(['budgetByItems', 'budgetDates']),
-        attributes() {
-            let budgetDates = this.$store.state.budgetByItems;
-            return [
-                ...budgetDates.map(res => ({
-                    dates: res.date,
-                    bar: {
-                        backgroundColor: '#ff8080'
-                    },
-                    popover: {
-                        label: res.name != '' ? res.name : res.expenseType
-                    }
-                }))
-            ]
-
-        }
+      ...mapState(["budgetByItems", "budgetDates", "expensesByDay"]),
+    },
+    filters: {
+      formatDate(val) {
+        let date = moment(val).format("MMM Do, YYYY");
+        return date;
+      },
+      formatCurrency(val) {
+        let value = numeral(val).format("$0,0");
+        return value;
+      }
     }
-}
+  };
 </script>

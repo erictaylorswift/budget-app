@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fireSQL } from './firebaseConfig';
+import {
+    fireSQL
+} from './firebaseConfig';
 import moment from 'moment'
 
 const fb = require('./firebaseConfig')
@@ -17,44 +19,80 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         currentUser: null,
-        budgets: {},
         expenses: {},
-        currentBudget: {
-            start: 0,
-            end: 0,
-            expenses: {
-                rent: 0,
-                credit: 0,
-                loans: 0,
-                utilities: 0,
-                phones: 0,
-                car: 0,
-                internet: 0,
-                insurance: 0,
-                subscriptions: 0,
-                gym: 0,
-                groceries: 0,
-                allowances: 0,
-                savings: 0,
-                'child Care': 0,
-            }
-        },
-        income: 0,
         dailyExpenses: [],
-        expenseCategory: [],
+        expenseCat: [],
         expTotal: 0,
+        incTotal: 0,
         current: [],
-        remaining: [],
         showExpenseModal: false,
+        showIncomeModal: false,
         budgetItem: [],
         budgetByItems: [],
-        budgetDates: []
+        budgetDates: [],
+        expensesByDay: [],
+        budgetTotals: [],
+        expensees: [
+            "MBNA",
+            "PC MasterCard",
+            "ScotiaBank Visa",
+            "Capital One",
+            "HBC Card",
+            "London Y",
+            "India Taylor",
+            "Leah Taylor",
+            "Mogo",
+            "Rent",
+            "Groceries",
+            "Child Care",
+            "Fido",
+            "Bell",
+            "Hyundai",
+            "Volkswagen",
+            "Gas",
+            "Insurance",
+            "Allowances",
+            "Utilities",
+            "Prescriptions",
+            "Subscriptions"
+        ],
     },
     actions: {
-        addBudgetItem({commit}, json) {
+        addBudgetItem({
+            commit
+        }, json) {
             commit('setBudgetItem', json)
         },
-        fetchBudgetItems({commit}) {
+        fetchExpensesByDay({
+            commit
+        }) {
+            let data = [];
+            let totals = [];
+            const promise = fireSQL.query(`
+                SELECT
+                    SUM(amount) as totals,
+                    date
+                FROM BudgetedExpenses
+                GROUP BY date
+            `)
+
+            promise.then(query => {
+                query.forEach(doc => {
+                    if (doc.date != null) {
+                        data.push({
+                            'expenseTotal': Number(doc.totals),
+                            'date': doc.date
+                        })
+                        totals.push(Number(doc.totals))
+                    }
+                })
+            })
+
+            commit('setExpensesByDay', data)
+        },
+        fetchBudgetDates({
+            commit
+        }) {
             let dates = [];
             const datePromise = fireSQL.query(`
                 SELECT
@@ -65,59 +103,95 @@ export const store = new Vuex.Store({
 
             datePromise.then(query => {
                 dates.push({
-                    'start': query[0].start,
-                    'end': query[0].end
+                    'start': moment(query[0].start).toISOString(),
+                    'end': moment(query[0].end).toISOString()
 
                 })
             })
+            commit('setBudgetDates', dates)
+        },
+        fetchBudgetItems({
+            commit
+        }) {
             let budgetItems = [];
             const promise = fireSQL.query(`
                 SELECT
                     amount,
-                    expenseType,
-                    name,
                     type,
+                    name,
+                    spent,
                     date
-                FROM BudgetItems
-                WHERE type = 'Expense'
+                FROM BudgetedExpenses
             `)
 
             promise.then(query => {
                 query.forEach(doc => {
-                    let date = moment(doc.date);
-                    let start = moment(dates[0].start);
-                    let end = moment(dates[0].end);
-
-                    if (date >= start && date <= end) {
+                    if (doc.date != null) {
                         budgetItems.push({
                             amount: doc.amount,
-                            expenseType: doc.expenseType,
+                            expenseType: doc.type,
                             name: doc.name,
-                            type: doc.type,
-                            date: date.toISOString()
+                            spent: doc.spent,
+                            date: moment(doc.date).toISOString()
                         })
                     }
                 })
             })
-            // console.log(budgetItems)
-            commit('setBudgetDates', dates)
             commit('setBudgetByItems', budgetItems)
         },
-        fetchExpenseTotals({ commit }) {
+        fetchBudgetTotals({
+            commit
+        }) {
+            let totals = [];
             const promise = fireSQL.query(`
-                SELECT 
-                    category,
-                    SUM(budgeted) as value,
-                    SUM(spent) as spent
-                FROM ExpenseCategories
-                GROUP BY category
+                SELECT
+                    expenseTotal,
+                    incomeTotal,
+                    difference
+                FROM BudgetOverview
             `)
 
             promise.then(query => {
+                totals.push({
+                    'income': query[0].incomeTotal,
+                    'expenses': query[0].expenseTotal,
+                    'difference': query[0].difference
+                })
+            })
+            commit('setBudgetTotals', totals)
+        },
+        fetchExpenseTotals({
+            commit
+        }) {
+
+            const datePromise = fireSQL.query(`
+                SELECT
+                    start,
+                    end
+                FROM BudgetOverview
+            `)
+            let dates = [];
+            datePromise.then(query => {
+                dates.push({
+                    "start": query[0].start,
+                    "end": query[0].end
+                })
+            })
+            const promise = fireSQL.query(`
+                SELECT 
+                    date,
+                    SUM(value) as value
+                FROM ExpenseTotals
+                GROUP BY date
+            `)
+            promise.then(query => {
                 let calc = 0;
+                let start = dates[0].start;
+                let end = dates[0].end;
                 query.forEach(doc => {
-                    if (doc.category != 'bills' && doc.category != 'income') {
-                        calc = calc + Number(doc.spent)
+                    let date = moment(doc.date).toISOString();
+                    if (date > start && date < end) {
+                        calc = calc + Number(doc.value)
                     }
                 })
 
@@ -126,49 +200,50 @@ export const store = new Vuex.Store({
                 commit('setExpTotal', data)
             })
         },
-        fetchIncome({ commit }) {
-            let income = 0
-            let budgetDates = []
-            
-            const budgetPromise = fireSQL.query(`
+        fetchExpenseCategories({commit}) {
+            const datePromise = fireSQL.query(`
                 SELECT
                     start,
                     end
-                FROM Budget
+                FROM BudgetOverview
             `)
-            
-            budgetPromise.then(query => {
-                budgetDates.push({
-                    'start': (query[0].start),
-                    'end': (query[0].end)
-                }) 
+            let dates = [];
+            datePromise.then(query => {
+                dates.push({
+                    "start": query[0].start,
+                    "end": query[0].end
+                })
             })
+            let expenses = [];
 
-
-            const incomePromise = fireSQL.query(`
+            const promise = fireSQL.query(`
                 SELECT
+                    category,
                     date,
-                    SUM(income) as value
-                FROM Income
-                GROUP BY date
+                    value
+                FROM ExpenseTotals
             `)
 
-            incomePromise.then(query => {
+            promise.then(query => {
                 query.forEach(doc => {
-                    let incDate = moment(doc.date)
-                    let start = moment(budgetDates[0].start)
-                    let end = moment(budgetDates[0].end)
-                    let startDiff = incDate.diff(start, "days")
-                    let endDiff = incDate.diff(end, "days")
-
-                    if ( startDiff > -1 && endDiff < 1 ) {
-                        income = doc.value + income
+                    let date = moment(doc.date).toISOString();
+                    let start = dates[0].start;
+                    let end = dates[0].end;
+                    if (date > start && date < end) {
+                        expenses.push({
+                            'category': doc.category,
+                            'amount': doc.value
+                        })
                     }
                 })
-                commit('setIncome', income)
             })
+
+            commit('setExpenseCategories', expenses)
+
         },
-        fetchExpenses({ commit }) {
+        fetchExpenses({
+            commit
+        }) {
             fb.expenseCollection.orderBy("date", "asc").orderBy("expense").onSnapshot(querySnapshot => {
                 let expenseArray = [];
 
@@ -192,7 +267,9 @@ export const store = new Vuex.Store({
                 commit('setExpenses', expenseArray)
             })
         },
-        fetchDailyExpenses({ commit }) {
+        fetchDailyExpenses({
+            commit
+        }) {
             const expenseDataset = [];
 
             const expensePromise = fireSQL.query(`
@@ -203,7 +280,7 @@ export const store = new Vuex.Store({
 
                 GROUP BY date
             `)
-            
+
             expensePromise.then(query => {
                 query.forEach(doc => {
                     expenseDataset.push({
@@ -211,159 +288,88 @@ export const store = new Vuex.Store({
                         'amount': Number(doc.value)
                     })
                 })
-                
-                expenseDataset.sort((a,b) => {
+
+                expenseDataset.sort((a, b) => {
                     return new Date(a.date) - new Date(b.date)
                 })
 
                 commit('setDailyExpenses', expenseDataset)
             })
         },
-        fetchBudget({ commit }) {
-            fb.budgetCollection.onSnapshot(querySnapshot => {
-                let budgetArray = [];
-
-                querySnapshot.forEach(doc => {
-                    let budget = doc.data();
-
-                    budgetArray.push(budget)
-                })
-
-                commit('setBudget', budgetArray)
-            })
-        },
-        fetchCurrentBudget({ commit }) {
-            fb.budgetCollection.onSnapshot(querySnapshot => {
-                let budgetArray = [];
-
-                querySnapshot.forEach(doc => {
-                    let budget = doc.data();                  
-
-                    budgetArray.push(budget)
-                })
-
-                let current = budgetArray[0];
-                let typesArray = Object.keys(current);
-                let amountsArray = Object.values(current);
-                let currentArray = [];
-    
-                for (var i = 0; i<typesArray.length; i++) {
-                    let types = typesArray[i];
-                    let amounts = amountsArray[i]
-
-                    if (
-                        types != 'start' && 
-                        types != 'end'
-                    ) {
-                        currentArray.push({
-                            'type': types.toLocaleLowerCase(),
-                            'amount': amounts
-                        })
-                    }
-                }
-
-                commit('setCurrentBudget', currentArray)
-            })
-        },
-        fetchExpenseCategory({ commit }) {
-            let categorySet = [];
-
-            const categoryPromise = fireSQL.query(`
+        fetchIncomes({commit}) {
+            const datePromise = fireSQL.query(`
                 SELECT
-                    category,
-                    spent,
-                    budgeted
-                FROM ExpenseCategories
+                    start,
+                    end
+                FROM BudgetOverview
             `)
-
-            categoryPromise.then(query => {
-                query.forEach(doc => {
-                    let budgeted = Number(doc.budgeted);
-                    let spent = Number(doc.spent);
-                    let remaining = budgeted - spent;
-                    categorySet.push({
-                        'type': doc.category.toLocaleLowerCase(),
-                        'budgeted': budgeted,
-                        'spent': spent,
-                        'remaining': remaining
-                    })
+            let dates = [];
+            datePromise.then(query => {
+                dates.push({
+                    "start": query[0].start,
+                    "end": query[0].end
                 })
-
-                commit('setExpenseCategory', categorySet)
             })
-        },
-        fetchRemaining({ commit }) {
 
             const promise = fireSQL.query(`
-                SELECT 
-                    category,
-                    SUM(budgeted) as value,
-                    SUM(spent) as spent
-                FROM ExpenseCategories
-                GROUP BY category
+                SELECT
+                    date,
+                    SUM(income) as income
+                FROM Income
+                GROUP BY date
             `)
 
             promise.then(query => {
-                let calc = 0;
                 let total = 0;
-
+                let start = dates[0].start;
+                let end = dates[0].end;
                 query.forEach(doc => {
-                    if (doc.category != 'bills' && doc.category != 'income') {
-                        calc = calc + (doc.value - doc.spent)
-                        total = total + doc.value
+                    let date = moment(doc.date).toISOString();
+                    if (date > start && date < end) {
+                        total = total + Number(doc.income)
                     }
                 })
-
-                let remainingPercent = (calc / total)*100
-                let remainingObj = {
-                    remaining: calc,
-                    budgeted: total,
-                    percent: remainingPercent
-                }
-                return remainingObj
+                return total
             }).then((data) => {
-                commit('setRemaining', data)
+                commit('setIncTotal', data)
             })
-
-            
         }
     },
     mutations: {
-        setBudget(state, val) {
-            state.budgets = val
-        },
-        setCurrentBudget(state, val) {
-            state.current = val
-        },
         setDailyExpenses(state, val) {
             state.dailyExpenses = val
-        },
-        setExpenseCategory(state, val) {
-            state.expenseCategory = val
         },
         setExpTotal(state, val) {
             state.expTotal = val
         },
-        setIncome(state, val) {
-            state.income = val
-        },
         setExpenses(state, val) {
             state.expenses = val
         },
-        setRemaining(state, val) {
-            state.remaining = val
+        setExpenseCategories(state, val) {
+            state.expenseCat = val
         },
         setCurrentUser(state, val) {
             state.currentUser = val
         },
         setBudgetItem(state, val) {
-            state.budgetItem.push({...val})
+            state.budgetItem.push({
+                ...val
+            })
         },
         setBudgetByItems(state, val) {
             state.budgetByItems = val
         },
         setBudgetDates(state, val) {
             state.budgetDates = val
+        },
+        setExpensesByDay(state, val) {
+            state.expensesByDay = val
+        },
+        setBudgetTotals(state, val) {
+            state.budgetTotals = val
+        },
+        setIncTotal(state, val) {
+            state.incTotal = val
         }
     }
 })

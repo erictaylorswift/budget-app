@@ -2,7 +2,6 @@
 // @import url(https://unpkg.com/nes.css/css/nes.css);
 @import url('https://fonts.googleapis.com/css?family=Arimo');
 @import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
-
 @import './nav';
 @import './flex';
 @import './buttons.scss';
@@ -76,7 +75,9 @@ a:hover {
 #bills {
     input {
         @extend %budget-inputs
-    };
+    }
+
+    ;
 
     label {
         @extend %budget-labels
@@ -86,7 +87,9 @@ a:hover {
 #otherExpenses {
     input {
         @extend %budget-inputs;
-    };
+    }
+
+    ;
 
     label {
         @extend %budget-labels
@@ -96,7 +99,9 @@ a:hover {
 #income {
     input {
         @extend %budget-inputs
-    };
+    }
+
+    ;
 
     label {
         @extend %budget-labels
@@ -128,7 +133,7 @@ a:hover {
 .absolute {
     position: relative;
     width: 100%;
-    
+
 }
 
 .space {
