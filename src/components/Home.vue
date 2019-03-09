@@ -87,20 +87,17 @@
 <script>
   import { mapState } from "vuex";
   import moment from "moment";
+  import numeral from 'numeral';
   import DailyExpense from "./charts/ExpenseChart";
   import CategoryPie from "./charts/CategoryPie";
-  import _ from "lodash";
-  const numeral = require("numeral");
 
   export default {
     created() {
       this.$store.dispatch("fetchBudgetTotals");
       this.$store.dispatch("fetchExpenseTotals");
       this.$store.dispatch("fetchDailyExpenses");
-      this.$store.dispatch("fetchBudgetItems");
       this.$store.dispatch("fetchBudgetDates");
       this.$store.dispatch("fetchIncomes");
-      this.$store.dispatch("fetchExpenseCategories");
     },
     components: {
       DailyExpense,

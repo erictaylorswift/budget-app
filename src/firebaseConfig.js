@@ -21,6 +21,7 @@ const billsCollection = db.collection('Bills')
 const allowanceCollection = db.collection('Allowances')
 const fireSQL = new FireSQL(db)
 
+
 export {
     db,
     fireSQL,

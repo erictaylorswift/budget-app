@@ -2,6 +2,8 @@
 // @import url(https://unpkg.com/nes.css/css/nes.css);
 @import url('https://fonts.googleapis.com/css?family=Arimo');
 @import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
+@import 'bulma';
+@import '../../../node_modules/bulma/sass/utilities/initial-variables.sass';
 @import './nav';
 @import './flex';
 @import './buttons.scss';
@@ -10,6 +12,7 @@
 @import './pages/login.scss';
 @import './charts/pie.scss';
 @import './modals.scss';
+@import './accordion.scss';
 
 %margin-top {
     margin-top: 20px;

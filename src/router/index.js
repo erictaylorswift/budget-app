@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import firebase from 'firebase'
 
 import Details from '@/components/Details'
 import Home from '@/components/Home'
-import BudgetForm from '@/components/BudgetForm'
+// import BudgetForm from '@/components/BudgetForm'
 import CurrentBudget from '@/components/CurrentBudget'
 import Login from '@/components/Login'
 import NewBudget from '@/components/NewBudget'
@@ -13,6 +14,10 @@ Vue.use(Router)
 const router = new Router({
 	mode: 'history',
 	routes: [
+		{
+			path: '*',
+			redirect: '/login'
+		},
 		{
 			path: '/',
 			redirect: '/home'
@@ -41,7 +46,7 @@ const router = new Router({
 		{
 			path: '/budget',
 			name: 'Budget',
-			component: BudgetForm,
+			component: NewBudget,
 			meta: {
 				requiresAuth: true
 			}
@@ -60,6 +65,15 @@ const router = new Router({
 			component: NewBudget
 		}
 	]
+});
+
+router.beforeEach((to, from, next) => {
+	const currentUser = firebase.auth().currentUser;
+	const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+	if (requiresAuth && !currentUser) next('login');
+	else if (!requiresAuth && currentUser) next('home');
+	else next();
 })
 
 

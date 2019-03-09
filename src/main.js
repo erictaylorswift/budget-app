@@ -12,6 +12,8 @@ import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
 import 'bulma/css/bulma.css'
 import lodash from 'lodash'
+import { auth } from './firebaseConfig'
+import {BadgerAccordion, BadgerAccordionItem} from 'vue-badger-accordion'
 
 Vue.config.productionTip = false
 
@@ -23,11 +25,17 @@ Vue.use(SmartTable)
 Vue.use(VCalendar, {
   firstDayOfWeek: 2
 })
+Vue.component('BadgerAccordion', BadgerAccordion)
+Vue.component('BadgerAccordionItem', BadgerAccordionItem)
 
+let app = '';
 
-new Vue({
-  el: '#app',
-  store,
-  router,
-  render: h => h(App),
+auth.onAuthStateChanged(() => {
+  if (!app) {
+    app = new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app')
+  }
 })

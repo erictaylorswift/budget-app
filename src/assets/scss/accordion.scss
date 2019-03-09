@@ -1,0 +1,13 @@
+.component-badger-accordion {
+    background: $warning;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.badger-accordion-toggle {
+    div {
+        font-size: 18px;
+        font-weight: bold;
+    }
+}

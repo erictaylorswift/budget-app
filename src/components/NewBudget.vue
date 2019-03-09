@@ -3,17 +3,34 @@
     <div class="buttons is-right">
       <button @click="saveBudget" class="button is-outlined is-primary is-rounded">Save budget</button>
     </div>
+    <badger-accordion :icons="this.accordion.icons">
+      <badger-accordion-item>
+        <div slot="header">
+          Add expense category
+        </div>
+        <template slot="content">
+          <div class="columns">
+            <div class="control column">
+              <input class="input" v-model="newCategory">
+            </div>
+            <div class="buttons column is-right">
+              <button class="button is-rounded" @click="addCategory">Add category</button>
+            </div>
+          </div>
+        </template>
+      </badger-accordion-item>
+    </badger-accordion>
     <div class="columns">
       <div class="field column is-one-fifth">
         <label class="label">Start Date</label>
         <div class="control is-large">
-          <datepicker input-class="input" placeholder="mm/dd/yyyy" v-model="start" typeable="true"></datepicker>
+          <datepicker input-class="input" placeholder="mm/dd/yyyy" v-model="start"></datepicker>
         </div>
       </div>
       <div class="field column is-one-fifth">
         <label class="label">Start Date</label>
         <div class="control is-large">
-          <datepicker input-class="input" placeholder="mm/dd/yyyy" v-model="end" typeable="true"></datepicker>
+          <datepicker input-class="input" placeholder="mm/dd/yyyy" v-model="end"></datepicker>
         </div>
       </div>
     </div>
@@ -65,7 +82,7 @@
                         input-class="input"
                         placeholder="mm/dd/yyyy"
                         v-model="expenses[index].date"
-                        typeable="true"
+                      
                       ></datepicker>
                     </div>
                   </td>
@@ -119,6 +136,7 @@
   import moment from "moment";
   import { mapState } from "vuex";
   import numeral from "numeral";
+
   const fb = require("../firebaseConfig");
 
   export default {
@@ -144,6 +162,7 @@
         start: "",
         end: "",
         newItem: [],
+        newCategory: '',
         expensees: [
           "MBNA",
           "PC MasterCard",
@@ -173,7 +192,17 @@
           db: {
             amount: ""
           }
-        }
+        },
+        accordion: {
+          icons: {
+            closed: '<i class="fas fa-arrow-down"></i>',
+            opened: '<i class="fas fa-arrow-up"></i>'
+          },
+          options: {
+            panelClass: 'accordion-header'
+          }
+        },
+        currCategories: null
       };
     },
     methods: {
@@ -232,6 +261,28 @@
             date: ""
           });
         });
+      },
+      addCategory() {
+        let category = this.newCategory;
+        let currentUser = this.$store.state.currentUser.uid;
+        let currCategories = {categories: []};
+
+        let docRef = fb.db.collection('ExpenseCategories').doc(currentUser)
+
+        docRef.get()
+          .then((doc) => {
+            let categories = doc.data().categories;
+            
+            categories.forEach(d => {
+              currCategories.categories.push(d)
+            })
+          }).then(() => {
+            currCategories.categories.push(category);
+          }).then(() => {
+            docRef.set(currCategories)
+          }).then(() => {
+            this.newCategory = '';
+          })
       }
     },
     filters: {
