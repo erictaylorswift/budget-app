@@ -3,23 +3,7 @@
     <div class="buttons is-right">
       <button @click="saveBudget" class="button is-outlined is-primary is-rounded">Save budget</button>
     </div>
-    <badger-accordion :icons="this.accordion.icons">
-      <badger-accordion-item>
-        <div slot="header">
-          Add expense category
-        </div>
-        <template slot="content">
-          <div class="columns">
-            <div class="control column">
-              <input class="input" v-model="newCategory">
-            </div>
-            <div class="buttons column is-right">
-              <button class="button is-rounded" @click="addCategory">Add category</button>
-            </div>
-          </div>
-        </template>
-      </badger-accordion-item>
-    </badger-accordion>
+    <add-category></add-category>
     <div class="columns">
       <div class="field column is-one-fifth">
         <label class="label">Start Date</label>
@@ -39,7 +23,7 @@
         <article class="tile is-child notification is-primary">
           <p class="title">Input expenses</p>
           <div class="content columns">
-            <table class="table">
+            <table class="table" :data="mapExpenses">
               <thead>
                 <th>Expense Name</th>
                 <th>Expense Type</th>
@@ -47,11 +31,11 @@
                 <th>Date</th>
               </thead>
               <tbody>
-                <tr v-for="(expense, index) in expenses" :key="expense.id">
+                <tr v-for="(expense, index) in expByCat" :key="expense.id">
                   <td>{{expense.name}}</td>
                   <td>
                     <div class="select">
-                      <select v-model="expenses[index].type">
+                      <select v-model="expByCat[index].type">
                         <option disabled value>Select type</option>
                         <option>Credit</option>
                         <option>Loans</option>
@@ -69,7 +53,7 @@
                         class="input"
                         type="number"
                         step=".01"
-                        v-model="expenses[index].amount"
+                        v-model="expByCat[index].amount"
                       >
                       <span class="icon is-left is-medium">
                         <i class="fas fa-dollar-sign"></i>
@@ -81,8 +65,7 @@
                       <datepicker
                         input-class="input"
                         placeholder="mm/dd/yyyy"
-                        v-model="expenses[index].date"
-                      
+                        v-model="expByCat[index].date"
                       ></datepicker>
                     </div>
                   </td>
@@ -94,7 +77,7 @@
       </div>
       <div class="tile is-parent">
         <div class="tile is-child notification is-info height-30">
-            <p class="title">Input income</p>
+          <p class="title">Input income</p>
           <table class="table">
             <thead>
               <th>Income Source</th>
@@ -136,19 +119,35 @@
   import moment from "moment";
   import { mapState } from "vuex";
   import numeral from "numeral";
+  import AddCategory from "./AddCategory.vue";
 
   const fb = require("../firebaseConfig");
 
   export default {
     created() {
       this.$store.dispatch("fetchBudgetItems");
-      this.mapExpenses();
+      this.$store.dispatch("fetchBaseCategories");
     },
     components: {
-      Datepicker
+      Datepicker,
+      AddCategory
     },
     computed: {
-      ...mapState(["currentBudget", "budgetItem", "budgetByItems"])
+      ...mapState(["currentBudget", "budgetItem", "budgetByItems", "expensees"]),
+      mapExpenses() {
+        let ex = this.$store.state.expensees;
+        let cats = this.expByCat;
+
+        ex.forEach(e => {
+          cats.push({
+            name: e,
+            type: "",
+            amount: "",
+            date: ""
+          });
+        });
+        return cats;
+      }
     },
     data() {
       return {
@@ -162,29 +161,7 @@
         start: "",
         end: "",
         newItem: [],
-        newCategory: '',
-        expensees: [
-          "MBNA",
-          "PC MasterCard",
-          "ScotiaBank Visa",
-          "Capital One",
-          "London Y",
-          "India Taylor",
-          "Leah Taylor",
-          "Mogo",
-          "Rent",
-          "Child Care",
-          "Fido",
-          "Bell",
-          "Hyundai",
-          "Volkswagen",
-          "Gas",
-          "Insurance",
-          "Allowances",
-          "Utilities",
-          "Prescriptions"
-        ],
-        expenses: [],
+        expByCat: [],
         income: {
           rr: {
             amount: ""
@@ -193,16 +170,7 @@
             amount: ""
           }
         },
-        accordion: {
-          icons: {
-            closed: '<i class="fas fa-arrow-down"></i>',
-            opened: '<i class="fas fa-arrow-up"></i>'
-          },
-          options: {
-            panelClass: 'accordion-header'
-          }
-        },
-        currCategories: null
+        currCategories: null,
       };
     },
     methods: {
@@ -212,7 +180,7 @@
       },
       saveBudget() {
         let expenses = this.expenses;
-        let income = this.income
+        let income = this.income;
         let start = this.start;
         let end = this.end;
         let expenseArray = [];
@@ -241,7 +209,13 @@
             start: start,
             end: end,
             difference: difference
-          });
+          }).then(() => {
+            this.$toasted.show('Budget created successfully', {
+              theme: 'toasted-primary',
+              position: 'top-center',
+              duration: 5000
+            })
+          })
       },
       clearData() {
         let state = this.budgetLine;
@@ -249,40 +223,6 @@
           (state.name = ""),
           (state.budgetType = ""),
           (state.expenseType = "");
-      },
-      mapExpenses() {
-        let expensees = this.expensees;
-
-        expensees.forEach(e => {
-          this.expenses.push({
-            name: e,
-            type: "",
-            amount: "",
-            date: ""
-          });
-        });
-      },
-      addCategory() {
-        let category = this.newCategory;
-        let currentUser = this.$store.state.currentUser.uid;
-        let currCategories = {categories: []};
-
-        let docRef = fb.db.collection('ExpenseCategories').doc(currentUser)
-
-        docRef.get()
-          .then((doc) => {
-            let categories = doc.data().categories;
-            
-            categories.forEach(d => {
-              currCategories.categories.push(d)
-            })
-          }).then(() => {
-            currCategories.categories.push(category);
-          }).then(() => {
-            docRef.set(currCategories)
-          }).then(() => {
-            this.newCategory = '';
-          })
       }
     },
     filters: {
@@ -297,4 +237,3 @@
     }
   };
 </script>
-

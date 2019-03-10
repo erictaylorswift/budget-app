@@ -27,41 +27,73 @@ export const store = new Vuex.Store({
         current: [],
         showExpenseModal: false,
         showIncomeModal: false,
+        showNewNameModal: false,
         budgetItem: [],
         budgetByItems: [],
         budgetDates: [],
         expensesByDay: [],
         budgetTotals: [],
         expensees: [
-            "MBNA",
-            "PC MasterCard",
-            "ScotiaBank Visa",
-            "Capital One",
-            "HBC Card",
-            "London Y",
-            "India Taylor",
-            "Leah Taylor",
-            "Mogo",
-            "Rent",
-            "Groceries",
-            "Child Care",
-            "Fido",
-            "Bell",
-            "Hyundai",
-            "Volkswagen",
-            "Gas",
-            "Insurance",
-            "Allowances",
-            "Utilities",
-            "Prescriptions",
-            "Subscriptions"
         ],
+        baseTypes: [],
+        incomeSources: []
     },
     actions: {
         addBudgetItem({
             commit
         }, json) {
             commit('setBudgetItem', json)
+        },
+        fetchBaseCategories({commit, state}) {
+            let userID = state.currentUser.uid;
+            let cat = [];
+
+            fb.db.collection('ExpenseCategories')
+            .doc(userID)
+            .get()
+            .then((doc) => {
+                let array = doc.data().categories;
+
+                array.forEach(i => {
+                    cat.push(i)
+                })
+            })
+
+            commit('setBaseCat', cat)
+        },
+        fetchBaseTypes({commit, state}) {
+            let userID = state.currentUser.uid;
+            let types = [];
+
+            fb.db.collection('ExpenseTypes')
+            .doc(userID)
+            .get()
+            .then((doc) => {
+                let array = doc.data().types
+
+                array.forEach(i => {
+                    types.push(i)
+                })
+            })
+
+            commit('setBaseTypes', types)
+        },
+        fetchIncomeSources({commit, state}) {
+            let userID = state.currentUser.uid;
+            let sources = [];
+
+            fb.db.collection('IncomeSources')
+            .doc(userID)
+            .get()
+            .then((doc) => {
+                let array = doc.data().source
+
+                array.forEach(i => {
+                    sources.push(i)
+                })
+            })
+
+            commit('setIncomeSources', sources)
         },
         fetchExpensesByDay({
             commit
@@ -370,6 +402,15 @@ export const store = new Vuex.Store({
         },
         setIncTotal(state, val) {
             state.incTotal = val
+        },
+        setBaseCat(state, val) {
+            state.expensees = val
+        },
+        setBaseTypes(state, val) {
+            state.baseTypes = val
+        },
+        setIncomeSources(state, val) {
+            state.incomeSources = val
         }
     }
 })

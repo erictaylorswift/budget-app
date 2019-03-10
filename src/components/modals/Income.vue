@@ -55,7 +55,7 @@
   import moment from "moment";
   import Datepicker from "vuejs-datepicker";
   import { mapState } from "vuex";
-  const fb = require("../firebaseConfig");
+  const fb = require("../../firebaseConfig");
 
   export default {
     components: {

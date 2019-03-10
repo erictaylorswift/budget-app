@@ -14,6 +14,7 @@ import 'bulma/css/bulma.css'
 import lodash from 'lodash'
 import { auth } from './firebaseConfig'
 import {BadgerAccordion, BadgerAccordionItem} from 'vue-badger-accordion'
+import VueFloatLabel from 'vue-float-label'
 
 Vue.config.productionTip = false
 
@@ -25,6 +26,7 @@ Vue.use(SmartTable)
 Vue.use(VCalendar, {
   firstDayOfWeek: 2
 })
+Vue.use(VueFloatLabel)
 Vue.component('BadgerAccordion', BadgerAccordion)
 Vue.component('BadgerAccordionItem', BadgerAccordionItem)
 

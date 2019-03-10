@@ -3,19 +3,22 @@
     <Nav></Nav>
     <Expenses/>
     <Income/>
+    <NewExpType/>
     <router-view/>
   </div>
 </template>
 
 <script>
 import Nav from './components/Nav'
-import Expenses from './components/Expenses'
-import Income from './components/Income'
+import Expenses from './components/modals/Expenses'
+import Income from './components/modals/Income'
+import NewExpType from './components/modals/NewExpType'
 export default {
   components: {
     Nav,
     Expenses,
-    Income
+    Income,
+    NewExpType
   },
   created() {
     this.$store.dispatch('fetchExpensesByDay')

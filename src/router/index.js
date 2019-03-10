@@ -8,6 +8,7 @@ import Home from '@/components/Home'
 import CurrentBudget from '@/components/CurrentBudget'
 import Login from '@/components/Login'
 import NewBudget from '@/components/NewBudget'
+import Settings from '@/components/Settings'
 
 Vue.use(Router)
 
@@ -60,9 +61,12 @@ const router = new Router({
 			}
 		},
 		{
-			path: '/new-budget',
-			name: 'NewBudget',
-			component: NewBudget
+			path: '/settings',
+			name: 'Settings',
+			component: Settings,
+			meta: {
+				requiresAuth: true
+			}
 		}
 	]
 });
