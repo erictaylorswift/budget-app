@@ -30,6 +30,25 @@ Vue.use(VueFloatLabel)
 Vue.component('BadgerAccordion', BadgerAccordion)
 Vue.component('BadgerAccordionItem', BadgerAccordionItem)
 
+let successToastOptions = {
+  type: 'success',
+  fitToScreen: true,
+  duration: 5000,
+  position: 'top-center',
+  theme: 'bubble'
+}
+
+Vue.toasted.register('success', 
+  (payload) => {
+    if (! payload.message) {
+      return 'Success'
+    }
+
+    return payload.message
+  },
+  successToastOptions
+)
+
 let app = '';
 
 auth.onAuthStateChanged(() => {

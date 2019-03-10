@@ -14,6 +14,7 @@ firebase.initializeApp(config)
 
 const db = firebase.firestore()
 const auth = firebase.auth()
+const storage = firebase.storage()
 const budgetCollection = db.collection('Budget')
 const expenseCollection = db.collection('Expenses')
 const incomeCollection = db.collection('Income')
@@ -26,6 +27,7 @@ export {
     db,
     fireSQL,
     auth,
+    storage,
     budgetCollection,
     expenseCollection,
     incomeCollection,

@@ -1,24 +1,18 @@
 <template>
   <div id="main" class="container">
     <Nav></Nav>
-    <Expenses/>
-    <Income/>
-    <NewExpType/>
+    <Modals/>
     <router-view/>
   </div>
 </template>
 
 <script>
 import Nav from './components/Nav'
-import Expenses from './components/modals/Expenses'
-import Income from './components/modals/Income'
-import NewExpType from './components/modals/NewExpType'
+import Modals from './components/modals/Modals'
 export default {
   components: {
     Nav,
-    Expenses,
-    Income,
-    NewExpType
+    Modals
   },
   created() {
     this.$store.dispatch('fetchExpensesByDay')

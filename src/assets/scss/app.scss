@@ -4,6 +4,7 @@
 @import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
 @import 'bulma';
 @import '../../../node_modules/bulma/sass/utilities/initial-variables.sass';
+@import '../../../node_modules/animate.css/animate.min.css';
 @import './nav';
 @import './flex';
 @import './buttons.scss';
@@ -13,6 +14,7 @@
 @import './charts/pie.scss';
 @import './modals.scss';
 @import './accordion.scss';
+@import './transitions.scss';
 
 %margin-top {
     margin-top: 20px;
@@ -161,6 +163,7 @@ a:hover {
 .vfl-label-on-input {
     font-size: 1rem !important;
     color:$primary !important;
+    margin: -6px 0;
 }
 
 .link {
@@ -192,4 +195,10 @@ a:hover {
         }
     }
   
+}
+
+.content {
+    .field:first-child {
+        margin-bottom: 2rem !important;
+    }
 }

@@ -10,6 +10,7 @@
   "dependencies": {
     "@firebase/app": "^0.3.8",
     "ajv": "^6.9.1",
+    "animate.css": "^3.7.0",
     "braces": "^2.3.2",
     "bulma": "^0.7.4",
     "chart.js": "^2.7.3",
@@ -31,6 +32,7 @@
     "vue-chartjs": "^3.4.0",
     "vue-float-label": "^1.6.1",
     "vue-focus": "^2.1.0",
+    "vue-image-crop-upload": "^2.5.0",
     "vue-material": "^1.0.0-beta-10.2",
     "vue-router": "^3.0.2",
     "vue-tables-2": "^1.4.70",

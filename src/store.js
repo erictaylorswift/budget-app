@@ -28,13 +28,14 @@ export const store = new Vuex.Store({
         showExpenseModal: false,
         showIncomeModal: false,
         showNewNameModal: false,
+        showNewCatModal: false,
+        showNewIncSourceModal: false,
         budgetItem: [],
         budgetByItems: [],
         budgetDates: [],
         expensesByDay: [],
         budgetTotals: [],
-        expensees: [
-        ],
+        expensees: [],
         baseTypes: [],
         incomeSources: []
     },
@@ -44,54 +45,74 @@ export const store = new Vuex.Store({
         }, json) {
             commit('setBudgetItem', json)
         },
-        fetchBaseCategories({commit, state}) {
+        fetchUser({
+            commit
+        }) {
+            let user = fb.auth.currentUser;
+
+
+            if (user != null) {
+                commit('setCurrentUser', user)
+            }
+
+        },
+        fetchBaseCategories({
+            commit,
+            state
+        }) {
             let userID = state.currentUser.uid;
             let cat = [];
 
             fb.db.collection('ExpenseCategories')
-            .doc(userID)
-            .get()
-            .then((doc) => {
-                let array = doc.data().categories;
+                .doc(userID)
+                .get()
+                .then((doc) => {
+                    let array = doc.data().categories;
 
-                array.forEach(i => {
-                    cat.push(i)
+                    array.forEach(i => {
+                        cat.push(i)
+                    })
                 })
-            })
 
             commit('setBaseCat', cat)
         },
-        fetchBaseTypes({commit, state}) {
+        fetchBaseTypes({
+            commit,
+            state
+        }) {
             let userID = state.currentUser.uid;
             let types = [];
 
             fb.db.collection('ExpenseTypes')
-            .doc(userID)
-            .get()
-            .then((doc) => {
-                let array = doc.data().types
+                .doc(userID)
+                .get()
+                .then((doc) => {
+                    let array = doc.data().types
 
-                array.forEach(i => {
-                    types.push(i)
+                    array.forEach(i => {
+                        types.push(i)
+                    })
                 })
-            })
 
             commit('setBaseTypes', types)
         },
-        fetchIncomeSources({commit, state}) {
+        fetchIncomeSources({
+            commit,
+            state
+        }) {
             let userID = state.currentUser.uid;
             let sources = [];
 
             fb.db.collection('IncomeSources')
-            .doc(userID)
-            .get()
-            .then((doc) => {
-                let array = doc.data().source
+                .doc(userID)
+                .get()
+                .then((doc) => {
+                    let array = doc.data().source
 
-                array.forEach(i => {
-                    sources.push(i)
+                    array.forEach(i => {
+                        sources.push(i)
+                    })
                 })
-            })
 
             commit('setIncomeSources', sources)
         },
@@ -232,7 +253,9 @@ export const store = new Vuex.Store({
                 commit('setExpTotal', data)
             })
         },
-        fetchExpenseCategories({commit}) {
+        fetchExpenseCategories({
+            commit
+        }) {
             const datePromise = fireSQL.query(`
                 SELECT
                     start,
@@ -328,7 +351,9 @@ export const store = new Vuex.Store({
                 commit('setDailyExpenses', expenseDataset)
             })
         },
-        fetchIncomes({commit}) {
+        fetchIncomes({
+            commit
+        }) {
             const datePromise = fireSQL.query(`
                 SELECT
                     start,
