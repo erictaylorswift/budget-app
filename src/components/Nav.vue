@@ -1,16 +1,24 @@
 <template>
-  <nav class="navbar is-fixed-top is-black" role="navigation" v-if="currentUser">
+  <nav
+    class="navbar is-fixed-top is-black"
+    role="navigation"
+    v-if="currentUser"
+  >
     <div class="container">
       <div class="navbar-brand">
         <a @click="goHome" class="navbar-item">
-          <img src="..\assets\images\home.png">
+          <img src="..\assets\images\home.png" />
         </a>
       </div>
 
       <div class="navbar-menu">
         <div class="navbar-start">
-          <a @click="viewExpenses" class="navbar-item has-text-weight-semibold">Expenses</a>
-          <a @click="currentBudget" class="navbar-item has-text-weight-semibold">Budgets</a>
+          <a @click="viewExpenses" class="navbar-item has-text-weight-semibold"
+            >Expenses</a
+          >
+          <a @click="currentBudget" class="navbar-item has-text-weight-semibold"
+            >Budgets</a
+          >
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
@@ -45,46 +53,45 @@
 </template>
 
 <script>
-  import { mapState } from "vuex";
-  const fb = require("../firebaseConfig");
-  export default {
-    computed: {
-      ...mapState(["currentUser"])
+import { mapState } from 'vuex'
+const fb = require('../firebaseConfig')
+export default {
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  methods: {
+    viewExpenses() {
+      this.$router.push('expenses')
     },
-    methods: {
-      viewExpenses() {
-        this.$router.push("expenses");
-      },
-      currentBudget() {
-        this.$router.push("current-budget");
-      },
-      expenseChart() {
-        this.$router.push("/charts");
-      },
-      goHome() {
-        this.$router.push("/home");
-      },
-      goToSettings() {
-          this.$router.push("/settings");
-      },
-      logout() {
-        fb.auth
-          .signOut()
-          .then(() => {
-            this.$store.commit("setCurrentUser", null);
-            this.$router.push("login");
-          })
-          .catch(err => {
-            alert(err);
-          });
-      },
-      newExpense() {
-        this.$store.state.showExpenseModal = true;
-      },
-      newIncome() {
-        this.$store.state.showIncomeModal = true;
-      }
+    currentBudget() {
+      this.$router.push('current-budget')
+    },
+    expenseChart() {
+      this.$router.push('/charts')
+    },
+    goHome() {
+      this.$router.push('/home')
+    },
+    goToSettings() {
+      this.$router.push('/settings')
+    },
+    logout() {
+      fb.auth
+        .signOut()
+        .then(() => {
+          this.$store.commit('setCurrentUser', null)
+          this.$router.push('login')
+        })
+        .catch(err => {
+          alert(err)
+        })
+    },
+    newExpense() {
+      this.$store.state.showExpenseModal = true
+    },
+    newIncome() {
+      this.$store.state.showIncomeModal = true
     }
-  };
+  }
+}
 </script>
-

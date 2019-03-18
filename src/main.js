@@ -3,17 +3,17 @@ import App from './App.vue'
 import Datepicker from 'vuejs-datepicker'
 import Toasted from 'vue-toasted'
 import VueMaterial from 'vue-material'
-import SmartTable from 'vuejs-smart-table';
+import SmartTable from 'vuejs-smart-table'
 import 'vue-material/dist/vue-material.min.css'
 import './assets/scss/app.scss'
 import router from './router'
-import { store } from './store.js'
+import { store } from './store/store.js'
 import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
 import 'bulma/css/bulma.css'
 import lodash from 'lodash'
 import { auth } from './firebaseConfig'
-import {BadgerAccordion, BadgerAccordionItem} from 'vue-badger-accordion'
+import { BadgerAccordion, BadgerAccordionItem } from 'vue-badger-accordion'
 import VueFloatLabel from 'vue-float-label'
 
 Vue.config.productionTip = false
@@ -38,9 +38,10 @@ let successToastOptions = {
   theme: 'bubble'
 }
 
-Vue.toasted.register('success', 
-  (payload) => {
-    if (! payload.message) {
+Vue.toasted.register(
+  'success',
+  payload => {
+    if (!payload.message) {
       return 'Success'
     }
 
@@ -49,7 +50,7 @@ Vue.toasted.register('success',
   successToastOptions
 )
 
-let app = '';
+let app = ''
 
 auth.onAuthStateChanged(() => {
   if (!app) {

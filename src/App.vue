@@ -1,8 +1,8 @@
 <template>
   <div id="main" class="container">
     <Nav></Nav>
-    <Modals/>
-    <router-view/>
+    <Modals />
+    <router-view />
   </div>
 </template>
 
@@ -13,9 +13,6 @@ export default {
   components: {
     Nav,
     Modals
-  },
-  created() {
-    this.$store.dispatch('fetchExpensesByDay')
   }
 }
 </script>

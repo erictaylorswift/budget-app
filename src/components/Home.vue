@@ -1,19 +1,28 @@
 <template>
   <div id="home">
     <h1 class="title">Budget Performance Overview</h1>
-    <p
-      class="subtitle"
-    >for {{ budgetDates[0].start | formatDate }} to {{ budgetDates[0].end | formatDate }}</p>
+    <p class="subtitle">
+      for {{ budgetStart | formatDate }} to
+      {{ budgetEnd | formatDate }}
+    </p>
     <div class="tile is-ancestor">
       <div class="tile is-parent is-4">
         <article class="tile is-child notification is-primary">
           <p class="title is-4">Breakdown</p>
           <div class="content">
-            <p>Budgeted income: {{ budgetTotals[0].income | formatCurrency }}</p>
-            <p>Budgeted expenses: {{ budgetTotals[0].expenses | formatCurrency }}</p>
-            <hr>
+            <p>
+              Budgeted income:
+              {{ Budgets.budgetTotals[0].income | formatCurrency }}
+            </p>
+            <p>
+              Budgeted expenses:
+              {{ Budgets.budgetTotals[0].expenses | formatCurrency }}
+            </p>
+            <hr />
             <p>Budget net income: {{ netBudget.budgetNet | formatCurrency }}</p>
-            <p>Current net income: {{ netBudget.currentNet | formatCurrency}}</p>
+            <p>
+              Current net income: {{ netBudget.currentNet | formatCurrency }}
+            </p>
           </div>
         </article>
       </div>
@@ -21,10 +30,16 @@
         <article class="tile is-child notification is-warning">
           <p class="title is-4">Expenses</p>
           <div class="content">
-            <p>Spent: {{ expTotal | formatCurrency }}</p>
+            <p>Spent: {{ Expenses.expTotal | formatCurrency }}</p>
             <p>
               Remaining:
-              <b>{{ Number(budgetTotals[0].expenses) - expTotal | formatCurrency }}</b>
+              <b>
+                {{
+                  (Number(Budgets.budgetTotals[0].expenses) -
+                    Expenses.expTotal)
+                    | formatCurrency
+                }}
+              </b>
             </p>
           </div>
           <p class="title is-4">Income</p>
@@ -32,7 +47,11 @@
             <p>Earned: {{ incTotal | formatCurrency }}</p>
             <p>
               Balance:
-              <b>{{ incTotal - budgetTotals[0].income | formatCurrency }}</b>
+              <b>
+                {{
+                  (incTotal - Budgets.budgetTotals[0].income) | formatCurrency
+                }}
+              </b>
             </p>
           </div>
         </article>
@@ -46,31 +65,49 @@
             <p class="card-footer-item">
               <span
                 class="tag is-large"
-                v-bind:class="{'is-success': remaining.percent > 49, 'is-danger': remaining.percent < 50}"
-              >{{remaining.remaining | formatCurrency}}</span>
+                v-bind:class="{
+                  'is-success': remaining.percent > 49,
+                  'is-danger': remaining.percent < 50
+                }"
+                >{{ remaining.remaining | formatCurrency }}</span
+              >
             </p>
             <p class="card-footer-item">
-              <span class="tag is-large is-light">{{(remaining.percent).toFixed(0)}}%</span>
+              <span class="tag is-large is-light"
+                >{{ remaining.percent.toFixed(0) }}%</span
+              >
             </p>
           </footer>
         </div>
       </div>
-      <hr>
+      <hr />
       <progress
-        v-bind:class="{'is-success': remaining.percent > 49, 'is-warning': remaining.percent < 50 && remaining.percent > 24, 'is-danger': remaining.percent < 25}"
+        v-bind:class="{
+          'is-success': remaining.percent > 49,
+          'is-warning': remaining.percent < 50 && remaining.percent > 24,
+          'is-danger': remaining.percent < 25
+        }"
         class="progress is-large"
         v-bind:value="remaining.percent"
         max="100"
       ></progress>
     </div>
     <div class="buttons column">
-      <a @click="showCharts" v-if="!this.charts" class="button has-background-info is-rounded">
+      <a
+        @click="showCharts"
+        v-if="!this.charts"
+        class="button has-background-info is-rounded"
+      >
         <span class="icon is-large has-text-white">
           <i class="fas fa-chart-line"></i>
         </span>
         <span class="has-text-white">Show Charts</span>
       </a>
-      <a v-else @click="hideCharts" class="button has-background-danger is-rounded">
+      <a
+        v-else
+        @click="hideCharts"
+        class="button has-background-danger is-rounded"
+      >
         <span class="icon is-large has-text-white">
           <i class="fas fa-chart-line"></i>
         </span>
@@ -85,80 +122,84 @@
 </template>
 
 <script>
-  import { mapState } from "vuex";
-  import moment from "moment";
-  import numeral from 'numeral';
-  import DailyExpense from "./charts/ExpenseChart";
-  import CategoryPie from "./charts/CategoryPie";
+import { mapState } from 'vuex'
+import moment from 'moment'
+import numeral from 'numeral'
+import DailyExpense from './charts/ExpenseChart'
+import CategoryPie from './charts/CategoryPie'
 
-  export default {
-    created() {
-      this.$store.dispatch("fetchBudgetTotals");
-      this.$store.dispatch("fetchExpenseTotals");
-      this.$store.dispatch("fetchDailyExpenses");
-      this.$store.dispatch("fetchBudgetDates");
-      this.$store.dispatch("fetchIncomes");
-    },
-    components: {
-      DailyExpense,
-      CategoryPie
-    },
-    computed: {
-      ...mapState(["expTotal", "incTotal", "budgetTotals", "budgetDates"]),
-      netBudget() {
-        let state = this.$store.state;
-        let budgetNet = state.budgetTotals[0].difference;
-        let currentNet = state.income - state.expTotal;
-        let diff = currentNet - budgetNet;
+export default {
+  created() {
+    this.$store.dispatch('fetchExpenses')
+    this.$store.dispatch('fetchBudgetTotals')
+    this.$store.dispatch('fetchExpenseTotals')
+    this.$store.dispatch('fetchIncomes')
+  },
+  components: {
+    DailyExpense,
+    CategoryPie
+  },
+  computed: {
+    ...mapState([
+      'Expenses',
+      'Budgets',
+      'incTotal',
+      'budgetStart',
+      'budgetEnd'
+    ]),
+    netBudget() {
+      let state = this.$store.state
+      let budgetNet = state.Budgets.budgetTotals[0].difference
+      let currentNet = state.incTotal - state.Expenses.expTotal
+      let diff = currentNet - budgetNet
 
-        if (diff > 0) {
-          // eslint-disable-next-line
-          this.positiveNet = true;
-        }
-
-        return {
-          budgetNet: budgetNet,
-          currentNet: currentNet,
-          diff: diff
-        };
-      },
-      remaining() {
-        let expTotals = this.$store.state.expTotal;
-        let budgetedExp = this.$store.state.budgetTotals[0].expenses;
-        let remaining = Number(budgetedExp) - Number(expTotals);
-        let percent = (remaining / budgetedExp) * 100;
-
-        return {
-          budgetedExp: budgetedExp,
-          remaining: remaining,
-          percent: percent
-        };
+      if (diff > 0) {
+        // eslint-disable-next-line
+          this.positiveNet = true
       }
-    },
-    filters: {
-      formatDate(val) {
-        let date = moment(val).format("MMM Do, YYYY");
-        return date;
-      },
-      formatCurrency(val) {
-        let value = numeral(val).format("$0,0");
-        return value;
-      }
-    },
-    data() {
+
       return {
-        charts: false,
-        positiveNet: false
-      };
+        budgetNet: budgetNet,
+        currentNet: currentNet,
+        diff: diff
+      }
     },
-    methods: {
-      showCharts() {
-        this.charts = true;
-      },
-      hideCharts() {
-        this.charts = false;
+    remaining() {
+      let expTotals = this.$store.state.Expenses.expTotal
+      let budgetedExp = this.$store.state.Budgets.budgetTotals[0].expenses
+      let remaining = Number(budgetedExp) - Number(expTotals)
+      let percent = (remaining / budgetedExp) * 100
+
+      return {
+        budgetedExp: budgetedExp,
+        remaining: remaining,
+        percent: percent
       }
     }
-  };
+  },
+  filters: {
+    formatDate(val) {
+      let date = moment(val).format('MMM Do, YYYY')
+      return date
+    },
+    formatCurrency(val) {
+      let value = numeral(val).format('$0,0')
+      return value
+    }
+  },
+  data() {
+    return {
+      charts: false,
+      positiveNet: false
+    }
+  },
+  methods: {
+    showCharts() {
+      this.charts = true
+    },
+    hideCharts() {
+      this.charts = false
+    }
+  }
+}
 </script>
-

@@ -25,6 +25,7 @@
     "node": "^11.10.0",
     "node-sass": "^4.11.0",
     "numeral": "^2.0.6",
+    "prettier": "^1.16.4",
     "rxfire": "^3.3.2",
     "v-calendar": "^0.9.7",
     "vue": "^2.5.21",
@@ -45,7 +46,7 @@
     "@vue/cli-plugin-eslint": "^3.3.0",
     "@vue/cli-service": "^3.3.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.8.0",
+    "eslint": "^5.15.2",
     "eslint-plugin-vue": "^5.0.0",
     "vue-template-compiler": "^2.5.21"
   },
@@ -56,7 +57,8 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "plugin: prettier/recommended",
+      "@vue/prettier"
     ],
     "rules": {},
     "parserOptions": {
