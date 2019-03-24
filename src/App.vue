@@ -1,9 +1,13 @@
 <template>
-  <div id="main">
+  <v-app>
     <Nav></Nav>
     <Modals />
-    <router-view />
-  </div>
+    <v-content>
+      <v-content-fluid>
+        <router-view />
+      </v-content-fluid>
+    </v-content>
+  </v-app>
 </template>
 
 <script>

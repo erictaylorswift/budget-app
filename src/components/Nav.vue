@@ -1,18 +1,29 @@
 <template>
-  <div>
-    <md-toolbar class="md-primary">
-      <md-button class="md-icon-button" @click="goHome">
-        <img src="..\assets\images\home.png" />
-      </md-button>
-      <div class="md-toolbar-section-end">
-        <md-button @click="newIncome">Add income</md-button>
-        <md-button @click="newExpense">Add Expense</md-button>
-        <md-button @click="logout">
-          <md-icon>exit_to_app</md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-  </div>
+  <v-toolbar color="purple" fixed>
+    <v-menu :nudge-width="100">
+      <template v-slot:activator="{ on }">
+        <v-toolbar-title v-on="on">
+          <span>Budgie</span>
+          <v-icon>arrow_drop_down</v-icon>
+        </v-toolbar-title>
+      </template>
+
+      <v-list>
+        <v-tile @click="newIncome">
+          <v-tile-title>Add income</v-tile-title>
+        </v-tile>
+        <v-tile @click="newExpense">
+          <v-tile-title>Add expense</v-tile-title>
+        </v-tile>
+      </v-list>
+    </v-menu>
+    <v-spacer></v-spacer>
+    <v-toolbar-items class="hidden-sm-and-down">
+      <v-btn flat @click="logout">
+        <v-icon>exit_to_app</v-icon>
+      </v-btn>
+    </v-toolbar-items>
+  </v-toolbar>
 </template>
 
 <script>

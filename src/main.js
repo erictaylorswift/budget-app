@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import './plugins/vuetify'
 import App from './App.vue'
 import Datepicker from 'vuejs-datepicker'
 import Toasted from 'vue-toasted'
@@ -16,11 +17,14 @@ import lodash from 'lodash'
 import { auth } from './firebaseConfig'
 import { BadgerAccordion, BadgerAccordionItem } from 'vue-badger-accordion'
 import VueFloatLabel from 'vue-float-label'
-import 'vuesax/dist/vuesax.css'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+import './assets/styles/imports.styl'
 
 Vue.config.productionTip = false
 
 Vue.use(lodash)
+Vue.use(Vuetify)
 Vue.use(Datepicker)
 Vue.use(Toasted)
 Vue.use(VueMaterial)
