@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@firebase/app": "^0.3.8",
+    "@vue/cli": "^3.5.1",
     "ajv": "^6.9.1",
     "animate.css": "^3.7.0",
     "braces": "^2.3.2",
@@ -43,7 +44,8 @@
     "vue-toasted": "^1.1.26",
     "vuejs-datepicker": "^1.5.4",
     "vuejs-smart-table": "0.0.3",
-    "vuesax": "^3.8.37"
+    "vuesax": "^3.8.37",
+    "vuetify": "^1.5.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
@@ -52,7 +54,11 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.15.2",
     "eslint-plugin-vue": "^5.0.0",
-    "vue-template-compiler": "^2.5.21"
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue-cli-plugin-vuetify": "^0.5.0",
+    "vue-template-compiler": "^2.5.21",
+    "vuetify-loader": "^1.0.5"
   },
   "eslintConfig": {
     "root": true,
@@ -74,16 +80,16 @@
       "autoprefixer": {}
     }
   },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
   "stylus": {
     "use": [
       "vue-style-loader",
       "css-loader",
       "stylus-loader"
     ]
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  }
 }

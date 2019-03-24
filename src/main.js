@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import './plugins/vuetify'
 import App from './App.vue'
 import Datepicker from 'vuejs-datepicker'
 import Toasted from 'vue-toasted'
