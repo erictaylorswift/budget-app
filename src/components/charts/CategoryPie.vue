@@ -1,5 +1,5 @@
 <template>
-  <div class="pie-chart-wrapper column">
+  <div class="pie-chart-wrapper">
     <h2 class="subtitle">Amount spent by Category</h2>
     <pie-chart :chart-data="fillData" :options="chartOptions"></pie-chart>
   </div>
@@ -12,6 +12,9 @@ import 'chartjs-plugin-colorschemes'
 import _ from 'lodash'
 
 export default {
+  created() {
+    this.$store.dispatch('fetchExpenseTotals')
+  },
   computed: {
     ...mapState(['Expenses']),
     fillData() {
@@ -53,6 +56,18 @@ export default {
   components: { PieChart },
   data() {
     return {
+      colors: [
+        'rgba(8, 126, 139, 1)',
+        'rgba(255, 90, 95, 1)',
+        'rgba(108, 197, 81, 1)',
+        'rgba(125, 132, 178, 1)',
+        'rgba(64, 71, 109, 1)',
+        'rgba(8, 126, 139, 1)',
+        'rgba(255, 90, 95, 1)',
+        'rgba(108, 197, 81, 1)',
+        'rgba(125, 132, 178, 1)',
+        'rgba(64, 71, 109, 1)'
+      ],
       datacollection: null,
       chartOptions: {
         zoomOutPercentage: 10,
@@ -64,10 +79,8 @@ export default {
             bottom: 100
           }
         },
+        color: this.colors,
         plugins: {
-          colorschemes: {
-            scheme: 'tableau.Tableau20'
-          },
           legend: false,
           outlabels: {
             text: '%l: \n $%v',

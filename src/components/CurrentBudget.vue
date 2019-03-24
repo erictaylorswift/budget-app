@@ -1,51 +1,29 @@
 <template>
-  <div>
-    <div class="buttons is-right">
-      <button @click="newBudget" class="button is-rounded is-warning">
-        New budget
-      </button>
+  <div class="container">
+    <div class="tabs is-medium">
+      <ul>
+        <li v-bind:class="{ 'is-active': this.view == 'BudgetProgress' }">
+          <a @click="switchView('BudgetProgress')">Progress Overview</a>
+        </li>
+        <li v-bind:class="{ 'is-active': this.view == 'BudgetTable' }">
+          <a @click="switchView('BudgetTable')">Table View</a>
+        </li>
+      </ul>
     </div>
-    <h2 class="title">Current Budget</h2>
-    <div class="columns">
-      <div class="column is-one-fifth">
-        <Calendar />
+    <div class="field is-grouped">
+      <div class="control">
+        <h2 class="title">Current Budget</h2>
       </div>
-      <v-table
-        :data="budgetByItems"
-        class="table is-bordered column is-hoverable budget-table is-two-thirds"
-      >
-        <thead slot="head">
-          <v-th sortKey="date">Expense Date</v-th>
-          <v-th sortKey="name">Expense</v-th>
-          <v-th sortKey="amount">Budgeted</v-th>
-          <v-th sortKey="spent">Spent</v-th>
-          <th>Remaining</th>
-        </thead>
-        <tbody slot="body" slot-scope="{ displayData }">
-          <tr v-for="row in displayData" :key="row.id">
-            <td>{{ row.date | formatDate }}</td>
-            <td>{{ row.name }}</td>
-            <td>{{ row.amount | formatCurrency }}</td>
-            <td>{{ row.spent | formatCurrency }}</td>
-            <td>{{ (row.amount - row.spent) | formatCurrency }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-      <v-table :data="budgetTotals" class="table is-bordered column">
-        <thead slot="head">
-          <th>Income</th>
-          <th>Expenses</th>
-          <th>Surplus</th>
-        </thead>
-        <tbody slot="body" slot-scope="{ displayData }">
-          <tr v-for="row in displayData" :key="row.id">
-            <td>{{ row.income | formatCurrency }}</td>
-            <td>{{ row.expenses | formatCurrency }}</td>
-            <td>{{ row.difference | formatCurrency }}</td>
-          </tr>
-        </tbody>
-      </v-table>
+      <div class="control">
+        <div class="buttons">
+          <button @click="newBudget" class="button is-rounded is-warning">
+            New budget
+          </button>
+        </div>
+      </div>
     </div>
+    <budget-overview></budget-overview>
+    <component v-bind:is="view"></component>
   </div>
 </template>
 
@@ -54,16 +32,28 @@ import numeral from 'numeral'
 import { mapState } from 'vuex'
 import moment from 'moment'
 import Calendar from './Calendar'
+import BudgetProgress from './BudgetProgress'
+import BudgetTable from './BudgetTable'
+import BudgetOverview from './CurrentBudgetOverview'
 /* eslint-disable */
   export default {
+    created() {
+      this.$store.dispatch('fetchBudgetTotals')
+      this.$store.dispatch('fetchBudgetItems')
+    },
     components: {
-      Calendar
+      Calendar,
+      BudgetProgress,
+      BudgetTable,
+      BudgetOverview
     },
     computed: {
-      ...mapState(['budgetByItems', 'budgetTotals'])
+      ...mapState(['Budgets'])
     },
     data() {
-      return {}
+      return {
+        view: 'BudgetProgress'
+      }
     },
     methods: {
       goHome() {
@@ -71,6 +61,9 @@ import Calendar from './Calendar'
       },
       newBudget() {
         this.$router.push('budget')
+      },
+      switchView(name) {
+        this.view = name
       }
     },
     filters: {
@@ -85,6 +78,10 @@ import Calendar from './Calendar'
       formatDate(val) {
         let date = moment(val).format('MMM Do, YY')
         return date
+      },
+      formatPercentage(val) {
+        let percent = numeral(val).format('0%')
+        return percent
       }
     }
   }

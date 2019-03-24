@@ -1,10 +1,7 @@
-// @import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
-// @import url(https://unpkg.com/nes.css/css/nes.css);
 @import url('https://fonts.googleapis.com/css?family=Arimo');
 @import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
-@import 'bulma';
-@import '../../../node_modules/bulma/sass/utilities/initial-variables.sass';
 @import '../../../node_modules/animate.css/animate.min.css';
+@import './type.scss';
 @import './nav';
 @import './flex';
 @import './buttons.scss';
@@ -162,43 +159,81 @@ a:hover {
 
 .vfl-label-on-input {
     font-size: 1rem !important;
-    color:$primary !important;
+
     margin: -6px 0;
 }
 
 .link {
     padding: 8px 0;
     font-size: 24px;
-    color: $warning;
 }
 
 .expand-collapse {
     font-size: 18px;
-    color: $cyan;
 }
 
 .w-100 {
     width: 100%;
 }
 
-.panel-with-background {
-    background-color: $grey-lighter
-}
+// .panel-with-background {
+//     background-color: $grey-lighter
+// }
 
-.panel-heading {
-    background-color: $cyan !important;
+// .panel-heading {
+//     background-color: $cyan !important;
 
-    .level {
-        p {
-            color: $cyan-invert;
-            font-weight: bold;
-        }
-    }
-  
-}
+//     .level {
+//         p {
+//             color: $cyan-invert;
+//             font-weight: bold;
+//         }
+//     }
+
+// }
 
 .content {
     .field:first-child {
         margin-bottom: 2rem !important;
     }
+}
+
+.is-fullheight {
+    height: 103vh;
+}
+
+.is-fullwidth {
+    width: 100vw;
+}
+
+.is-circle {
+    height: 20px !important;
+    width: 20px !important;
+    border-radius: 200px !important;
+    margin-right: 10px;
+}
+
+.pagination {
+    margin-right: 8px !important;
+
+    .page-item {
+        margin: 0 6px;
+
+
+    }
+}
+
+#login {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    overflow: hidden;
+}
+
+.container {
+    padding: 0px 110px;
+}
+
+.fields {
+    padding-left: 1rem;
 }

@@ -27,7 +27,7 @@
             <label class="label">Select expense source</label>
             <div class="select">
               <select v-model="expense.note">
-                <option v-for="option in expensees" :key="option.id">{{
+                <option v-for="option in Budgets.expensees" :key="option.id">{{
                   option
                 }}</option>
               </select>
@@ -91,7 +91,7 @@ export default {
   },
   components: { Datepicker },
   computed: {
-    ...mapState(['expenses', 'showExpenseModal', 'expensees'])
+    ...mapState(['expenses', 'showExpenseModal', 'Budgets'])
   },
   methods: {
     saveExpense() {
@@ -125,11 +125,11 @@ export default {
           value: expenseValue
         })
         .then(() => {
-          ;(this.expense.label = ''),
-            (this.expense.category = ''),
-            (this.expense.value = null),
-            (this.expense.note = ''),
-            (this.expense.date = '')
+          expenseLabel = ''
+          this.expense.category = ''
+          this.expense.value = null
+          this.expense.note = ''
+          this.expense.date = ''
         })
         .then(() => {
           this.$store.dispatch('fetchExpenseTotals')

@@ -1,19 +1,19 @@
 <template>
-  <div class="column is-three-fifths">
+  <div>
     <h2 class="subtitle">Daily Expenses</h2>
-    <bar-chart
+    <line-chart
       :chart-data="fillData"
       :options="chartOptions"
       width="50"
       height="25"
-    ></bar-chart>
+    ></line-chart>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import moment from 'moment'
-import BarChart from './Bar.js'
+import LineChart from './Line.js'
 import numeral from 'numeral'
 export default {
   computed: {
@@ -48,14 +48,15 @@ export default {
           {
             label: 'Daily Expenses',
             data: amounts,
-            backgroundColor: '#41A234',
-            hoverBackgroundColor: '#2D6F24'
+            fill: false,
+            borderColor: '#DE0954',
+            pointBackgroundColor: '#540047'
           }
         ]
       }
     }
   },
-  components: { BarChart },
+  components: { LineChart },
   data() {
     return {
       datacollection: null,

@@ -1,19 +1,19 @@
 <template>
   <div class>
     <h2 class="subtitle">Daily Expenses</h2>
-    <bar-chart
+    <line-chart
       :chart-data="datacollection"
       :options="chartOptions"
       width="500"
       height="300"
-    ></bar-chart>
+    ></line-chart>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import moment from 'moment'
-import BarChart from './Bar.js'
+import LineChart from './Line.js'
 import numeral from 'numeral'
 export default {
   created() {
@@ -34,7 +34,7 @@ export default {
       return totals
     }
   },
-  components: { BarChart },
+  components: { LineChart },
   data() {
     return {
       chart: false,

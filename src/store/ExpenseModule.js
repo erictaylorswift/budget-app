@@ -40,19 +40,17 @@ const expenseModule = {
     fetchExpenseTotals({ commit, rootState }) {
       let uid = rootState.currentUser.uid
       let dates = []
-      const datePromise = fireSQL.query(`
-                  SELECT
-                      start,
-                      end
-                  FROM BudgetOverview
-              `)
-
-      datePromise.then(query => {
-        dates.push({
-          start: query[0].start,
-          end: query[0].end
+      fb.db
+        .collection('Overview')
+        .doc(uid)
+        .get()
+        .then(doc => {
+          let data = doc.data()
+          dates.push({
+            start: data.start,
+            end: data.end
+          })
         })
-      })
       fb.db
         .collection('ExpenseTotals')
         .doc(uid)
@@ -81,19 +79,17 @@ const expenseModule = {
       let expenseArray = []
       let categoryArray = []
 
-      const datePromise = fireSQL.query(`
-                  SELECT
-                      start,
-                      end
-                  FROM BudgetOverview
-              `)
-
-      datePromise.then(query => {
-        dates.push({
-          start: query[0].start,
-          end: query[0].end
+      fb.db
+        .collection('Overview')
+        .doc(uid)
+        .get()
+        .then(doc => {
+          let data = doc.data()
+          dates.push({
+            start: data.start,
+            end: data.end
+          })
         })
-      })
 
       fb.db
         .collection('Expenses')
@@ -110,7 +106,7 @@ const expenseModule = {
 
             if (startDiff >= 0 && endDiff <= -1) {
               expenseArray.push({
-                date: date,
+                date: date.toISOString(),
                 type: data.expense,
                 note: data.note,
                 amount: Number(data.value)

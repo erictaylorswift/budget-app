@@ -14,18 +14,18 @@ fb.auth.onAuthStateChanged(user => {
   }
 })
 
-fb.db
-  .collection('BudgetOverview')
-  .doc('Overview')
-  .onSnapshot(doc => {
-    let data = doc.data()
-    let budgetStart = moment(data.start).toISOString()
-    let budgetEnd = moment(data.end).toISOString()
-    if (doc) {
-      store.commit('setStart', budgetStart)
-      store.commit('setEnd', budgetEnd)
-    }
-  })
+// fb.db
+//   .collection('BudgetOverview')
+//   .doc('Overview')
+//   .onSnapshot(doc => {
+//     let data = doc.data()
+//     let budgetStart = moment(data.start).toISOString()
+//     let budgetEnd = moment(data.end).toISOString()
+//     if (doc) {
+//       store.commit('setStart', budgetStart)
+//       store.commit('setEnd', budgetEnd)
+//     }
+//   })
 
 Vue.use(Vuex)
 
@@ -64,19 +64,18 @@ export const store = new Vuex.Store({
 
     fetchIncomes({ commit, state }) {
       let uid = state.currentUser.uid
-      const datePromise = fireSQL.query(`
-                SELECT
-                    start,
-                    end
-                FROM BudgetOverview
-            `)
       let dates = []
-      datePromise.then(query => {
-        dates.push({
-          start: query[0].start,
-          end: query[0].end
+      fb.db
+        .collection('Overview')
+        .doc(uid)
+        .get()
+        .then(doc => {
+          let data = doc.data()
+          dates.push({
+            start: data.start,
+            end: data.end
+          })
         })
-      })
 
       fb.db
         .collection('Income')

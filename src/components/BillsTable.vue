@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <p class="title is-4">Filter</p>
+  <div class="container">
+    <h1 class="title">Expense breakdown</h1>
+    <p class="heading">Filter</p>
     <div class="level absolute">
       <div class="level-left">
         <div class="level-item">
@@ -25,33 +26,49 @@
         </div>
       </div>
     </div>
-    <div class="tile is-ancestor">
-      <div class="tile is-parent is-5">
-        <div class="tile is-child notification is-primary">
-          <p class="title">Expense Breakdown</p>
-          <v-table
-            :data="Expenses.expenses"
-            :filters="filters"
-            class="table is-fullwidth has-text-white"
-          >
-            <thead slot="head" class="has-text-white">
-              <v-th sortKey="date" class="has-text-white">Date</v-th>
-              <v-th sortKey="type" class="has-text-white">Expense</v-th>
-              <th class="has-text-white">Expensee</th>
-              <v-th sortKey="amount" class="has-text-white">Amount</v-th>
-            </thead>
-            <tbody slot="body" slot-scope="{ displayData }">
-              <tr v-for="row in displayData" :key="row.id">
-                <td>{{ row.date | formatDate }}</td>
-                <td>{{ row.type }}</td>
-                <td>{{ row.note }}</td>
-                <td>{{ row.amount | formatCurrency }}</td>
-              </tr>
-            </tbody>
-          </v-table>
+    <div class="box">
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <div class="tile is-child notification is-primary">
+            <v-table
+              :data="Expenses.expenses"
+              :filters="filters"
+              :currentPage.sync="currentPage"
+              :pageSize="10"
+              @totalPagesChanged="totalPages = $event"
+              class="table is-fullwidth has-text-white"
+            >
+              <thead slot="head" class="has-text-white">
+                <v-th defaultSort="desc" sortKey="date" class="has-text-white"
+                  >Date</v-th
+                >
+                <v-th sortKey="type" class="has-text-white">Expense</v-th>
+                <th class="has-text-white">Expensee</th>
+                <v-th sortKey="amount" class="has-text-white">Amount</v-th>
+              </thead>
+              <tbody slot="body" slot-scope="{ displayData }">
+                <tr v-for="row in displayData" :key="row.id">
+                  <td>{{ row.date | formatDate }}</td>
+                  <td>{{ row.type }}</td>
+                  <td>{{ row.note }}</td>
+                  <td>{{ row.amount | formatCurrency }}</td>
+                </tr>
+              </tbody>
+            </v-table>
+          </div>
         </div>
       </div>
-      <category-pie></category-pie>
+      <div class="level-right">
+        <div class="level-item">
+          <div>
+            <smart-pagination
+              :currentPage.sync="currentPage"
+              :totalPages="totalPages"
+              :directionLinks="false"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -60,12 +77,8 @@
 import { mapState } from 'vuex'
 import moment from 'moment'
 import numeral from 'numeral'
-import CategoryPie from './charts/CategoryPie.vue'
 
 export default {
-  components: {
-    CategoryPie
-  },
   created() {
     this.$store.dispatch('fetchExpenseTotals')
     this.$store.dispatch('fetchExpenses')
@@ -96,7 +109,9 @@ export default {
           keys: ['type']
         }
       },
-      total: 0
+      total: 0,
+      currentPage: 1,
+      totalPages: 0
     }
   },
   methods: {},

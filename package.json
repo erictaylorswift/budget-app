@@ -20,6 +20,7 @@
     "firesql": "^1.0.2",
     "firestore": "^1.1.6",
     "lodash": "^4.17.11",
+    "material-icons": "^0.3.0",
     "moment": "^2.23.0",
     "nice-color-palettes": "^2.0.0",
     "node": "^11.10.0",
@@ -27,6 +28,8 @@
     "numeral": "^2.0.6",
     "prettier": "^1.16.4",
     "rxfire": "^3.3.2",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
     "v-calendar": "^0.9.7",
     "vue": "^2.5.21",
     "vue-badger-accordion": "^1.1.2",
@@ -39,7 +42,8 @@
     "vue-tables-2": "^1.4.70",
     "vue-toasted": "^1.1.26",
     "vuejs-datepicker": "^1.5.4",
-    "vuejs-smart-table": "0.0.3"
+    "vuejs-smart-table": "0.0.3",
+    "vuesax": "^3.8.37"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
@@ -69,6 +73,13 @@
     "plugins": {
       "autoprefixer": {}
     }
+  },
+  "stylus": {
+    "use": [
+      "vue-style-loader",
+      "css-loader",
+      "stylus-loader"
+    ]
   },
   "browserslist": [
     "> 1%",

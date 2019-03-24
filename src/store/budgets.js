@@ -70,28 +70,51 @@ const budgets = {
 
       commit('setIncomeSources', sources)
     },
-    fetchBudgetItems({ commit }) {
+    fetchBudgetItems({ commit, rootState }) {
+      let uid = rootState.currentUser.uid
       let budgetItems = []
 
-      commit('setBudgetByItems', budgetItems)
-    },
-    fetchBudgetTotals({ commit }) {
-      let totals = []
-      const promise = fireSQL.query(`
-                  SELECT
-                      expenseTotal,
-                      incomeTotal,
-                      difference
-                  FROM BudgetOverview
-              `)
+      fb.db
+        .collection('BudgetedExpenses')
+        .doc(uid)
+        .collection('budgetExpenses')
+        .onSnapshot(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            let data = doc.data()
+            let budgeted = Number(data.amount)
+            let spent = Number(data.spent)
 
-      promise.then(query => {
-        totals.push({
-          income: query[0].incomeTotal,
-          expenses: query[0].expenseTotal,
-          difference: query[0].difference
+            budgetItems.push({
+              amount: budgeted,
+              date: data.date,
+              name: data.name,
+              spent: spent,
+              type: data.type,
+              remaining: Number(budgeted - spent)
+            })
+          })
+          commit('setBudgetByItems', budgetItems)
         })
-      })
+    },
+    fetchBudgetTotals({ commit, rootState }) {
+      let uid = rootState.currentUser.uid
+      let totals = []
+      // console.log('user', uid)
+      fb.db
+        .collection('Overview')
+        .doc(uid)
+        .get()
+        .then(doc => {
+          let data = doc.data()
+          totals.push({
+            income: data.incomeTotal,
+            expenses: data.expenseTotal,
+            difference: data.difference,
+            start: data.start,
+            end: data.end
+          })
+        })
+      console.log(totals)
       commit('setBudgetTotals', totals)
     }
   },

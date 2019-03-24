@@ -1,122 +1,154 @@
 <template>
-  <div id="home">
+  <div id="home" class="container">
     <h1 class="title">Budget Performance Overview</h1>
     <p class="subtitle">
       for {{ budgetStart | formatDate }} to
       {{ budgetEnd | formatDate }}
     </p>
+    <vs-row vs-justify="center">
+      <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="3">
+        <vs-card>
+          <div slot="header">
+            <h3>Budgeted income</h3>
+          </div>
+          <div>
+            <p>{{ Budgets.budgetTotals[0].income | formatCurrency }}</p>
+          </div>
+        </vs-card>
+      </vs-col>
+
+      <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="3">
+        <vs-card>
+          <div slot="header">
+            <h3>Budgeted expenses</h3>
+          </div>
+          <div>
+            <p>{{ Budgets.budgetTotals[0].expenses | formatCurrency }}</p>
+          </div>
+        </vs-card>
+      </vs-col>
+      <!-- <vs-card>
+          <div slot="header">
+            <h3>Budgeted expenses</h3>
+          </div>
+          <div>
+            <p>{{ Budgets.budgetTotals[0].expenses | formatCurrency }}</p>
+          </div>
+        </vs-card>
+        <vs-card>
+          <div slot="header">
+            <h3>Budget surplus</h3>
+          </div>
+          <div>
+            <p>{{ netBudget.budgetNet | formatCurrency }}</p>
+          </div>
+        </vs-card>
+        <vs-card>
+          <div slot="header">
+            <h3>Current balance</h3>
+          </div>
+          <div>
+            <p>{{ netBudget.currentNet | formatCurrency }}</p>
+          </div>
+        </vs-card>
+      </vs-col>-->
+    </vs-row>
+    <vs-row>
+      <vs-col vs-type="flex" vs-justify="start" vs-align="center" vs-w="12">
+        <div class="tile is-ancestor">
+          <a @click="toExpenses" class="tile is-parent">
+            <article
+              class="tile is-child notification is-info has-text-centered"
+            >
+              <p class="title is-4">Expenses</p>
+              <div class="content">
+                <p>Spent: {{ Expenses.expTotal | formatCurrency }}</p>
+                <p>
+                  Remaining:
+                  <b>
+                    {{
+                      (Number(Budgets.budgetTotals[0].expenses) -
+                        Expenses.expTotal)
+                        | formatCurrency
+                    }}
+                  </b>
+                </p>
+              </div>
+            </article>
+          </a>
+          <div class="tile is-parent">
+            <article
+              class="tile is-child notification is-warning has-text-centered"
+            >
+              <p class="title is-4">Income</p>
+              <div class="content">
+                <p>Earned: {{ incTotal | formatCurrency }}</p>
+                <p>
+                  Balance:
+                  <b>
+                    {{
+                      (incTotal - Budgets.budgetTotals[0].income)
+                        | formatCurrency
+                    }}
+                  </b>
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </vs-col>
+    </vs-row>
+
     <div class="tile is-ancestor">
-      <div class="tile is-parent is-4">
-        <article class="tile is-child notification is-primary">
-          <p class="title is-4">Breakdown</p>
-          <div class="content">
-            <p>
-              Budgeted income:
-              {{ Budgets.budgetTotals[0].income | formatCurrency }}
-            </p>
-            <p>
-              Budgeted expenses:
-              {{ Budgets.budgetTotals[0].expenses | formatCurrency }}
-            </p>
-            <hr />
-            <p>Budget net income: {{ netBudget.budgetNet | formatCurrency }}</p>
-            <p>
-              Current net income: {{ netBudget.currentNet | formatCurrency }}
-            </p>
-          </div>
+      <div class="tile is-parent is-3">
+        <article class="tile is-child">
+          <calendar />
         </article>
       </div>
-      <div class="tile is-3 is-parent">
-        <article class="tile is-child notification is-warning">
-          <p class="title is-4">Expenses</p>
-          <div class="content">
-            <p>Spent: {{ Expenses.expTotal | formatCurrency }}</p>
-            <p>
-              Remaining:
-              <b>
-                {{
-                  (Number(Budgets.budgetTotals[0].expenses) -
-                    Expenses.expTotal)
-                    | formatCurrency
-                }}
-              </b>
-            </p>
+      <div class="tile is-parent">
+        <div class="tile is-child">
+          <div class="box">
+            <div class="tile is-ancestor">
+              <div class="tile is-parent">
+                <article class="tile is-child">
+                  <p class="title is-4 margin-top">Remaining budget</p>
+                  <p class="subtitle">
+                    {{ remaining.remaining | formatCurrency }} |
+                    {{ remaining.percent.toFixed(0) }}%
+                  </p>
+                  <progress
+                    v-bind:class="{
+                      'is-success': remaining.percent > 49,
+                      'is-warning':
+                        remaining.percent < 50 && remaining.percent > 24,
+                      'is-danger': remaining.percent < 25
+                    }"
+                    class="progress is-large"
+                    v-bind:value="remaining.percent"
+                    max="100"
+                  ></progress>
+                </article>
+              </div>
+            </div>
           </div>
-          <p class="title is-4">Income</p>
-          <div class="content">
-            <p>Earned: {{ incTotal | formatCurrency }}</p>
-            <p>
-              Balance:
-              <b>
-                {{
-                  (incTotal - Budgets.budgetTotals[0].income) | formatCurrency
-                }}
-              </b>
-            </p>
-          </div>
-        </article>
-      </div>
-    </div>
-    <div class="column is-8">
-      <div class="column is-5">
-        <h4 class="subtitle">Remaining budget:</h4>
-        <div class="card">
-          <footer class="card-footer">
-            <p class="card-footer-item">
-              <span
-                class="tag is-large"
-                v-bind:class="{
-                  'is-success': remaining.percent > 49,
-                  'is-danger': remaining.percent < 50
-                }"
-                >{{ remaining.remaining | formatCurrency }}</span
-              >
-            </p>
-            <p class="card-footer-item">
-              <span class="tag is-large is-light"
-                >{{ remaining.percent.toFixed(0) }}%</span
-              >
-            </p>
-          </footer>
         </div>
       </div>
-      <hr />
-      <progress
-        v-bind:class="{
-          'is-success': remaining.percent > 49,
-          'is-warning': remaining.percent < 50 && remaining.percent > 24,
-          'is-danger': remaining.percent < 25
-        }"
-        class="progress is-large"
-        v-bind:value="remaining.percent"
-        max="100"
-      ></progress>
     </div>
-    <div class="buttons column">
-      <a
-        @click="showCharts"
-        v-if="!this.charts"
-        class="button has-background-info is-rounded"
-      >
-        <span class="icon is-large has-text-white">
-          <i class="fas fa-chart-line"></i>
-        </span>
-        <span class="has-text-white">Show Charts</span>
-      </a>
-      <a
-        v-else
-        @click="hideCharts"
-        class="button has-background-danger is-rounded"
-      >
-        <span class="icon is-large has-text-white">
-          <i class="fas fa-chart-line"></i>
-        </span>
-        <span class="has-text-white">Hide Charts</span>
-      </a>
-    </div>
-    <div class="columns margin-top" v-if="this.charts">
-      <daily-expense></daily-expense>
-      <category-pie></category-pie>
+    <div class="tile is-ancestor">
+      <div class="tile is-parent">
+        <div class="tile is-child">
+          <div class="box">
+            <daily-expense></daily-expense>
+          </div>
+        </div>
+      </div>
+      <div class="tile is-parent">
+        <div class="tile is-child">
+          <div class="box">
+            <category-pie></category-pie>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -127,6 +159,7 @@ import moment from 'moment'
 import numeral from 'numeral'
 import DailyExpense from './charts/ExpenseChart'
 import CategoryPie from './charts/CategoryPie'
+import Calendar from './Calendar'
 
 export default {
   created() {
@@ -137,7 +170,8 @@ export default {
   },
   components: {
     DailyExpense,
-    CategoryPie
+    CategoryPie,
+    Calendar
   },
   computed: {
     ...mapState([
@@ -199,6 +233,9 @@ export default {
     },
     hideCharts() {
       this.charts = false
+    },
+    toExpenses() {
+      this.$router.push('expenses')
     }
   }
 }

@@ -229,8 +229,8 @@ export default {
       let difference = incomeTotal - Number(expenseTotal)
 
       fb.db
-        .collection('BudgetOverview')
-        .doc('Overview')
+        .collection('Overview')
+        .doc(uid)
         .set({
           expenseTotal: Number(expenseTotal),
           incomeTotal: incomeTotal,
