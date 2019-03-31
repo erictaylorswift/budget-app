@@ -1,38 +1,28 @@
 <template>
-  <div class="box">
-    <div
-      v-for="category in leftInBudget"
-      :key="category.name"
-      class="margin-top"
-    >
-      <div class="flex margin-bottom">
-        <span
-          class="tag is-circle"
-          :class="{
-            'is-success': category.percent > 0.49,
-            'is-warning': category.percent < 0.5 && category.percent > 0.24,
-            'is-danger': category.percent < 0.25
-          }"
-        ></span>
-        <p class="is-size-6">
-          {{ category.type }} --
-          <strong>{{ category.spent | formatCurrency }}</strong>
-          |
-          <small>{{ category.percent | formatPercentage }} remaining</small>
-        </p>
-      </div>
-      <progress
-        :value="category.remaining"
-        :max="category.amount"
-        class="progress is-medium"
-        :class="{
-          'is-success': category.percent > 0.49,
-          'is-warning': category.percent < 0.5 && category.percent > 0.24,
-          'is-danger': category.percent < 0.25
-        }"
-        >...</progress
-      >
-    </div>
+  <div class="mt-5 ml-3 w-75">
+    <v-card>
+      <v-card-text>
+        <div
+          v-for="category in leftInBudget"
+          :key="category.name"
+          class="margin-top"
+        >
+          <div class="flex">
+            <p class="title">
+              {{ category.type }} --
+              <strong>{{ category.spent | formatCurrency }}</strong>
+              |
+              <small>{{ category.percent | formatPercentage }} remaining</small>
+            </p>
+          </div>
+          <v-progress-linear
+            :value="category.percent * 100"
+            height="15"
+            :color="category.style"
+          ></v-progress-linear>
+        </div>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -52,12 +42,11 @@ export default {
       let items = []
       let catSum = []
       let styles = [
-        'is-primary',
-        'is-link',
-        'is-info',
-        'is-success',
-        'is-warning',
-        'is-danger'
+        'purple darken-1',
+        'pink accent-2',
+        'indigo',
+        'teal accent-4',
+        'deep-orange darken-2'
       ]
 
       const Arr = data

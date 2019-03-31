@@ -10,7 +10,17 @@ const budgets = {
     budgetTotals: [],
     expensees: [],
     baseTypes: [],
-    incomeSources: []
+    incomeSources: [],
+    budgetStart: '',
+    budgetEnd: ''
+  },
+  getters: {
+    budgetDates: state => {
+      return {
+        start: state.budgetTotals[0].start,
+        end: state.budgetTotals[0].end
+      }
+    }
   },
   actions: {
     addBudgetItem({ commit }, json) {
@@ -114,7 +124,6 @@ const budgets = {
             end: data.end
           })
         })
-      console.log(totals)
       commit('setBudgetTotals', totals)
     }
   },

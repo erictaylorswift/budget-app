@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import firebase from 'firebase'
 
 import Details from '@/components/Details'
-import Home from '@/components/Home'
+import Home from '@/pages/Home'
 // import BudgetForm from '@/components/BudgetForm'
 import CurrentBudget from '@/components/CurrentBudget'
 import HomeScreen from '@/components/home_screen/Home'

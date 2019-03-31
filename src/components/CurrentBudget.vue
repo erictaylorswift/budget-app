@@ -1,29 +1,14 @@
 <template>
-  <div class="container">
-    <div class="tabs is-medium">
-      <ul>
-        <li v-bind:class="{ 'is-active': this.view == 'BudgetProgress' }">
-          <a @click="switchView('BudgetProgress')">Progress Overview</a>
-        </li>
-        <li v-bind:class="{ 'is-active': this.view == 'BudgetTable' }">
-          <a @click="switchView('BudgetTable')">Table View</a>
-        </li>
-      </ul>
-    </div>
-    <div class="field is-grouped">
-      <div class="control">
-        <h2 class="title">Current Budget</h2>
-      </div>
-      <div class="control">
-        <div class="buttons">
-          <button @click="newBudget" class="button is-rounded is-warning">
-            New budget
-          </button>
-        </div>
-      </div>
-    </div>
-    <budget-overview></budget-overview>
-    <component v-bind:is="view"></component>
+  <div>
+    <v-tabs color="grey lighten-5" class="mb-4 ml-3">
+      <v-tabs-slider color="yellow"></v-tabs-slider>
+      <v-tab @click="switchView('BudgetProgress')">Progress Overview</v-tab>
+      <v-tab @click="switchView('BudgetTable')">Table view</v-tab>
+    </v-tabs>
+    <section>
+      <budget-overview></budget-overview>
+      <component v-bind:is="view"></component>
+    </section>
   </div>
 </template>
 
@@ -34,7 +19,7 @@ import moment from 'moment'
 import Calendar from './Calendar'
 import BudgetProgress from './BudgetProgress'
 import BudgetTable from './BudgetTable'
-import BudgetOverview from './CurrentBudgetOverview'
+import BudgetOverview from './BudgetOverview'
 /* eslint-disable */
   export default {
     created() {

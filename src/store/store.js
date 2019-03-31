@@ -14,19 +14,6 @@ fb.auth.onAuthStateChanged(user => {
   }
 })
 
-// fb.db
-//   .collection('BudgetOverview')
-//   .doc('Overview')
-//   .onSnapshot(doc => {
-//     let data = doc.data()
-//     let budgetStart = moment(data.start).toISOString()
-//     let budgetEnd = moment(data.end).toISOString()
-//     if (doc) {
-//       store.commit('setStart', budgetStart)
-//       store.commit('setEnd', budgetEnd)
-//     }
-//   })
-
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
@@ -36,6 +23,7 @@ export const store = new Vuex.Store({
   },
   state: {
     currentUser: null,
+    percent: 0,
     incTotal: 0,
     incomes: [],
     current: [],
@@ -43,15 +31,8 @@ export const store = new Vuex.Store({
     showIncomeModal: false,
     showNewNameModal: false,
     showNewCatModal: false,
-    showNewIncSourceModal: false
-  },
-  getters: {
-    getBudgetStart: state => {
-      return state.budgetStart
-    },
-    getBudgetEnd: state => {
-      return state.budgetEnd
-    }
+    showNewIncSourceModal: false,
+    drawer: null
   },
   actions: {
     fetchUser({ commit }) {
@@ -61,7 +42,6 @@ export const store = new Vuex.Store({
         commit('setCurrentUser', user)
       }
     },
-
     fetchIncomes({ commit, state }) {
       let uid = state.currentUser.uid
       let dates = []
@@ -124,6 +104,9 @@ export const store = new Vuex.Store({
     },
     setIncomes(state, val) {
       state.incomes = val
+    },
+    setPercentRemaining(state, val) {
+      state.percent = val
     }
   }
 })

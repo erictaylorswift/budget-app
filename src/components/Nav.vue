@@ -1,17 +1,50 @@
 <template>
   <div>
-    <md-toolbar class="md-primary">
-      <md-button class="md-icon-button" @click="goHome">
-        <img src="..\assets\images\home.png" />
-      </md-button>
-      <div class="md-toolbar-section-end">
-        <md-button @click="newIncome">Add income</md-button>
-        <md-button @click="newExpense">Add Expense</md-button>
-        <md-button @click="logout">
-          <md-icon>exit_to_app</md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
+    <v-toolbar fixed app>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>
+        <v-btn flat @click="goHome">Budgie</v-btn>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn flat @click="newIncome">Add income</v-btn>
+        <v-btn flat @click="newExpense">Add expense</v-btn>
+        <v-btn flat @click="logout">
+          <v-icon>exit_to_app</v-icon>
+        </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <v-navigation-drawer v-model="drawer" absolute temporary>
+      <v-list class="pa-1">
+        <v-list-tile avatar>
+          <v-list-tile-avatar>
+            <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+          </v-list-tile-avatar>
+
+          <v-list-tile-content>
+            <v-list-tile-title>John Leider</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+
+      <v-list class="pt-0" dense>
+        <v-divider></v-divider>
+
+        <v-list-tile
+          v-for="item in items"
+          :key="item.title"
+          @click="goTo(item.route)"
+        >
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
   </div>
 </template>
 
@@ -19,24 +52,26 @@
 import { mapState } from 'vuex'
 const fb = require('../firebaseConfig')
 export default {
+  data() {
+    return {
+      drawer: null,
+      items: [
+        { title: 'Home', icon: 'dashboard', route: '/home' },
+        { title: 'Expenses', icon: 'attach_money', route: '/expenses' },
+        {
+          title: 'Budget Overview',
+          icon: 'account_balance_wallet',
+          route: '/current-budget'
+        }
+      ]
+    }
+  },
   computed: {
     ...mapState(['currentUser'])
   },
   methods: {
-    viewExpenses() {
-      this.$router.push('expenses')
-    },
-    currentBudget() {
-      this.$router.push('current-budget')
-    },
-    expenseChart() {
-      this.$router.push('/charts')
-    },
-    goHome() {
-      this.$router.push('/home')
-    },
-    goToSettings() {
-      this.$router.push('/settings')
+    goTo(route) {
+      this.$router.push(route)
     },
     logout() {
       fb.auth

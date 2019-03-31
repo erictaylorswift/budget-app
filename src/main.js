@@ -4,10 +4,7 @@ import App from './App.vue'
 import Datepicker from 'vuejs-datepicker'
 import Toasted from 'vue-toasted'
 import SmartTable from 'vuejs-smart-table'
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.min.css'
 import 'material-icons/iconfont/material-icons.css'
-import 'vue-material/dist/theme/default.css'
 import './assets/scss/app.scss'
 import router from './router'
 import { store } from './store/store.js'
@@ -17,14 +14,16 @@ import lodash from 'lodash'
 import { auth } from './firebaseConfig'
 import { BadgerAccordion, BadgerAccordionItem } from 'vue-badger-accordion'
 import VueFloatLabel from 'vue-float-label'
-import 'vuesax/dist/vuesax.css'
+import Fab from 'vue-fab'
+import ProgressBar from 'vuejs-progress-bar'
 
 Vue.config.productionTip = false
 
 Vue.use(lodash)
 Vue.use(Datepicker)
+Vue.use(ProgressBar)
+Vue.use(Fab)
 Vue.use(Toasted)
-Vue.use(VueMaterial)
 Vue.use(SmartTable)
 Vue.use(VCalendar, {
   firstDayOfWeek: 2

@@ -27,31 +27,6 @@
           </div>
         </vs-card>
       </vs-col>
-      <!-- <vs-card>
-          <div slot="header">
-            <h3>Budgeted expenses</h3>
-          </div>
-          <div>
-            <p>{{ Budgets.budgetTotals[0].expenses | formatCurrency }}</p>
-          </div>
-        </vs-card>
-        <vs-card>
-          <div slot="header">
-            <h3>Budget surplus</h3>
-          </div>
-          <div>
-            <p>{{ netBudget.budgetNet | formatCurrency }}</p>
-          </div>
-        </vs-card>
-        <vs-card>
-          <div slot="header">
-            <h3>Current balance</h3>
-          </div>
-          <div>
-            <p>{{ netBudget.currentNet | formatCurrency }}</p>
-          </div>
-        </vs-card>
-      </vs-col>-->
     </vs-row>
     <vs-row>
       <vs-col vs-type="flex" vs-justify="start" vs-align="center" vs-w="12">
