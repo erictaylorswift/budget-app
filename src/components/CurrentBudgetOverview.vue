@@ -5,37 +5,11 @@
         <v-icon left color="green darken-2">account_balance_wallet</v-icon>
         <span class="title green--text text--darken-2">Income</span>
       </v-card-title>
-      <v-card-text class="headline font-weight-bold">{{
-        Budgets.budgetTotals[0].income | formatCurrency
-      }}</v-card-text>
+      <v-card-text class="headline font-weight-bold">
+        {{ Budgets.budgetTotals[0].income | formatCurrency }}
+      </v-card-text>
     </v-card>
   </v-layout>
-  <!-- <v-item-group multiple>
-    <v-item>
-      <div>
-        <p class="heading">Income</p>
-        <p class="title">
-          {{ Budgets.budgetTotals[0].income | formatCurrency }}
-        </p>
-      </div>
-    </v-item>
-    <v-item>
-      <div>
-        <p class="heading">Expenses</p>
-        <p class="title">
-          {{ Budgets.budgetTotals[0].expenses | formatCurrency }}
-        </p>
-      </div>
-    </v-item>
-    <div>
-      <div>
-        <p class="heading">Surplus</p>
-        <p class="title">
-          {{ Budgets.budgetTotals[0].difference | formatCurrency }}
-        </p>
-      </div>
-    </div>
-  </v-item-group>-->
 </template>
 
 <script>

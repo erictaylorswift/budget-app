@@ -9,7 +9,6 @@
     <Overview />
     <v-layout wrap row align-top>
       <Spent />
-      <Progress />
     </v-layout>
     <Drawer />
   </v-container>
@@ -21,13 +20,11 @@ import moment from 'moment'
 import numeral from 'numeral'
 import Overview from '@/components/BudgetOverview'
 import Spent from '@/components/Spent'
-import Progress from '@/components/Progress'
 
 export default {
   components: {
     Overview,
-    Spent,
-    Progress
+    Spent
   },
   data() {
     return {

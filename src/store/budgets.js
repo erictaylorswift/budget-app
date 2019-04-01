@@ -12,7 +12,8 @@ const budgets = {
     baseTypes: [],
     incomeSources: [],
     budgetStart: '',
-    budgetEnd: ''
+    budgetEnd: '',
+    budgetedExpenses: null
   },
   getters: {
     budgetDates: state => {
@@ -20,6 +21,9 @@ const budgets = {
         start: state.budgetTotals[0].start,
         end: state.budgetTotals[0].end
       }
+    },
+    expenses: state => {
+      return state.budgetTotals[0].expenses
     }
   },
   actions: {
@@ -109,7 +113,6 @@ const budgets = {
     fetchBudgetTotals({ commit, rootState }) {
       let uid = rootState.currentUser.uid
       let totals = []
-      // console.log('user', uid)
       fb.db
         .collection('Overview')
         .doc(uid)
@@ -150,6 +153,9 @@ const budgets = {
     },
     setIncomeSources(state, val) {
       state.incomeSources = val
+    },
+    setBudgetExpenses(state, val) {
+      state.budgetedExpenses = val
     }
   }
 }

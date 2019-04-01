@@ -31,6 +31,17 @@
         {{ netBudget.budgetNet | formatCurrency }}
       </v-card-text>
     </v-card>
+    <v-card class="elevation-5 mw-300 mr-3 mt-3">
+      <v-card-title>
+        <v-icon left color="orange darken-2">money</v-icon>
+        <span class="title orange--text text--darken-2"
+          >Percent of budget remaining</span
+        >
+      </v-card-title>
+      <v-card-text class="headline font-weight-bold"
+        >{{ netBudget.percent }}%</v-card-text
+      >
+    </v-card>
   </v-layout>
 </template>
 
@@ -49,18 +60,17 @@ export default {
     netBudget() {
       let state = this.$store.state
       let budgetNet = state.Budgets.budgetTotals[0].difference
-      let currentNet = state.incTotal - state.Expenses.expTotal
+      let expenseTotal = state.Expenses.expTotal
+      let currentNet = state.incTotal - expenseTotal
       let diff = currentNet - budgetNet
-
-      if (diff > 0) {
-        // eslint-disable-next-line
-          this.positiveNet = true
-      }
-
+      let budgetedExp = state.Budgets.budgetTotals[0].expenses
+      let remainingExp = expenseTotal - budgetedExp
+      let percentRem = (remainingExp / budgetedExp) * 100
       return {
         budgetNet: budgetNet,
         currentNet: currentNet,
-        diff: diff
+        diff: diff,
+        percent: Number(percentRem).toFixed(0)
       }
     }
   },

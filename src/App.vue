@@ -13,7 +13,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Nav from './components/Nav'
-import Modals from './components/modals/Modals'
+import Modals from './components/modals/BottomSheet'
 export default {
   components: {
     Nav,

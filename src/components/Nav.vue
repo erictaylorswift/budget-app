@@ -73,6 +73,9 @@ export default {
     goTo(route) {
       this.$router.push(route)
     },
+    goHome() {
+      this.$router.push('home')
+    },
     logout() {
       fb.auth
         .signOut()
@@ -85,9 +88,11 @@ export default {
         })
     },
     newExpense() {
+      this.$store.state.bottomSheet = true
       this.$store.state.showExpenseModal = true
     },
     newIncome() {
+      this.$store.state.bottomSheet = true
       this.$store.state.showIncomeModal = true
     }
   }

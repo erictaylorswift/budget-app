@@ -137,12 +137,6 @@ import CategoryPie from './charts/CategoryPie'
 import Calendar from './Calendar'
 
 export default {
-  created() {
-    this.$store.dispatch('fetchExpenses')
-    this.$store.dispatch('fetchBudgetTotals')
-    this.$store.dispatch('fetchExpenseTotals')
-    this.$store.dispatch('fetchIncomes')
-  },
   components: {
     DailyExpense,
     CategoryPie,

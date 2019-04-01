@@ -27,6 +27,7 @@ export const store = new Vuex.Store({
     incTotal: 0,
     incomes: [],
     current: [],
+    bottomSheet: false,
     showExpenseModal: false,
     showIncomeModal: false,
     showNewNameModal: false,

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mt-5 ml-3 w-50">
+  <v-card class="mt-5 ml-3 w-75">
     <v-sheet
       class="v-sheet--offset mx-auto pa-3"
       color="cyan"
