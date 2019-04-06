@@ -5,8 +5,12 @@
         <v-icon left color="green darken-2">account_balance_wallet</v-icon>
         <span class="title green--text text--darken-2">Budgeted income</span>
       </v-card-title>
-      <v-card-text class="headline font-weight-bold">
-        {{ Budgets.budgetTotals[0].income | formatCurrency }}
+      <v-card-text>
+        <ICountUp
+          :endVal="Budgets.budgetTotals[0].income"
+          :options="options"
+          class="display-1 font-weight-bold grey--text text--darken-2"
+        />
       </v-card-text>
     </v-card>
     <v-card class="elevation-5 mw-300 mr-3 mt-3">
@@ -14,8 +18,12 @@
         <v-icon left color="orange darken-2">money</v-icon>
         <span class="title orange--text text--darken-2">Budgeted expenses</span>
       </v-card-title>
-      <v-card-text class="headline font-weight-bold">
-        {{ Budgets.budgetTotals[0].expenses | formatCurrency }}
+      <v-card-text>
+        <ICountUp
+          :endVal="Budgets.budgetTotals[0].expenses"
+          :options="options"
+          class="display-1 font-weight-bold grey--text text--darken-2"
+        />
       </v-card-text>
     </v-card>
     <v-card class="elevation-5 mw-300 mr-3 mt-3">
@@ -27,8 +35,12 @@
         <v-icon left color="red lighten-2">thumb_down</v-icon>
         <span class="title red--text text--lighten-2">Budget deficit</span>
       </v-card-title>
-      <v-card-text class="headline font-weight-bold">
-        {{ netBudget.budgetNet | formatCurrency }}
+      <v-card-text>
+        <ICountUp
+          :endVal="netBudget.budgetNet"
+          :options="options"
+          class="display-1 font-weight-bold grey--text text--darken-2"
+        />
       </v-card-text>
     </v-card>
     <v-card class="elevation-5 mw-300 mr-3 mt-3">
@@ -38,9 +50,13 @@
           >Percent of budget remaining</span
         >
       </v-card-title>
-      <v-card-text class="headline font-weight-bold"
-        >{{ netBudget.percent }}%</v-card-text
-      >
+      <v-card-text>
+        <ICountUp
+          :endVal="netBudget.percent"
+          :options="percentOptions"
+          class="display-1 font-weight-bold grey--text text--darken-2"
+        />
+      </v-card-text>
     </v-card>
   </v-layout>
 </template>
@@ -49,7 +65,32 @@
 import { mapState } from 'vuex'
 import numeral from 'numeral'
 import moment from 'moment'
+import ICountUp from 'vue-countup-v2'
 export default {
+  components: {
+    ICountUp
+  },
+  data() {
+    return {
+      options: {
+        useEasing: true,
+        useGrouping: true,
+        separator: ',',
+        decimal: '.',
+        prefix: '$',
+        suffix: '',
+        duration: 1
+      },
+      percentOptions: {
+        useEasing: true,
+        useGrouping: true,
+        separator: ',',
+        decimal: '.',
+        prefix: '',
+        suffix: '%'
+      }
+    }
+  },
   created() {
     this.$store.dispatch('fetchBudgetTotals')
     this.$store.dispatch('fetchExpenseTotals')

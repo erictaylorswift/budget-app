@@ -1,45 +1,70 @@
 <template>
-  <div class="list">
-    <md-list>
-      <md-list-item md-expand>
-        <md-icon>attach_money</md-icon>
-        <span class="md-list-item-text">Expense names</span>
-
-        <md-list slot="md-expand">
-          <md-list-item v-for="name in sortedNames" :key="name.id">
-            {{ name }}
-          </md-list-item>
-        </md-list>
-      </md-list-item>
-
-      <md-divider></md-divider>
-
-      <md-list-item md-expand>
-        <md-icon>category</md-icon>
-        <span class="md-list-item-text">Expense categories</span>
-        <md-list slot="md-expand">
-          <md-list-item
-            v-for="category in Budgets.baseTypes"
-            :key="category.id"
-            >{{ category }}</md-list-item
+  <div>
+    <h3 class="title ma-2">Expenses</h3>
+    <v-layout row wrap align-center>
+      <v-speed-dial
+        direction="left"
+        transition="slide-y-reverse-transition"
+        v-model="fab"
+        absolute
+        class="v-speed__dial"
+      >
+        <template slot="activator">
+          <v-btn v-model="fab" color="blue darken-2" dark fab>
+            <v-icon class="v-btn-activator">add</v-icon>
+            <v-icon class="v-btn-activator">close</v-icon>
+          </v-btn>
+        </template>
+        <v-btn @click="openIncSourceModal" round dark color="amber darken-4">
+          Add income source
+          <v-icon small>trending_up</v-icon>
+        </v-btn>
+        <v-btn @click="openNewCatModal" round dark color="deep-purple darken-1">
+          Add / edit expense category
+          <v-icon small>category</v-icon>
+        </v-btn>
+      </v-speed-dial>
+    </v-layout>
+    <v-flex>
+      <v-card
+        v-for="(source, index) in Budgets.baseTypes"
+        :key="index"
+        class="ma-2"
+        color="deep-purple darken-1"
+      >
+        <v-card-title class="subheading font-weight-bold white--text">
+          {{ index }}
+        </v-card-title>
+        <v-divider></v-divider>
+        <div class="pa-3">
+          <v-chip
+            v-for="name in source"
+            :key="name"
+            color="deep-purple lighten-4 elevation-3"
+            >{{ name }}</v-chip
           >
-        </md-list>
-      </md-list-item>
-
-      <md-divider></md-divider>
-
-      <md-list-item md-expand>
-        <md-icon>monetization_on</md-icon>
-        <span class="md-list-item-text">Income sources</span>
-        <md-list slot="md-expand">
-          <md-list-item
+        </div>
+      </v-card>
+    </v-flex>
+    <v-divider class="ma-2"></v-divider>
+    <h3 class="title ma-2">Income</h3>
+    <v-flex>
+      <v-card class="ma-2" color="amber darken-4" dark>
+        <v-card-title class="subheading font-weight-bold"
+          >Income sources</v-card-title
+        >
+        <v-divider></v-divider>
+        <div class="pa-3">
+          <v-chip
             v-for="category in Budgets.incomeSources"
             :key="category.id"
-            >{{ category }}</md-list-item
+            color="amber lighten-4"
+            light
+            >{{ category }}</v-chip
           >
-        </md-list>
-      </md-list-item>
-    </md-list>
+        </div>
+      </v-card>
+    </v-flex>
   </div>
 </template>
 
@@ -67,10 +92,19 @@ export default {
       categorization: true,
       account: false,
       expandSingle: false,
-      expandNames: false
+      expandNames: false,
+      fab: false
     }
   },
   methods: {
+    openIncSourceModal() {
+      this.$store.state.bottomSheet = true
+      this.$store.state.showNewIncSourceModal = true
+    },
+    openNewCatModal() {
+      this.$store.state.bottomSheet = true
+      this.$store.state.showNewCatModal = true
+    },
     switchAccount() {
       this.categorization = false
       this.account = true
@@ -82,3 +116,14 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-btn-activator {
+  top: -9px !important;
+}
+
+.v-speed__dial {
+  right: 110px;
+  top: 44px;
+}
+</style>

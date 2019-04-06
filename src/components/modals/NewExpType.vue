@@ -1,78 +1,79 @@
 <template>
-  <div class="modal is-active" v-if="showNewNameModal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Add new expense name</p>
-        <button @click="closeModal" class="delete" aria-label="close"></button>
-      </header>
-      <section class="modal-card-body">
-        <div class="control has-icons-left v-spacing">
-          <float-label>
-            <input type="text" class="input" v-model="newName" placeholder="Add name">
-          </float-label>
-          <span class="icon is-medium is-left">
-            <i class="fas fa-pen-fancy"></i>
-          </span>
-        </div>
-      </section>
-      <footer class="modal-card-foot">
-        <button @click="addCategory" class="button is-rounded is-success">Add</button>
-      </footer>
-    </div>
+  <div v-if="showNewNameModal">
+    <v-card class="pa-5">
+      <v-card-title>
+        <span class="headline">Add new expense source</span>
+      </v-card-title>
+      <v-card-text>
+        <v-layout wrap>
+          <v-flex xs12 sm6 md6>
+            <v-text-field
+              v-model="newName"
+              label="Add source name"
+              type="text"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn fab medium color="success" @click="addCategory">
+          <v-icon @click="addCategory">check</v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
 <script>
-  import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
-  const fb = require("../../firebaseConfig");
-  export default {
-    computed: {
-      ...mapState(["showNewNameModal"])
-    },
-    data() {
-      return {
-        newName: ""
-      };
-    },
-    methods: {
-      addCategory() {
-        let category = this.newName;
-        let currentUser = this.$store.state.currentUser.uid;
-        let currCategories = { categories: [] };
-
-        let docRef = fb.db.collection("ExpenseCategories").doc(currentUser);
-
-        docRef
-          .get()
-          .then(doc => {
-            let categories = doc.data().categories;
-
-            categories.forEach(d => {
-              currCategories.categories.push(d);
-            });
-          })
-          .then(() => {
-            currCategories.categories.push(category);
-          })
-          .then(() => {
-            docRef.set(currCategories);
-          })
-          .then(() => {
-            this.$toasted.global.success({
-              message: "You've successfully added " + this.newName
-            });
-            this.$store.dispatch("fetchBaseCategories");
-          })
-          .then(() => {
-            this.newName = "";
-          });
-      },
-      closeModal() {
-        this.$store.state.showNewNameModal = false;
-      }
+const fb = require('../../firebaseConfig')
+export default {
+  computed: {
+    ...mapState(['showNewNameModal'])
+  },
+  data() {
+    return {
+      newName: ''
     }
-  };
-</script>
+  },
+  methods: {
+    addCategory() {
+      let category = this.newName
+      let currentUser = this.$store.state.currentUser.uid
+      let currCategories = { categories: [] }
 
+      let docRef = fb.db.collection('ExpenseCategories').doc(currentUser)
+
+      docRef
+        .get()
+        .then(doc => {
+          let categories = doc.data().categories
+
+          categories.forEach(d => {
+            currCategories.categories.push(d)
+          })
+        })
+        .then(() => {
+          currCategories.categories.push(category)
+        })
+        .then(() => {
+          docRef.set(currCategories)
+        })
+        .then(() => {
+          this.$toasted.global.success({
+            message: "You've successfully added " + this.newName
+          })
+          this.$store.dispatch('fetchBaseCategories')
+        })
+        .then(() => {
+          this.newName = ''
+        })
+    },
+    closeModal() {
+      this.$store.state.showNewNameModal = false
+    }
+  }
+}
+</script>

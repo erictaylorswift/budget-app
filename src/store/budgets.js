@@ -24,6 +24,9 @@ const budgets = {
     },
     expenses: state => {
       return state.budgetTotals[0].expenses
+    },
+    categories: state => {
+      return Object.keys(state.baseTypes)
     }
   },
   actions: {
@@ -57,14 +60,14 @@ const budgets = {
         .doc(userID)
         .get()
         .then(doc => {
-          let array = doc.data().types
-
-          array.forEach(i => {
-            types.push(i)
-          })
+          let array = doc.data()
+          return array
+        })
+        .then(arr => {
+          commit('setBaseTypes', arr)
         })
 
-      commit('setBaseTypes', types)
+      // commit('setBaseTypes', types)
     },
     fetchIncomeSources({ commit, rootState }) {
       let userID = rootState.currentUser.uid

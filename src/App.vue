@@ -3,9 +3,7 @@
     <Nav />
     <modals />
     <v-content>
-      <v-container fluid>
-        <router-view />
-      </v-container>
+      <router-view />
     </v-content>
   </v-app>
 </template>

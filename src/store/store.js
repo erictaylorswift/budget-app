@@ -33,7 +33,8 @@ export const store = new Vuex.Store({
     showNewNameModal: false,
     showNewCatModal: false,
     showNewIncSourceModal: false,
-    drawer: null
+    drawer: null,
+    performingRequest: false
   },
   actions: {
     fetchUser({ commit }) {

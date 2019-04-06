@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import BillsTable from './BillsTable'
+import BillsTable from '../components/BillsTable'
 
 export default {
   components: { BillsTable }

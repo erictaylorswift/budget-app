@@ -1,99 +1,93 @@
 {
-  "name": "budget-app",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "@firebase/app": "^0.3.8",
-    "@vue/cli": "^3.5.1",
-    "ajv": "^6.9.1",
-    "animate.css": "^3.7.0",
-    "braces": "^2.3.2",
-    "bulma": "^0.7.4",
-    "chart.js": "^2.7.3",
-    "chartjs-plugin-colorschemes": "^0.3.0",
-    "chartjs-plugin-piechart-outlabels": "^0.1.4",
-    "firebase": "^5.8.2",
-    "firesql": "^1.0.2",
-    "firestore": "^1.1.6",
-    "lodash": "^4.17.11",
-    "material-icons": "^0.3.0",
-    "moment": "^2.23.0",
-    "nice-color-palettes": "^2.0.0",
-    "node": "^11.10.0",
-    "node-sass": "^4.11.0",
-    "numeral": "^2.0.6",
-    "prettier": "^1.16.4",
-    "rxfire": "^3.3.2",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
-    "v-calendar": "^0.9.7",
-    "vue": "^2.5.21",
-    "vue-async-computed": "^3.6.1",
-    "vue-badger-accordion": "^1.1.2",
-    "vue-chartjs": "^3.4.0",
-    "vue-fab": "^2.3.1",
-    "vue-float-label": "^1.6.1",
-    "vue-focus": "^2.1.0",
-    "vue-image-crop-upload": "^2.5.0",
-    "vue-material": "^1.0.0-beta-10.2",
-    "vue-radial-progress": "^0.2.10",
-    "vue-router": "^3.0.2",
-    "vue-tables-2": "^1.4.70",
-    "vue-toasted": "^1.1.26",
-    "vuejs-datepicker": "^1.5.4",
-    "vuejs-progress-bar": "^1.0.9",
-    "vuejs-smart-table": "0.0.3",
-    "vuesax": "^3.8.37",
-    "vuetify": "^1.5.5"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.3.0",
-    "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-service": "^3.3.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.15.2",
-    "eslint-plugin-vue": "^5.0.0",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
-    "vue-cli-plugin-vuetify": "^0.5.0",
-    "vue-template-compiler": "^2.5.21",
-    "vuetify-loader": "^1.0.5"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "plugin: prettier/recommended",
-      "@vue/prettier"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
-  "stylus": {
-    "use": [
-      "vue-style-loader",
-      "css-loader",
-      "stylus-loader"
-    ]
-  }
+	"name": "budget-app",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"serve": "vue-cli-service serve",
+		"build": "vue-cli-service build",
+		"lint": "vue-cli-service lint"
+	},
+	"dependencies": {
+		"@firebase/app": "^0.3.8",
+		"@vue/cli": "^3.5.1",
+		"ajv": "^6.9.1",
+		"animate.css": "^3.7.0",
+		"braces": "^2.3.2",
+		"chart.js": "^2.7.3",
+		"chartjs-plugin-colorschemes": "^0.3.0",
+		"chartjs-plugin-piechart-outlabels": "^0.1.4",
+		"countup.js": "^2.0.4",
+		"firebase": "^5.8.2",
+		"firesql": "^1.0.2",
+		"firestore": "^1.1.6",
+		"lodash": "^4.17.11",
+		"material-icons": "^0.3.0",
+		"moment": "^2.23.0",
+		"nice-color-palettes": "^2.0.0",
+		"node": "^11.10.0",
+		"node-sass": "^4.11.0",
+		"numeral": "^2.0.6",
+		"prettier": "^1.16.4",
+		"rxfire": "^3.3.2",
+		"stylus": "^0.54.5",
+		"stylus-loader": "^3.0.2",
+		"v-calendar": "^0.9.7",
+		"vue": "^2.5.21",
+		"vue-async-computed": "^3.6.1",
+		"vue-chartjs": "^3.4.0",
+		"vue-countup-v2": "^3.0.1",
+		"vue-focus": "^2.1.0",
+		"vue-full-loading": "^1.2.1",
+		"vue-image-crop-upload": "^2.5.0",
+		"vue-material": "^1.0.0-beta-10.2",
+		"vue-radial-progress": "^0.2.10",
+		"vue-router": "^3.0.2",
+		"vue-toasted": "^1.1.26",
+		"vuetify": "^1.5.5"
+	},
+	"devDependencies": {
+		"@vue/cli-plugin-babel": "^3.3.0",
+		"@vue/cli-plugin-eslint": "^3.3.0",
+		"@vue/cli-service": "^3.3.0",
+		"babel-eslint": "^10.0.1",
+		"eslint": "^5.15.2",
+		"eslint-plugin-vue": "^5.0.0",
+		"stylus": "^0.54.5",
+		"stylus-loader": "^3.0.1",
+		"vue-cli-plugin-vuetify": "^0.5.0",
+		"vue-template-compiler": "^2.5.21",
+		"vuetify-loader": "^1.0.5"
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true
+		},
+		"extends": [
+			"plugin:vue/essential",
+			"plugin: prettier/recommended",
+			"@vue/prettier"
+		],
+		"rules": {},
+		"parserOptions": {
+			"parser": "babel-eslint"
+		}
+	},
+	"postcss": {
+		"plugins": {
+			"autoprefixer": {}
+		}
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not ie <= 8"
+	],
+	"stylus": {
+		"use": [
+			"vue-style-loader",
+			"css-loader",
+			"stylus-loader"
+		]
+	}
 }

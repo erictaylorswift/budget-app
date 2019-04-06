@@ -1,144 +1,96 @@
 <template>
   <div class="container">
-    <div class="buttons is-right">
-      <button
-        @click="saveBudget"
-        class="button is-outlined is-primary is-rounded"
-      >
-        Save budget
-      </button>
-    </div>
-    <add-category></add-category>
-    <div class="columns">
-      <div class="field column is-one-fifth">
-        <label class="label">Start Date</label>
-        <div class="control is-large">
-          <datepicker
-            input-class="input"
-            placeholder="mm/dd/yyyy"
-            v-model="start"
-          ></datepicker>
-        </div>
-      </div>
-      <div class="field column is-one-fifth">
-        <label class="label">End Date</label>
-        <div class="control is-large">
-          <datepicker
-            input-class="input"
-            placeholder="mm/dd/yyyy"
-            v-model="end"
-          ></datepicker>
-        </div>
-      </div>
-    </div>
-    <div class="tile is-ancestor">
-      <div class="tile is-parent is-vertical is-7">
-        <article class="tile is-child notification is-primary">
-          <p class="title">Input expenses</p>
-          <div class="content columns">
-            <table class="table" :data="mapExpenses">
-              <thead>
-                <th>Expense Name</th>
-                <th>Expense Type</th>
-                <th>Amount</th>
-                <th>Date</th>
-              </thead>
-              <tbody>
-                <tr v-for="(expense, index) in expByCat" :key="expense.id">
-                  <td>{{ expense.name }}</td>
-                  <td>
-                    <div class="select">
-                      <select v-model="expByCat[index].type">
-                        <option disabled value>Select type</option>
-                        <option>Credit</option>
-                        <option>Loans</option>
-                        <option>Housing</option>
-                        <option>Transportation</option>
-                        <option>Family</option>
-                        <option>Insurance</option>
-                        <option>Personal</option>
-                      </select>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="control has-icons-left">
-                      <input
-                        class="input"
-                        type="number"
-                        step=".01"
-                        v-model="expByCat[index].amount"
-                      />
-                      <span class="icon is-left is-medium">
-                        <i class="fas fa-dollar-sign"></i>
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="control">
-                      <datepicker
-                        input-class="input"
-                        placeholder="mm/dd/yyyy"
-                        v-model="expByCat[index].date"
-                      ></datepicker>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </article>
-      </div>
-      <div class="tile is-parent">
-        <div class="tile is-child notification is-info height-30">
-          <p class="title">Input income</p>
-          <table class="table">
-            <thead>
-              <th>Income Source</th>
-              <th>Income Amount</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td>RoomRoster</td>
-                <td>
-                  <div class="control has-icons-left">
-                    <input
-                      class="input"
-                      type="number"
-                      step=".01"
-                      v-model="income.rr.amount"
-                    />
-                    <span class="icon is-left is-medium">
-                      <i class="fas fa-dollar-sign"></i>
-                    </span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Dyer Brown</td>
-                <td>
-                  <div class="control has-icons-left">
-                    <input
-                      class="input"
-                      type="number"
-                      step=".01"
-                      v-model="income.db.amount"
-                    />
-                    <span class="icon is-left is-medium">
-                      <i class="fas fa-dollar-sign"></i>
-                    </span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <v-layout row wrap>
+      <v-flex d-flex xs12 sm6 md4 lg4 xl4>
+        <v-card>
+          <v-card-title>
+            <span class="title">Select budget period</span>
+          </v-card-title>
+          <v-card-text>
+            <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              :return-value.sync="budgetDates"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <template slot="activator" :slot-scope="{ on }">
+                <v-combobox
+                  v-model="budgetDates"
+                  multiple
+                  chips
+                  small-chips
+                  label="Budget period"
+                  perpend-icon="event"
+                  readonly
+                  v-on="on"
+                ></v-combobox>
+              </template>
+              <v-date-picker v-model="budgetDates" multiple no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn flat color="red accent-3" @click="menu = false"
+                  >Close</v-btn
+                >
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="$refs.menu.save(budgetDates)"
+                  >Save</v-btn
+                >
+              </v-date-picker>
+            </v-menu>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap>
+      <v-flex d-flex xs12 sm12 md12 lg12>
+        <v-toolbar color="white" class="mt-3">
+          <v-toolbar-title>Add expense items</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="800px">
+            <template slot="activator" :slot-scope="{ on }">
+              <v-btn color="primary" dark class="mb-2" v-on="on"
+                >New item</v-btn
+              >
+            </template>
+            <v-card>
+              <v-card-title>
+                <span class="headline">New expense item</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container gird-list-md>
+                  <v-layout wrap>
+                    <v-flex class="mx-1">
+                      <v-select
+                        v-model="editedItem.category"
+                        :items="Budgets.baseTypes"
+                        label="Select expense category"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex class="mx-1">
+                      <v-select
+                        v-model="editedItem.name"
+                        :items="Budgets.expensees"
+                        label="Select expense source"
+                      ></v-select>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
 <script>
-import Datepicker from 'vuejs-datepicker'
 import moment from 'moment'
 import { mapState } from 'vuex'
 import numeral from 'numeral'
@@ -151,12 +103,8 @@ export default {
     this.$store.dispatch('fetchBudgetItems')
     this.$store.dispatch('fetchBaseCategories')
   },
-  components: {
-    Datepicker,
-    AddCategory
-  },
   computed: {
-    ...mapState(['currentBudget', 'budgetItem', 'budgetByItems', 'expensees']),
+    ...mapState(['Expenses', 'Budgets']),
     mapExpenses() {
       let ex = this.$store.state.expensees
       let cats = this.expByCat
@@ -174,6 +122,8 @@ export default {
   },
   data() {
     return {
+      menu: false,
+      dialog: false,
       budgetLine: {
         date: '',
         budgetType: '',
@@ -181,7 +131,7 @@ export default {
         amount: '',
         name: ''
       },
-      start: '',
+      budgetDates: [],
       end: '',
       newItem: [],
       expByCat: [],
@@ -193,7 +143,13 @@ export default {
           amount: ''
         }
       },
-      currCategories: null
+      currCategories: null,
+      editedItem: {
+        category: '',
+        name: '',
+        date: moment().format('MM Do, YYYY'),
+        amount: 0
+      }
     }
   },
   methods: {

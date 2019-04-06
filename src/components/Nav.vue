@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="currentUser">
     <v-toolbar fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
@@ -18,11 +18,11 @@
       <v-list class="pa-1">
         <v-list-tile avatar>
           <v-list-tile-avatar>
-            <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+            <img :src="currentUser.photoURL" />
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title>John Leider</v-list-tile-title>
+            <v-list-tile-title>{{ currentUser.displayName }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -62,7 +62,8 @@ export default {
           title: 'Budget Overview',
           icon: 'account_balance_wallet',
           route: '/current-budget'
-        }
+        },
+        { title: 'Settings', icon: 'settings', route: '/settings' }
       ]
     }
   },

@@ -15,174 +15,165 @@
 @import './layouts/widths.scss';
 
 %margin-top {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 %margin-bottom {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 %standard-spacing {
-    margin: 0 16px;
+	margin: 0 16px;
 }
 
 %budget-inputs {
-    max-width: 80%;
-    font-size: 14px;
+	max-width: 80%;
+	font-size: 14px;
 }
 
 %budget-labels {
-    font-size: 12px;
+	font-size: 12px;
 }
 
 * {
-    font-family: 'Arimo'
+	font-family: 'Arimo';
 }
 
 a {
-    text-decoration: none;
+	text-decoration: none;
 }
 
 a:hover {
-    text-decoration: none !important;
+	text-decoration: none !important;
 }
 
 .positive {
-    color: #92CC41;
+	color: #92cc41;
 }
 
 .negative {
-    color: #E76E55
+	color: #e76e55;
 }
 
 .lg-font {
-    font-size: 32px;
+	font-size: 32px;
 }
-
-
-
 
 .header {
-    @extend %margin-top;
-    @extend %margin-bottom;
-    color: #C94C0C;
+	@extend %margin-top;
+	@extend %margin-bottom;
+	color: #c94c0c;
 }
 
-
-
 .login {
-    margin: 20px;
-    align-self: flex-end;
+	margin: 20px;
+	align-self: flex-end;
 }
 
 #bills {
-    input {
-        @extend %budget-inputs
-    }
+	input {
+		@extend %budget-inputs;
+	}
 
-    ;
-
-    label {
-        @extend %budget-labels
-    }
+	label {
+		@extend %budget-labels;
+	}
 }
 
 #otherExpenses {
-    input {
-        @extend %budget-inputs;
-    }
+	input {
+		@extend %budget-inputs;
+	}
 
-    ;
-
-    label {
-        @extend %budget-labels
-    }
+	label {
+		@extend %budget-labels;
+	}
 }
 
 #income {
-    input {
-        @extend %budget-inputs
-    }
+	input {
+		@extend %budget-inputs;
+	}
 
-    ;
-
-    label {
-        @extend %budget-labels
-    }
+	label {
+		@extend %budget-labels;
+	}
 }
 
 .lists {
-    margin: 0 32px;
+	margin: 0 32px;
 }
 
 .w-50 {
-    width: 50%;
+	width: 50%;
 }
 
 .mw-300 {
-    min-width: 300px;
+	min-width: 300px;
 }
 
 .margin-bottom {
-    @extend %margin-bottom
+	@extend %margin-bottom;
 }
 
 .margin-top {
-    @extend %margin-top
+	@extend %margin-top;
 }
 
 .top-right {
-    position: absolute;
-    right: 200px;
-    top: 100px;
+	position: absolute;
+	right: 200px;
+	top: 100px;
 
-    i {
-        margin-right: 16px;
-    }
+	i {
+		margin-right: 16px;
+	}
 }
 
 .absolute {
-    position: relative;
-    width: 100%;
-
+	position: relative;
+	width: 100%;
 }
 
 .space {
-    @extend %standard-spacing
+	@extend %standard-spacing;
 }
 
 .vdp-datepicker__calendar {
-
-    color: #283636;
+	color: #283636;
 }
 
 .vdp-datepicker {
-    .no-input {
-        display: none;
-    }
+	.no-input {
+		display: none;
+	}
 }
 
 .v-spacing {
-    margin: 10px 0;
+	margin: 10px 0;
 }
 
 .vfl-label-on-input {
-    font-size: 1rem !important;
+	font-size: 1rem !important;
 
-    margin: -6px 0;
+	margin: -6px 0;
 }
 
 .link {
-    padding: 8px 0;
-    font-size: 24px;
+	padding: 8px 0;
+	font-size: 24px;
 }
 
 .expand-collapse {
-    font-size: 18px;
+	font-size: 18px;
 }
 
 .w-100 {
-    width: 100%;
+	width: 100%;
+}
+
+.mw-200 {
+	max-width: 200px;
 }
 
 // .panel-with-background {
@@ -202,43 +193,48 @@ a:hover {
 // }
 
 .content {
-    .field:first-child {
-        margin-bottom: 2rem !important;
-    }
+	.field:first-child {
+		margin-bottom: 2rem !important;
+	}
 }
 
 .is-fullheight {
-    height: 103vh;
+	height: calc(100vh - 3px);
 }
 
 .is-fullwidth {
-    width: 100vw;
+	width: 100vw;
 }
 
 .is-circle {
-    height: 20px !important;
-    width: 20px !important;
-    border-radius: 200px !important;
-    margin-right: 10px;
+	height: 20px !important;
+	width: 20px !important;
+	border-radius: 200px !important;
+	margin-right: 10px;
 }
 
 .pagination {
-    margin-right: 8px !important;
+	margin-right: 8px !important;
 
-    .page-item {
-        margin: 0 6px;
-
-
-    }
+	.page-item {
+		margin: 0 6px;
+	}
 }
 
 #login {
-    position: fixed;
-    top: 0px;
-    left: 0;
-    overflow: hidden;
+	position: fixed;
+	top: -23px;
+	left: -23px;
+	overflow: hidden;
+	height: 130vh;
 }
 
 .fields {
-    padding-left: 1rem;
+	padding-left: 1rem;
+}
+
+@media (min-width: 960px) {
+	.drawer {
+		width: 64vw !important;
+	}
 }

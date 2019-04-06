@@ -1,75 +1,43 @@
 <template>
-  <div class="container">
-    <h1 class="title">Expense breakdown</h1>
-    <p class="heading">Filter</p>
-    <div class="level absolute">
-      <div class="level-left">
-        <div class="level-item">
-          <div class="select">
-            <select v-model="filters.type.value">
-              <option disabled value>Select type</option>
-              <option>Credit</option>
-              <option>Loans</option>
-              <option>Housing</option>
-              <option>Transportation</option>
-              <option>Family</option>
-              <option>Insurance</option>
-              <option>Personal</option>
-            </select>
-          </div>
-        </div>
-        <div class="level-item">
-          <label class="checkbox">
-            <input type="checkbox" v-model="filters.type.value" true-value />
-            Show All
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="box">
-      <div class="tile is-ancestor">
-        <div class="tile is-parent">
-          <div class="tile is-child notification is-primary">
-            <v-table
-              :data="Expenses.expenses"
-              :filters="filters"
-              :currentPage.sync="currentPage"
-              :pageSize="10"
-              @totalPagesChanged="totalPages = $event"
-              class="table is-fullwidth has-text-white"
-            >
-              <thead slot="head" class="has-text-white">
-                <v-th defaultSort="desc" sortKey="date" class="has-text-white"
-                  >Date</v-th
-                >
-                <v-th sortKey="type" class="has-text-white">Expense</v-th>
-                <th class="has-text-white">Expensee</th>
-                <v-th sortKey="amount" class="has-text-white">Amount</v-th>
-              </thead>
-              <tbody slot="body" slot-scope="{ displayData }">
-                <tr v-for="row in displayData" :key="row.id">
-                  <td>{{ row.date | formatDate }}</td>
-                  <td>{{ row.type }}</td>
-                  <td>{{ row.note }}</td>
-                  <td>{{ row.amount | formatCurrency }}</td>
-                </tr>
-              </tbody>
-            </v-table>
-          </div>
-        </div>
-      </div>
-      <div class="level-right">
-        <div class="level-item">
-          <div>
-            <smart-pagination
-              :currentPage.sync="currentPage"
-              :totalPages="totalPages"
-              :directionLinks="false"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="container fluid ml-3">
+    <h1 class="display-2">Expense breakdown</h1>
+    <v-card class="mt-3 w-75" color="purple">
+      <v-card-title>
+        <v-layout row wrap justify-end>
+          <v-flex xs12 sm6>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="search"
+              single-line
+              solo-inverted
+              hint="Search for expense type or source"
+              persistent-hint
+              dark
+              color="purple"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+      </v-card-title>
+      <v-card-text>
+        <v-data-table
+          :items="Expenses.expenses"
+          :headers="headers"
+          :pagination.sync="pagination"
+          :search="search"
+          class="elevation-10"
+        >
+          <template slot="items" slot-scope="props">
+            <tr>
+              <td>{{ props.item.date | formatDate }}</td>
+              <td>{{ props.item.type }}</td>
+              <td>{{ props.item.note }}</td>
+              <td>{{ props.item.amount | formatCurrency }}</td>
+            </tr>
+          </template>
+        </v-data-table>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -103,15 +71,19 @@ export default {
   },
   data() {
     return {
-      filters: {
-        type: {
-          value: '',
-          keys: ['type']
-        }
-      },
+      search: '',
       total: 0,
-      currentPage: 1,
-      totalPages: 0
+      headers: [
+        { text: 'Date', align: 'left', value: 'date' },
+        { text: 'Expense', align: 'left', value: 'type' },
+        { text: 'Expense source', align: 'left', value: 'note' },
+        { text: 'Amount', align: 'left', value: 'amount' }
+      ],
+      pagination: {
+        rowsPerPage: 10,
+        sortBy: 'date',
+        descending: true
+      }
     }
   },
   methods: {},

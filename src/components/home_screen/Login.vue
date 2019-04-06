@@ -1,5 +1,41 @@
 <template>
-  <div class="column">
+  <div>
+    <v-form ref="form" v-model="valid" lazy-validation>
+      <v-layout wrap>
+        <v-flex xs6>
+          <v-layout column justify-end>
+            <v-text-field
+              v-model="loginForm.email"
+              :rules="emailRules"
+              label="Email"
+              type="email"
+              required
+              prepend-icon="alternate_email"
+              class="mr-5"
+            ></v-text-field>
+            <v-text-field
+              v-model="loginForm.password"
+              prepend-icon="lock"
+              :append-icon="visible ? 'visibility' : 'visibility_off'"
+              :type="visible ? 'text' : 'password'"
+              :rules="passwordRules"
+              label="Password"
+              @click:append="visible = !visible"
+              class="mr-5"
+              @keyup.13="login"
+            ></v-text-field>
+            <v-layout wrap column align-end class="mr-4">
+              <v-btn dark color="green" @click="login">
+                Login
+                <v-icon right small dark>thumb_up</v-icon>
+              </v-btn>
+              <v-btn small flat color="blue">Forgot password</v-btn>
+            </v-layout>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </v-form>
+    <!-- <div class="column">
     <div class="columns">
       <div class="column is-two-thirds">
         <form v-if="showLoginForm" @submit.prevent>
@@ -97,7 +133,7 @@
           </div>
         </transition>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -118,40 +154,48 @@ export default {
       showForgotPassword: false,
       passwordResetSuccess: false,
       performingRequest: false,
-      errorMsg: ''
+      errorMsg: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      passwordRules: [v => !!v || 'Password is required'],
+      visible: false,
+      valild: true
     }
   },
   methods: {
     login() {
-      this.performingRequest = true
-
-      fb.auth
-        .signInWithEmailAndPassword(
-          this.loginForm.email,
-          this.loginForm.password
-        )
-        .then(user => {
-          this.$store.commit('setCurrentUser', user.user)
-          this.performingRequest = false
-          this.$router.push('/home')
-        })
-        .catch(err => {
-          this.performingRequest = false
-          this.errorMsg = err.message
-        })
+      if (this.$refs.form.validate()) {
+        this.$store.state.performingRequest = true
+        fb.auth
+          .signInWithEmailAndPassword(
+            this.loginForm.email,
+            this.loginForm.password
+          )
+          .then(user => {
+            this.$store.commit('setCurrentUser', user.user)
+            this.$store.state.performingRequest = false
+            this.$router.push('/home')
+          })
+          .catch(err => {
+            this.$store.state.performingRequest = false
+            this.errorMsg = err.message
+          })
+      }
     },
     resetPassword() {
-      this.performingRequest = true
+      this.$store.state.performingRequest = true
 
       fb.auth
         .sendPasswordResetEmail(this.passwordForm.email)
         .then(() => {
-          this.performingRequest = false
+          this.$store.state.performingRequest = false
           this.passwordResetSuccess = true
           this.passwordForm.email = ''
         })
         .catch(err => {
-          this.performingRequest = false
+          this.$store.state.performingRequest = false
           this.errorMsg = err.message
         })
     },

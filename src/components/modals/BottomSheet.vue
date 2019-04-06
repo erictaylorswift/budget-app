@@ -6,15 +6,27 @@
       </v-btn>
     </v-toolbar>
     <IncModal />
+    <ExpenseModal />
+    <ExpCatModal />
+    <ExpTypeModal />
+    <NewIncSourceModal />
   </v-bottom-sheet>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import IncModal from './IncModal'
+import ExpenseModal from './Expenses'
+import ExpCatModal from './NewExpCat'
+import ExpTypeModal from './NewExpType'
+import NewIncSourceModal from './NewIncomeSource'
 export default {
   components: {
-    IncModal
+    IncModal,
+    ExpenseModal,
+    ExpCatModal,
+    ExpTypeModal,
+    NewIncSourceModal
   },
   computed: {
     ...mapState(['bottomSheet'])
@@ -24,6 +36,9 @@ export default {
       this.$store.state.bottomSheet = false
       this.$store.state.showIncomeModal = false
       this.$store.state.showExpenseModal = false
+      this.$store.state.showNewNameModal = false
+      this.$store.state.showNewCatModal = false
+      this.$store.state.showNewIncSourceModal = false
     }
   }
 }
