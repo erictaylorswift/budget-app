@@ -3,11 +3,11 @@ module.exports = {
         "browser": true,
         "es6": true
     },
-    "extends": [
-        'plugin:prettier/recommended', // we added this line
-        'prettier',
-        "plugin:vue/essential"
-    ],
+    // "extends": [
+    //     'plugin:prettier/recommended', // we added this line
+    //     'prettier',
+    //     "plugin:vue/essential"
+    // ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"

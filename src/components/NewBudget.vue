@@ -91,18 +91,18 @@
         <v-layout row wrap>
           <v-flex xs12>
             <v-card
-              v-for="(name, i) in mapExpenses"
+              v-for="(category, name) in budgetLine"
               :key="name"
               class="mb-2 mr-2 elevation-10"
             >
               <v-card-title
                 ><h2 class="headline">
-                  {{ Object.keys(name)[0] }}
+                  {{ name }}
                 </h2></v-card-title
               >
-              <div v-for="(item, index) in name[Object.keys(name)]" :key="item">
+              <div v-for="(type, typeName) in category" :key="typeName">
                 <v-layout class="px-3">
-                  <v-text-field :value="item" disabled class="pr-3">
+                  <v-text-field :value="typeName" disabled class="pr-3">
                   </v-text-field>
                   <v-spacer></v-spacer>
                   <v-flex>
@@ -114,7 +114,7 @@
                           prefix="$"
                           label="Amount to budget"
                           @change="newItem(item)"
-                          v-model="amount[i]"
+                          v-model="budgetLine[name][typeName].amount"
                         ></v-text-field>
                       </v-flex>
                       <v-spacer></v-spacer>
@@ -126,6 +126,7 @@
                 </v-layout>
               </div>
             </v-card>
+            <span>{{expenseTypes.Allowances}}</span>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -149,7 +150,7 @@ export default {
   },
   computed: {
     ...mapState(['Expenses', 'Budgets']),
-    ...mapGetters(['categories']),
+    ...mapGetters(['categories', 'expenseTypes']),
     mapExpenses() {
       let ex = this.$store.getters.categories
       let types = this.$store.state.Budgets.baseTypes
@@ -170,13 +171,7 @@ export default {
     return {
       menu: false,
       dialog: false,
-      budgetLine: {
-        date: '',
-        budgetType: '',
-        expenseType: '',
-        amount: '',
-        name: ''
-      },
+      budgetLine: this.$store.getters.expenseTypes,
       budgetDates: [],
       expByCat: [],
       editedItem: {

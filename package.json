@@ -29,6 +29,7 @@
 		"numeral": "^2.0.6",
 		"prettier": "^1.16.4",
 		"rxfire": "^3.3.2",
+		"sass-loader": "^7.1.0",
 		"stylus": "^0.54.5",
 		"stylus-loader": "^3.0.2",
 		"v-calendar": "^0.9.7",
@@ -43,7 +44,8 @@
 		"vue-radial-progress": "^0.2.10",
 		"vue-router": "^3.0.2",
 		"vue-toasted": "^1.1.26",
-		"vuetify": "^1.5.5"
+		"vuetify": "^1.5.5",
+		"vuex": "^3.1.0"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "^3.3.0",

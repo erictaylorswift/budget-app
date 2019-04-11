@@ -1,5 +1,6 @@
 import { fireSQL } from '../firebaseConfig'
 import moment from 'moment'
+import _ from 'lodash'
 
 const fb = require('../firebaseConfig')
 
@@ -27,6 +28,17 @@ const budgets = {
     },
     categories: state => {
       return Object.keys(state.baseTypes)
+    },
+    expenseTypes: state => {
+      return _.mapValues(state.baseTypes, (cats) => {
+            return  _.chain(cats).map((types) => {
+                return {
+                  name: types,
+                  amount: 0,
+                  date: null
+                }
+              }).keyBy("name").value()
+      })
     }
   },
   actions: {
@@ -53,7 +65,6 @@ const budgets = {
     },
     fetchBaseTypes({ commit, rootState }) {
       let userID = rootState.currentUser.uid
-      let types = []
 
       fb.db
         .collection('ExpenseTypes')
@@ -66,8 +77,6 @@ const budgets = {
         .then(arr => {
           commit('setBaseTypes', arr)
         })
-
-      // commit('setBaseTypes', types)
     },
     fetchIncomeSources({ commit, rootState }) {
       let userID = rootState.currentUser.uid
