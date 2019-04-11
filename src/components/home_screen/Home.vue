@@ -104,6 +104,9 @@ export default {
       this.signup = false
       this.login = true
       this.drawer = !this.drawer
+    },
+    toGS() {
+      this.$router.push('/getting-started')
     }
   }
 }

@@ -8,6 +8,7 @@ import CurrentBudget from '@/components/CurrentBudget'
 import HomeScreen from '@/components/home_screen/Home'
 import NewBudget from '@/components/NewBudget'
 import Settings from '@/pages/Settings'
+import GettingStarted from '@/pages/GettingStarted'
 
 Vue.use(Router)
 
@@ -66,6 +67,11 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/getting-started',
+      name: 'GettingStarted',
+      component: GettingStarted
     }
   ]
 })

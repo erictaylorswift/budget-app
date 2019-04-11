@@ -7,9 +7,17 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn flat @click="newIncome">Add income</v-btn>
-        <v-btn flat @click="newExpense">Add expense</v-btn>
-        <v-btn flat @click="logout">
+        <v-btn flat @click="newIncome" color="green darken-2"
+          >Add income <v-icon right>account_balance_wallet</v-icon></v-btn
+        >
+        <v-btn color="orange darken-2" flat @click="newExpense"
+          >Add expense <v-icon right>money</v-icon></v-btn
+        >
+        <v-btn flat color="purple" @click="goTo('/budget')">
+          New budget
+          <v-icon right>fiber_new</v-icon>
+        </v-btn>
+        <v-btn flat @click="logout" color="grey">
           <v-icon>exit_to_app</v-icon>
         </v-btn>
       </v-toolbar-items>
@@ -27,8 +35,8 @@
         </v-list-tile>
       </v-list>
 
-      <v-list class="pt-0" dense>
-        <v-divider></v-divider>
+      <v-list class="pt-0 px-3" dense>
+        <v-divider class="mb-4"></v-divider>
 
         <v-list-tile
           v-for="item in items"
@@ -41,6 +49,15 @@
 
           <v-list-tile-content>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-divider class="mt-5"></v-divider>
+        <v-list-tile @click="goTo('/settings')" class="mt-3">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Settings</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -62,8 +79,7 @@ export default {
           title: 'Budget Overview',
           icon: 'account_balance_wallet',
           route: '/current-budget'
-        },
-        { title: 'Settings', icon: 'settings', route: '/settings' }
+        }
       ]
     }
   },
@@ -90,10 +106,12 @@ export default {
     },
     newExpense() {
       this.$store.state.bottomSheet = true
+      this.$store.state.showIncomeModal = false
       this.$store.state.showExpenseModal = true
     },
     newIncome() {
       this.$store.state.bottomSheet = true
+      this.$store.state.showExpenseModal = false
       this.$store.state.showIncomeModal = true
     }
   }

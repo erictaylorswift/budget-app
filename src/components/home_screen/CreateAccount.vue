@@ -1,49 +1,36 @@
 <template>
-  <div class="column">
-    <div class="columns">
-      <div class="column is-two-thirds">
-        <form @submit.prevent>
-          <h1 class="title login-title">Create your Budgie account</h1>
-          <div class="field">
-            <label for="email1" class="label">Email</label>
-            <div class="control has-icons-left">
-              <input
-                class="input"
-                v-model.trim="signupForm.email"
-                type="text"
-                placeholder="you@email.com"
-                id="email1"
-              />
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
-              </span>
-            </div>
-          </div>
-          <div class="field">
-            <label for="password1" class="label">Password</label>
-            <div class="control">
-              <input
-                class="input"
-                v-model.trim="signupForm.password"
-                type="password"
-                placeholder="******"
-                id="password1"
-              />
-            </div>
-          </div>
-          <div>
-            <div class="buttons">
-              <button
-                @click="signup"
-                class="button is-rounded is-medium login-button"
-              >
-                Log In
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+  <div>
+    <v-form ref="signupForm" v-model="valid" lazy-validation>
+      <v-layout wrap>
+        <v-flex xs6>
+          <v-layout column justify-end>
+            <v-text-field
+              v-model="signupForm.email"
+              label="Email"
+              type="email"
+              prepend-icon="alternate_email"
+              class="mr-5"
+            ></v-text-field>
+            <v-text-field
+              v-model="signupForm.password"
+              label="Password"
+              type="password"
+              prepend-icon="lock"
+              class="mr-5"
+              :append-icon="visible ? 'visibility' : 'visibility_off'"
+              @click:append="visible = !visible"
+              @keyup.13="signup"
+            ></v-text-field>
+            <v-layout wrap column align-end class="m4-4">
+              <v-btn dark color="green" @click="signup">
+                Sign up
+                <v-icon right small dark>thumb_up</v-icon>
+              </v-btn>
+            </v-layout>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </v-form>
   </div>
 </template>
 
@@ -55,12 +42,13 @@ export default {
       signupForm: {
         email: '',
         password: ''
-      }
+      },
+      visible: false
     }
   },
   methods: {
     signup() {
-      this.performingRequest = true
+      this.$store.state.performingRequest = true
 
       fb.auth
         .createUserWithEmailAndPassword(
@@ -68,13 +56,13 @@ export default {
           this.signupForm.password
         )
         .then(() => {
-          this.$store.dispatch('fetchUserProfile')
-          this.performingRequest = false
-          this.$router.push('/home')
+          this.$store.dispatch('fetchUser')
+          this.$store.state.performingRequest = false
         })
         .catch(err => {
           console.log(err)
         })
+      this.$router.push('/getting-started')
     }
   }
 }

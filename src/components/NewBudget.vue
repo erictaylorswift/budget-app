@@ -25,7 +25,7 @@
                   chips
                   small-chips
                   label="Budget period"
-                  perpend-icon="event"
+                  prepend-icon="event"
                   readonly
                   v-on="on"
                 ></v-combobox>
@@ -49,7 +49,7 @@
     </v-layout>
     <v-layout row wrap>
       <v-flex d-flex xs12 sm12 md12 lg12>
-        <v-toolbar color="white" class="mt-3">
+        <v-toolbar color="white" class="mt-3 mb-1">
           <v-toolbar-title>Add expense items</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="800px">
@@ -68,14 +68,15 @@
                     <v-flex class="mx-1">
                       <v-select
                         v-model="editedItem.category"
-                        :items="Budgets.baseTypes"
+                        :items="categories"
                         label="Select expense category"
+                        @change="getSources()"
                       ></v-select>
                     </v-flex>
                     <v-flex class="mx-1">
                       <v-select
                         v-model="editedItem.name"
-                        :items="Budgets.expensees"
+                        :items="sources"
                         label="Select expense source"
                       ></v-select>
                     </v-flex>
@@ -86,15 +87,58 @@
           </v-dialog>
         </v-toolbar>
       </v-flex>
+      <v-flex>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-card
+              v-for="(name, i) in mapExpenses"
+              :key="name"
+              class="mb-2 mr-2 elevation-10"
+            >
+              <v-card-title
+                ><h2 class="headline">
+                  {{ Object.keys(name)[0] }}
+                </h2></v-card-title
+              >
+              <div v-for="(item, index) in name[Object.keys(name)]" :key="item">
+                <v-layout class="px-3">
+                  <v-text-field :value="item" disabled class="pr-3">
+                  </v-text-field>
+                  <v-spacer></v-spacer>
+                  <v-flex>
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field
+                          type="number"
+                          step=".01"
+                          prefix="$"
+                          label="Amount to budget"
+                          @change="newItem(item)"
+                          v-model="amount[i]"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-spacer></v-spacer>
+                      <v-flex>
+                        <v-text-field></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                </v-layout>
+              </div>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-flex>
     </v-layout>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import numeral from 'numeral'
 import AddCategory from './AddCategory.vue'
+import _ from 'lodash'
 
 const fb = require('../firebaseConfig')
 
@@ -105,19 +149,21 @@ export default {
   },
   computed: {
     ...mapState(['Expenses', 'Budgets']),
+    ...mapGetters(['categories']),
     mapExpenses() {
-      let ex = this.$store.state.expensees
-      let cats = this.expByCat
-
-      ex.forEach(e => {
-        cats.push({
-          name: e,
-          type: '',
-          amount: '',
-          date: ''
+      let ex = this.$store.getters.categories
+      let types = this.$store.state.Budgets.baseTypes
+      let arr = []
+      let typeArr = []
+      let count = 0
+      ex.forEach(t => {
+        arr.push({
+          [t]: types[t]
         })
+        count = count + 1
       })
-      return cats
+
+      return arr
     }
   },
   data() {
@@ -132,24 +178,15 @@ export default {
         name: ''
       },
       budgetDates: [],
-      end: '',
-      newItem: [],
       expByCat: [],
-      income: {
-        rr: {
-          amount: ''
-        },
-        db: {
-          amount: ''
-        }
-      },
-      currCategories: null,
       editedItem: {
         category: '',
         name: '',
         date: moment().format('MM Do, YYYY'),
         amount: 0
-      }
+      },
+      lineItem: {},
+      amount: []
     }
   },
   methods: {
@@ -208,6 +245,18 @@ export default {
         (state.name = ''),
         (state.budgetType = ''),
         (state.expenseType = '')
+    },
+    getSources() {
+      let category = this.editedItem.category
+      let data = this.$store.state.Budgets.baseTypes[category]
+
+      this.sources = data
+    },
+    newItem(name, val) {
+      this.lineItem = {
+        name: name,
+        value: val
+      }
     }
   },
   filters: {

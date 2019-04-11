@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ml-5 mt-4">
     <v-tabs color="grey lighten-5" class="mb-4 ml-3">
       <v-tabs-slider color="yellow"></v-tabs-slider>
       <v-tab @click="switchView('BudgetProgress')">Progress Overview</v-tab>

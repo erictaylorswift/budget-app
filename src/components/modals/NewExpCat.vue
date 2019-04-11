@@ -113,7 +113,7 @@ export default {
       let names = this.catNames
       let uid = this.$store.state.currentUser.uid
 
-      let docRef = fb.db.collection('ExpenseTypes').doc(uid)
+      let docRef = fb.db.collection('ExpenseTypes2').doc(uid)
 
       let obj = []
 

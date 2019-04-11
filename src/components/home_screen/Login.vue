@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" v-model="valid" lazy-validation v-if="showLoginForm">
       <v-layout wrap>
         <v-flex xs6>
           <v-layout column justify-end>
@@ -29,115 +29,61 @@
                 Login
                 <v-icon right small dark>thumb_up</v-icon>
               </v-btn>
-              <v-btn small flat color="blue">Forgot password</v-btn>
+              <v-btn small flat color="blue" @click="toggleForgotPasswordReset"
+                >Forgot password</v-btn
+              >
             </v-layout>
           </v-layout>
         </v-flex>
       </v-layout>
     </v-form>
-    <!-- <div class="column">
-    <div class="columns">
-      <div class="column is-two-thirds">
-        <form v-if="showLoginForm" @submit.prevent>
-          <h1 class="title login-title">Sign in to view budget</h1>
-          <div class="field">
-            <label for="email1" class="label">Email</label>
-            <div class="control has-icons-left">
-              <input
-                class="input"
-                v-model.trim="loginForm.email"
-                type="text"
-                placeholder="you@email.com"
-                id="email1"
-              />
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
-              </span>
-            </div>
-          </div>
-          <div class="field">
-            <label for="password1" class="label">Password</label>
-            <div class="control">
-              <input
-                class="input"
-                v-model.trim="loginForm.password"
-                type="password"
-                placeholder="******"
-                id="password1"
-              />
-            </div>
-          </div>
-          <div>
-            <div class="buttons">
-              <button
-                @click="login"
-                class="button is-rounded is-medium login-button"
-              >
-                Log In
-              </button>
-              <button @click="toggleForgotPasswordReset" class="button is-text">
-                Forgot Password
-              </button>
-            </div>
-          </div>
-        </form>
-        <form v-if="showForgotPassword" @submit.prevent class="password-reset">
-          <div v-if="!passwordResetSuccess">
-            <h1 class="title login-title">Reset Password</h1>
-            <p>We will send you an email to reset your password</p>
-
-            <div class="field">
-              <label for="email3" class="label">Email</label>
-              <div class="control has-icons-left">
-                <input
-                  v-model.trim="passwordForm.email"
-                  type="text"
-                  placeholder="you@email.com"
-                  id="email3"
-                  class="input"
-                />
-                <span class="icon is-small is-left">
-                  <i class="fas fa-envelope"></i>
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <div class="buttons">
-                <button
-                  @click="resetPassword"
-                  class="button is-rounded is-medium login-button"
-                >
-                  Submit
-                </button>
-                <button
+    <v-form v-if="showForgotPassword">
+      <v-layout wrap fill-height>
+        <v-flex xs6>
+          <v-layout column>
+            <v-flex>
+              <v-text-field
+                v-model="passwordForm.email"
+                :rules="emailRules"
+                label="Email"
+                type="email"
+                prepend-icon="alternate_email"
+              ></v-text-field>
+            </v-flex>
+            <v-flex>
+              <v-flex>
+                <v-btn
+                  small
+                  flat
+                  color="blue"
                   @click="toggleForgotPasswordReset"
-                  class="button is-text"
+                  >Return to login</v-btn
                 >
-                  Back To Log In
-                </button>
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            <h1>Email Sent</h1>
-            <p>check your email for a link to reset your password</p>
-            <button @click="toggleForgotPasswordReset" class="button">
-              Back to login
-            </button>
-          </div>
-        </form>
-        <transition name="fade">
-          <div v-if="errorMsg !== ''" class="error-msg">
-            <p>{{ errorMsg }}</p>
-          </div>
-        </transition>
-      </div>
-    </div> -->
+              </v-flex>
+              <v-flex justify-end align-center>
+                <p class="body-1 pa-0 ma-0">
+                  We will send you an email with your reset password
+                </p>
+                <v-btn dark color="green" @click="resetPassword">
+                  Reset
+                  <v-icon small right>thumb_up</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </v-form>
+    <v-layout wrap v-if="errorMsg !== ''">
+      <v-flex>
+        <span class="red--text text--lighten-1">{{ errorMsg }}</span>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
 <script>
+import { setTimeout } from 'timers'
 const fb = require('../../firebaseConfig')
 export default {
   data() {
@@ -180,7 +126,9 @@ export default {
           })
           .catch(err => {
             this.$store.state.performingRequest = false
-            this.errorMsg = err.message
+            this.$toasted.global.error({
+              message: err.message
+            })
           })
       }
     },
@@ -196,12 +144,18 @@ export default {
         })
         .catch(err => {
           this.$store.state.performingRequest = false
-          this.errorMsg = err.message
+          this.$toasted.global.error({
+            message: err.message
+          })
         })
     },
     toggleForgotPasswordReset() {
       this.showLoginForm = !this.showLoginForm
       this.showForgotPassword = !this.showForgotPassword
+    },
+    toggleErrMsg(val) {
+      this.errorMsg = val
+      setTimeout(() => (this.errorMsg = ''), 2000)
     }
   }
 }
