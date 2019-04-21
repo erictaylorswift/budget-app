@@ -1,11 +1,8 @@
 <template>
   <div class="container">
     <v-layout row wrap>
-      <v-flex d-flex xs12 sm6 md4 lg4 xl4>
+      <v-flex d-flex xs12 class="mt-0 mb-4">
         <v-card>
-          <v-card-title>
-            <span class="title">Select budget period</span>
-          </v-card-title>
           <v-card-text>
             <v-menu
               ref="menu"
@@ -25,18 +22,18 @@
                   chips
                   small-chips
                   label="Budget period"
-                  prepend-icon="event"
+                  prepend-inner-icon="event"
                   readonly
                   v-on="on"
                 ></v-combobox>
               </template>
               <v-date-picker v-model="budgetDates" multiple no-title scrollable>
                 <v-spacer></v-spacer>
-                <v-btn flat color="red accent-3" @click="menu = false"
+                <v-btn :flat="true" color="red accent-3" @click="menu = false"
                   >Close</v-btn
                 >
                 <v-btn
-                  flat
+                  :flat="true"
                   color="primary"
                   @click="$refs.menu.save(budgetDates)"
                   >Save</v-btn
@@ -46,87 +43,96 @@
           </v-card-text>
         </v-card>
       </v-flex>
-    </v-layout>
-    <v-layout row wrap>
-      <v-flex d-flex xs12 sm12 md12 lg12>
-        <v-toolbar color="white" class="mt-3 mb-1">
-          <v-toolbar-title>Add expense items</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="800px">
-            <template slot="activator" :slot-scope="{ on }">
-              <v-btn color="primary" dark class="mb-2" v-on="on"
-                >New item</v-btn
+      <v-flex d-flex xs12 class="mb-4">
+        <v-card>
+          <v-card-text>
+            <span class="headline">Input incomes</span>
+            <v-layout>
+              <v-flex
+                v-for="(income, index) in Budgets.incomeSources"
+                :key="income.name"
+                xs2
               >
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">New expense item</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container gird-list-md>
-                  <v-layout wrap>
-                    <v-flex class="mx-1">
-                      <v-select
-                        v-model="editedItem.category"
-                        :items="categories"
-                        label="Select expense category"
-                        @change="getSources()"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex class="mx-1">
-                      <v-select
-                        v-model="editedItem.name"
-                        :items="sources"
-                        label="Select expense source"
-                      ></v-select>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-        </v-toolbar>
+                <v-text-field
+                  v-model="incomes[index].amount"
+                  :hint="'add income amount for ' + incomes[index].name"
+                  :persistent-hint="true"
+                  class="mr-3"
+                  prefix="$"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
       </v-flex>
       <v-flex>
         <v-layout row wrap>
+          <span class="headline mb-4">Add expenses</span>
           <v-flex xs12>
-            <v-card
-              v-for="(category, name) in budgetLine"
-              :key="name"
-              class="mb-2 mr-2 elevation-10"
-            >
-              <v-card-title
-                ><h2 class="headline">
-                  {{ name }}
-                </h2></v-card-title
-              >
-              <div v-for="(type, typeName) in category" :key="typeName">
-                <v-layout class="px-3">
-                  <v-text-field :value="typeName" disabled class="pr-3">
-                  </v-text-field>
-                  <v-spacer></v-spacer>
-                  <v-flex>
-                    <v-layout>
+            <v-layout row wrap>
+              <v-flex xs3 v-for="(category, name, i) in budgetLine" :key="name">
+                <v-card class="mb-2 mr-2 pb-3 elevation-10">
+                  <v-toolbar :color="colors[i]" dark>
+                    <v-toolbar-title>
+                      {{ name }}
+                    </v-toolbar-title>
+                  </v-toolbar>
+                  <div v-for="(type, typeName) in category" :key="typeName">
+                    <v-divider></v-divider>
+                    <v-layout class="px-3" align-center>
                       <v-flex>
-                        <v-text-field
-                          type="number"
-                          step=".01"
-                          prefix="$"
-                          label="Amount to budget"
-                          @change="newItem(item)"
-                          v-model="budgetLine[name][typeName].amount"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-spacer></v-spacer>
-                      <v-flex>
-                        <v-text-field></v-text-field>
+                        <span
+                          class="text-truncate mt-3 font-weight-bold grey--text text--darken-2"
+                          >{{ typeName }}</span
+                        >
+                        <v-layout wrap row justify-start="" class="mb-3">
+                          <v-flex class="mr-3" xs3>
+                            <v-text-field
+                              type="number"
+                              step=".01"
+                              prefix="$"
+                              :persistent-hint="true"
+                              hint="Amount to budget"
+                              v-model="budgetLine[name][typeName].amount"
+                            ></v-text-field>
+                          </v-flex>
+                          <v-flex xs6>
+                            <v-menu
+                              v-model="budgetLine[name][typeName].dateSelector"
+                              :close-on-content-click="false"
+                            >
+                              <template slot="activator" :slot-scope="{ on }">
+                                <v-text-field
+                                  v-model="budgetLine[name][typeName].date"
+                                  :v-on="on"
+                                  hint="Select date"
+                                  :persistent-hint="true"
+                                  prepend-inner-icon="event"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker
+                                v-model="budgetLine[name][typeName].date"
+                                @input="
+                                  budgetLine[name][
+                                    typeName
+                                  ].dateSelector = false
+                                "
+                                :max="budgetDates[1]"
+                                :min="budgetDates[0]"
+                              >
+                              </v-date-picker>
+                            </v-menu>
+                          </v-flex>
+                        </v-layout>
                       </v-flex>
                     </v-layout>
-                  </v-flex>
-                </v-layout>
-              </div>
-            </v-card>
-            <span>{{expenseTypes.Allowances}}</span>
+                  </div>
+                </v-card>
+              </v-flex>
+            </v-layout>
+            <v-btn fab fixed dark color="pink" right bottom @click="saveBudget"
+              ><v-icon>check</v-icon></v-btn
+            >
           </v-flex>
         </v-layout>
       </v-flex>
@@ -150,22 +156,7 @@ export default {
   },
   computed: {
     ...mapState(['Expenses', 'Budgets']),
-    ...mapGetters(['categories', 'expenseTypes']),
-    mapExpenses() {
-      let ex = this.$store.getters.categories
-      let types = this.$store.state.Budgets.baseTypes
-      let arr = []
-      let typeArr = []
-      let count = 0
-      ex.forEach(t => {
-        arr.push({
-          [t]: types[t]
-        })
-        count = count + 1
-      })
-
-      return arr
-    }
+    ...mapGetters(['categories', 'expenseTypes', 'incomeTypes'])
   },
   data() {
     return {
@@ -181,7 +172,21 @@ export default {
         amount: 0
       },
       lineItem: {},
-      amount: []
+      amount: [],
+      mask: '##/##/####',
+      colors: [
+        'purple darken-2',
+        'green darken-2',
+        'pink accent-3',
+        'teal darken-2',
+        'amber darken-3',
+        'deep-orange accent-3',
+        'light-green darken-4',
+        'cyan darken-4'
+      ],
+      max: '',
+      on: false,
+      incomes: this.$store.getters.incomeTypes
     }
   },
   methods: {
@@ -190,30 +195,39 @@ export default {
       this.$store.dispatch('addBudgetItem', item)
     },
     saveBudget() {
-      let expenses = this.expByCat
-      let income = this.income
-      let start = this.start
-      let end = this.end
+      let expenses = this.budgetLine
+      let incs = this.incomes
+      let start = this.budgetDates[0]
+      let end = this.budgetDates[1]
       let uid = this.$store.state.currentUser.uid
       let expenseArray = []
+      let incomeArray = []
 
-      for (var i = 0; i < expenses.length; i++) {
-        expenseArray.push(Number(expenses[i].amount))
-        fb.db
-          .collection('BudgetedExpenses')
-          .doc(uid)
-          .collection('budgetExpenses')
-          .add({
-            date: moment(expenses[i].date).toISOString(),
-            type: expenses[i].type,
-            name: expenses[i].name,
-            amount: Number(expenses[i].amount),
-            spent: 0
-          })
-      }
+      _.forIn(expenses, (value, key) => {
+        _.forIn(value, (v, k) => {
+          expenseArray.push(Number(v.amount))
+          fb.db
+            .collection('BudgetedExpenses')
+            .doc(uid)
+            .collection('budgetExpenses')
+            .add({
+              date: moment(v.date).toISOString(),
+              type: key,
+              name: v.name,
+              spent: 0,
+              amount: v.amount
+            })
+        })
+      })
 
+      _.forIn(incs, (value, key) => {
+        if (value.amount != null) {
+          incomeArray.push(Number(value.amount))
+        }
+      })
+      let incomeTotal = incomeArray.reduce((a, b) => a + b, 0)
       let expenseTotal = expenseArray.reduce((a, b) => a + b, 0)
-      let incomeTotal = Number(income.rr.amount) + Number(income.db.amount)
+
       let difference = incomeTotal - Number(expenseTotal)
 
       fb.db
@@ -252,6 +266,31 @@ export default {
         name: name,
         value: val
       }
+    },
+    saveNew() {
+      let expenses = this.budgetLine
+
+      _.forIn(expenses, (value, key) => {
+        _.forIn(value, (v, k) => {
+          console.log({
+            name: v.name,
+            amount: v.amount,
+            date: moment(v.date).toISOString(),
+            spent: 0,
+            type: key
+          })
+        })
+      })
+    },
+    getMax() {
+      if (this.budgetDates[1] != '') {
+        this.max = moment(this.budgetDates[1]).toISOString()
+      }
+    }
+  },
+  watch: {
+    budgetDates: val => {
+      this.max = moment(val[1]).toISOString()
     }
   },
   filters: {

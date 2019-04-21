@@ -7,7 +7,6 @@ import './assets/scss/app.scss'
 import router from './router'
 import { store } from './store/store.js'
 import VCalendar from 'v-calendar'
-import 'v-calendar/lib/v-calendar.min.css'
 import lodash from 'lodash'
 import { auth } from './firebaseConfig'
 
@@ -16,7 +15,8 @@ Vue.config.productionTip = false
 Vue.use(lodash)
 Vue.use(Toasted)
 Vue.use(VCalendar, {
-  firstDayOfWeek: 2
+  firstDayOfWeek: 2,
+  componentPrefix: 'vc'
 })
 
 let successToastOptions = {

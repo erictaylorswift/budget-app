@@ -54,12 +54,12 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn fab medium color="success" @click="saveExpense">
-          <v-icon @click="saveExpense">check</v-icon>
+          <v-icon>check</v-icon>
         </v-btn>
       </v-card-actions>
       <v-snackbar v-model="snackbar" color="pink darken-3">
         Please add an expense amount
-        <v-btn color="pink lighten-5" flat @click="snackbar = false"
+        <v-btn color="pink lighten-5" :flat="true" @click="snackbar = false"
           >close</v-btn
         >
       </v-snackbar>
@@ -88,7 +88,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['expenses', 'showExpenseModal', 'Budgets']),
+    ...mapState(['Expenses', 'showExpenseModal', 'Budgets']),
     ...mapGetters(['categories'])
   },
   methods: {

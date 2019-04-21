@@ -51,6 +51,7 @@ const expenseModule = {
             end: data.end
           })
         })
+
       fb.db
         .collection('ExpenseTotals')
         .doc(uid)
@@ -65,11 +66,11 @@ const expenseModule = {
             let date = moment(data.date).toISOString()
             let startDiff = moment(date).diff(moment(start), 'days')
             let endDiff = moment(date).diff(moment(end), 'days')
+
             if (startDiff >= 0 && endDiff < 0) {
               calc = calc + Number(data.value)
             }
           })
-          console.log(calc)
           commit('setExpTotal', calc)
         })
     },
@@ -109,10 +110,11 @@ const expenseModule = {
                 date: date.toISOString(),
                 type: data.expense,
                 note: data.note,
-                amount: Number(data.value)
+                amount: Number(data.value),
+                open: false
               })
+              commit('setExpenses', expenseArray)
             }
-            commit('setExpenses', expenseArray)
           })
         })
       fb.db

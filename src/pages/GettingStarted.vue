@@ -69,7 +69,7 @@
               </v-card>
             </v-stepper-content>
             <v-stepper-content step="2">
-              <v-card class="px-5 pt-5" flat>
+              <v-card class="px-5 pt-5" :flat="true">
                 <v-card-title>
                   <span class="headline">Add new expense category</span>
                 </v-card-title>
@@ -122,7 +122,7 @@
                     </v-layout>
                     <v-spacer></v-spacer>
                     <v-btn
-                      flat
+                      :flat="true"
                       color="blue"
                       v-if="this.catNames.length > 0"
                       @click="plusCat"

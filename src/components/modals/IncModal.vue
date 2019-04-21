@@ -54,7 +54,7 @@
       </v-card-actions>
       <v-snackbar v-model="snackbar" color="pink darken-3">
         Please add an income amount
-        <v-btn color="pink lighten-5" flat @click="snackbar = false"
+        <v-btn color="pink lighten-5" :flat="true" @click="snackbar = false"
           >close</v-btn
         >
       </v-snackbar>

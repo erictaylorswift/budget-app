@@ -1,21 +1,34 @@
 <template>
-  <v-calendar
-    :attributes="attributes"
-    :theme-styles="styles"
-    title-position="left"
-  >
-    <span slot="header-title" slot-scope="{ shortMonthLabel, shortYearLabel }"
-      >Budget dates | {{ shortMonthLabel }} - {{ shortYearLabel }}</span
+  <v-card class="mt-5 w-75 ml-3">
+    <v-calendar
+      type="custom-weekly"
+      :start="Budgets.budgetDates.start"
+      :end="Budgets.budgetDates.end"
+      color="purple darken-2"
     >
-    <div class="expenses-row" slot-scope="{ customData }" slot="expense-row">
-      <div class="expenses-content">
-        <p>
-          {{ customData.name != '' ? customData.name : customData.expenseType }}
-          | {{ customData.amount | formatCurrency }}
-        </p>
-      </div>
-    </div>
-  </v-calendar>
+      <template slot="day" slot-scope="{ date }">
+        <template v-for="event in eventsMap[date]">
+          <v-menu :key="event.note" v-model="event.open" full-width offset-x>
+            <template slot="activator" slot-scope="{ on }">
+              <div v-on="on" class="my-event">
+                {{ event.note }}
+                <v-icon small right>more_horiz</v-icon>
+              </div>
+            </template>
+            <v-card flat>
+              <v-toolbar>
+                <v-toolbar-title v-html="event.note"></v-toolbar-title>
+              </v-toolbar>
+              <v-card-title primary-title>
+                <span v-html="event.type"></span><v-spacer></v-spacer>
+                <span>{{ event.amount | formatCurrency }}</span>
+              </v-card-title>
+            </v-card>
+          </v-menu>
+        </template>
+      </template>
+    </v-calendar>
+  </v-card>
 </template>
 
 <script>
@@ -25,44 +38,37 @@ import moment from 'moment'
 export default {
   data() {
     return {
-      styles: {
-        wrapper: {
-          background: '#fff',
-          border: '0',
-          borderRadius: '5px',
-          boxShadow:
-            '0 4px 8px 0 rgba(0, 0, 0, 0.14), 0 6px 20px 0 rgba(0, 0, 0, 0.13)'
-        },
-        dayCellNotInMonth: {
-          opacity: 0
-        },
-        headerArrows: {
-          display: 'none'
-        }
-      }
+      today: new Date()
     }
   },
   created() {
     this.$store.dispatch('fetchBudgetItems')
   },
   computed: {
-    ...mapState(['Budgets']),
+    ...mapState(['Budgets', 'Expenses']),
     attributes() {
-      let items = this.$store.state.Budgets.budgetByItems
-      let dates = this.$store.state.Budgets.budgetTotals
+      let items = this.$store.state.Expenses.expenses
       return [
         ...items.map(res => ({
-          dates: res.date,
-          highlight: {
-            backgroundColor: '#ff3860'
-          },
+          dates: moment(res.date).format('YYYY-MM-DD'),
+          highlight: 'red',
           customData: res,
           popover: {
             slot: 'expense-row',
-            visibility: 'hover'
+            visibility: 'hover',
+            label: res.note
           }
         }))
       ]
+    },
+    eventsMap() {
+      let events = this.$store.state.Expenses.expenses
+      const map = {}
+      events.forEach(e =>
+        (map[moment(e.date).format('YYYY-MM-DD')] =
+          map[moment(e.date).format('YYYY-MM-DD')] || []).push(e)
+      )
+      return map
     }
   },
   filters: {

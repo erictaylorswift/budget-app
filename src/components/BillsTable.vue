@@ -12,7 +12,7 @@
               single-line
               solo-inverted
               hint="Search for expense type or source"
-              persistent-hint
+              :persistent-hint="true"
               dark
               color="purple"
             ></v-text-field>
@@ -21,7 +21,7 @@
       </v-card-title>
       <v-card-text>
         <v-data-table
-          :items="Expenses.expenses"
+          :items="getRows"
           :headers="headers"
           :pagination.sync="pagination"
           :search="search"
@@ -67,6 +67,9 @@ export default {
       }
 
       return value
+    },
+    getRows() {
+      return this.$store.state.Expenses.expenses
     }
   },
   data() {

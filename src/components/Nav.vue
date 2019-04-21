@@ -3,21 +3,21 @@
     <v-toolbar fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
-        <v-btn flat @click="goHome">Budgie</v-btn>
+        <v-btn :flat="true" @click="goHome">Budgie</v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn flat @click="newIncome" color="green darken-2"
+        <v-btn :flat="true" @click="newIncome" color="green darken-2"
           >Add income <v-icon right>account_balance_wallet</v-icon></v-btn
         >
-        <v-btn color="orange darken-2" flat @click="newExpense"
+        <v-btn color="orange darken-2" :flat="true" @click="newExpense"
           >Add expense <v-icon right>money</v-icon></v-btn
         >
-        <v-btn flat color="purple" @click="goTo('/budget')">
+        <v-btn :flat="true" color="purple" @click="goTo('/budget')">
           New budget
           <v-icon right>fiber_new</v-icon>
         </v-btn>
-        <v-btn flat @click="logout" color="grey">
+        <v-btn :flat="true" @click="logout" color="grey">
           <v-icon>exit_to_app</v-icon>
         </v-btn>
       </v-toolbar-items>
@@ -51,6 +51,15 @@
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile @click="openNewCatModal">
+          <v-list-tile-action>
+            <v-icon>add</v-icon>
+          </v-list-tile-action>
+
+          <v-list-tile-content>
+            <v-list-tile-title>Add expense item</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-divider class="mt-5"></v-divider>
         <v-list-tile @click="goTo('/settings')" class="mt-3">
           <v-list-tile-action>
@@ -74,12 +83,7 @@ export default {
       drawer: null,
       items: [
         { title: 'Home', icon: 'dashboard', route: '/home' },
-        { title: 'Expenses', icon: 'attach_money', route: '/expenses' },
-        {
-          title: 'Budget Overview',
-          icon: 'account_balance_wallet',
-          route: '/current-budget'
-        }
+        { title: 'Expenses', icon: 'attach_money', route: '/expenses' }
       ]
     }
   },
@@ -113,6 +117,10 @@ export default {
       this.$store.state.bottomSheet = true
       this.$store.state.showExpenseModal = false
       this.$store.state.showIncomeModal = true
+    },
+    openNewCatModal() {
+      this.$store.state.bottomSheet = true
+      this.$store.state.showNewCatModal = true
     }
   }
 }

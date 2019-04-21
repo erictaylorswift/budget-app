@@ -2,15 +2,14 @@
   <v-container grid-list-md>
     <div class="ml-3">
       <h1 class="display-2">Your budget</h1>
-      <h2 class="subheading">
-        {{ start | formatDate }} to {{ end | formatDate }}
+      <h2 class="subheading" v-if="dates">
+        {{ dates.start | formatDate }} to {{ dates.end | formatDate }}
       </h2>
     </div>
     <Overview />
     <v-layout wrap row align-top>
       <Spent />
     </v-layout>
-    <Drawer />
   </v-container>
 </template>
 
@@ -25,6 +24,9 @@ export default {
   components: {
     Overview,
     Spent
+  },
+  computed: {
+    ...mapGetters(['dates'])
   },
   data() {
     return {
@@ -41,7 +43,9 @@ export default {
           type: 'circle',
           horiztontalTextAlign: 20
         }
-      }
+      },
+      start: 'No Dates',
+      end: ''
     }
   },
   filters: {

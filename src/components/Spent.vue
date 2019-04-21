@@ -5,18 +5,21 @@
       color="grey darken-3"
       elevation="12"
       max-width="calc(100% - 32px)"
+      min-height="180px"
     >
       <v-sparkline
         :labels="fillData.labels"
         :value="fillData.value"
+        :fill="true"
         color="white"
         line-width="2"
         padding="20"
-        smooth
+        smooth="25"
         auto-draw
         :gradient="gradient"
         :gradient-direction="gradDirection"
         stroke-linecap="round"
+        label-size="5px"
       ></v-sparkline>
     </v-sheet>
     <v-card-text>

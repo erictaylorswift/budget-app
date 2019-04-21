@@ -29,7 +29,11 @@
                 Login
                 <v-icon right small dark>thumb_up</v-icon>
               </v-btn>
-              <v-btn small flat color="blue" @click="toggleForgotPasswordReset"
+              <v-btn
+                small
+                :flat="true"
+                color="blue"
+                @click="toggleForgotPasswordReset"
                 >Forgot password</v-btn
               >
             </v-layout>
@@ -54,7 +58,7 @@
               <v-flex>
                 <v-btn
                   small
-                  flat
+                  :flat="true"
                   color="blue"
                   @click="toggleForgotPasswordReset"
                   >Return to login</v-btn

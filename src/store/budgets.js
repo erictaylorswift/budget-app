@@ -1,6 +1,5 @@
-import { fireSQL } from '../firebaseConfig'
-import moment from 'moment'
 import _ from 'lodash'
+import moment from 'moment'
 
 const fb = require('../firebaseConfig')
 
@@ -14,31 +13,60 @@ const budgets = {
     incomeSources: [],
     budgetStart: '',
     budgetEnd: '',
-    budgetedExpenses: null
+    budgetedExpenses: null,
+    budgetIncome: 0,
+    budgetExpenses: 0,
+    budgetDiff: 0,
+    budgetDates: {}
   },
   getters: {
-    budgetDates: state => {
-      return {
-        start: state.budgetTotals[0].start,
-        end: state.budgetTotals[0].end
+    dates: state => {
+      if (state.budgetTotals.length > 0) {
+        let start = moment(state.budgetTotals[0].start).toISOString()
+        let end = moment(state.budgetTotals[0].end).toISOString()
+
+        return {
+          start: start,
+          end: end
+        }
       }
     },
     expenses: state => {
-      return state.budgetTotals[0].expenses
+      if (state.budgetTotals.length > 0) {
+        return state.budgetTotals[0].expenses
+      }
     },
     categories: state => {
       return Object.keys(state.baseTypes)
     },
     expenseTypes: state => {
-      return _.mapValues(state.baseTypes, (cats) => {
-            return  _.chain(cats).map((types) => {
-                return {
-                  name: types,
-                  amount: 0,
-                  date: null
-                }
-              }).keyBy("name").value()
+      return _.mapValues(state.baseTypes, cats => {
+        return _.chain(cats)
+          .map(types => {
+            return {
+              name: types,
+              amount: null,
+              date: null,
+              dateSelector: false
+            }
+          })
+          .keyBy('name')
+          .value()
       })
+    },
+    incomeTypes: state => {
+      return _.mapValues(state.incomeSources, source => {
+        return {
+          name: source,
+          amount: null,
+          date: null
+        }
+      })
+    },
+    incomeTotal: state => {
+      if (state.budgetTotals.length > 0) {
+        return state.budgetTotals[0].income
+      }
     }
   },
   actions: {
@@ -138,6 +166,10 @@ const budgets = {
             start: data.start,
             end: data.end
           })
+          commit('setBudgetDates', { start: data.start, end: data.end })
+          commit('setBudgetIncome', data.incomeTotal)
+          commit('setBudgetExpenses', data.expenseTotal)
+          commit('setBudgetDiff', data.difference)
         })
       commit('setBudgetTotals', totals)
     }
@@ -168,6 +200,18 @@ const budgets = {
     },
     setBudgetExpenses(state, val) {
       state.budgetedExpenses = val
+    },
+    setBudgetIncome(state, val) {
+      state.budgetIncome = val
+    },
+    setBudgetExpenses(state, val) {
+      state.budgetExpenses = val
+    },
+    setBudgetDiff(state, val) {
+      state.budgetDiff = val
+    },
+    setBudgetDates(state, val) {
+      state.budgetDates = val
     }
   }
 }

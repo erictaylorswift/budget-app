@@ -1,17 +1,19 @@
 .new-budget-button {
-    float: right;
-    margin-right: 60px;
-    position: fixed;
-    top: 30px;
-    right: 0;
+	float: right;
+	margin-right: 60px;
+	position: fixed;
+	top: 30px;
+	right: 0;
 }
 
 .budget-btn {
-    margin-top: 44px;
+	margin-top: 44px;
 }
 
-.md-button-content {
-    span {
-        margin-left: 8px;
-    }
+.v-btn--right {
+	right: 120px !important;
+}
+
+.v-btn--bottom {
+	bottom: 40px !important;
 }

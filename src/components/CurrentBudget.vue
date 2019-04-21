@@ -1,11 +1,19 @@
 <template>
   <div class="ml-5 mt-4">
-    <v-tabs color="grey lighten-5" class="mb-4 ml-3">
-      <v-tabs-slider color="yellow"></v-tabs-slider>
+    <v-tabs color="grey lighten-5" class=" ml-3">
+      <v-tabs-slider color="purple accent-3"></v-tabs-slider>
       <v-tab @click="switchView('BudgetProgress')">Progress Overview</v-tab>
       <v-tab @click="switchView('BudgetTable')">Table view</v-tab>
+      <v-tab @click="switchView('Calendar')">Calendar view</v-tab>
     </v-tabs>
     <section>
+      <div class="ml-3 mt-0">
+        <h1 class="display-2 purple--text text--darken-4 pb-2">Your budget</h1>
+        <h2 class="subheading grey--text ml-2">
+          {{ Budgets.budgetDates.start | formatDate }} to
+          {{ Budgets.budgetDates.end | formatDate }}
+        </h2>
+      </div>
       <budget-overview></budget-overview>
       <component v-bind:is="view"></component>
     </section>

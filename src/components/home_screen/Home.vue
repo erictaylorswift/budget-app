@@ -5,7 +5,7 @@
     <v-layout row d-flex fill-height>
       <v-flex xs12 align-center class="deep-purple darken-4 is-fullheight">
         <v-spacer class="hidden-sm-and-down"></v-spacer>
-        <v-card flat color="deep-purple darken-4">
+        <v-card :flat="true" color="deep-purple darken-4">
           <v-img
             :src="budgie"
             alt="budgie_logo"

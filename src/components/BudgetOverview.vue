@@ -7,7 +7,7 @@
       </v-card-title>
       <v-card-text>
         <ICountUp
-          :endVal="Budgets.budgetTotals[0].income"
+          :endVal="Budgets.budgetIncome"
           :options="options"
           class="display-1 font-weight-bold grey--text text--darken-2"
         />
@@ -20,7 +20,7 @@
       </v-card-title>
       <v-card-text>
         <ICountUp
-          :endVal="Budgets.budgetTotals[0].expenses"
+          :endVal="Budgets.budgetExpenses"
           :options="options"
           class="display-1 font-weight-bold grey--text text--darken-2"
         />
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import numeral from 'numeral'
 import moment from 'moment'
 import ICountUp from 'vue-countup-v2'
@@ -98,20 +98,23 @@ export default {
   },
   computed: {
     ...mapState(['Budgets', 'Expenses']),
+    ...mapGetters(['incomeTotals']),
     netBudget() {
       let state = this.$store.state
-      let budgetNet = state.Budgets.budgetTotals[0].difference
+      let budgetNet = state.Budgets.budgetDiff
       let expenseTotal = state.Expenses.expTotal
       let currentNet = state.incTotal - expenseTotal
       let diff = currentNet - budgetNet
-      let budgetedExp = state.Budgets.budgetTotals[0].expenses
+      let budgetedExp = state.Budgets.budgetExpenses
       let remainingExp = expenseTotal - budgetedExp
       let percentRem = (remainingExp / budgetedExp) * 100
+
       return {
         budgetNet: budgetNet,
         currentNet: currentNet,
         diff: diff,
-        percent: Number(percentRem).toFixed(0)
+        percent: Number(Number(percentRem).toFixed(0)),
+        incTotal: state.incTotal
       }
     }
   },
